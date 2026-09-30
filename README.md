@@ -4,12 +4,12 @@ Deployable Orchy Cloud Control dashboard.
 
 ## Deployment
 
-- Host: Vercel
+- Host: Render (free web service)
 - Framework: React + TypeScript + Vite
-- API facade: Hono on Vercel Functions
-- Deployment protection: Vercel Authentication
+- API facade: Hono on a Render Node web service
+- Deployment protection: app-level HTTP Basic Auth on Render
 - Dashboard-local persistence: Supabase
-- Initial domain: Vercel project domain; no custom domain required
+- Initial domain: Render onrender.com service domain; no custom domain required
 
 ## Authority boundary
 
