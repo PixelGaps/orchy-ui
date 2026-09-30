@@ -27,7 +27,7 @@ export interface CloudControlEnv {
 export interface AccessIdentity {
   subject: string
   email: string | null
-  issuer: "render-basic-auth"
+  issuer: "render-session-auth"
 }
 
 export class CloudSecurityError extends Error {
@@ -78,7 +78,7 @@ export function cloudOperatorIdentity(
   return {
     subject: env.ORCHY_OPERATOR_SUBJECT?.trim() || "orchy-operator",
     email: env.ORCHY_OPERATOR_EMAIL?.trim() || null,
-    issuer: "render-basic-auth",
+    issuer: "render-session-auth",
   }
 }
 

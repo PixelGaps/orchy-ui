@@ -24,7 +24,7 @@ const healthPayload = {
   stack: "render+hono+react",
   mode: "operator-read-models",
   authority: "canonical-source-projections",
-  auth: "render-basic-auth",
+  auth: "render-session-cookie",
   cache: "supabase-dashboard-local",
 } as const
 
@@ -167,6 +167,25 @@ export function createCloudApp(
         code === "OPERATION_ID_INVALID" ? 400 : 503,
       )
     }
+  })
+
+  app.get("/api/cloud-control/configuration", (context) => {
+    const supabaseBound = Boolean(
+      env.SUPABASE_URL?.trim() &&
+      (env.SUPABASE_SECRET_KEY?.trim() || env.SUPABASE_SERVICE_ROLE_KEY?.trim()),
+    )
+    return context.json({
+      host: "Render",
+      auth: "session-cookie",
+      store: store.bound ? "supabase" : "unbound",
+      bindings: {
+        jira: Boolean(env.JIRA_BASE_URL?.trim() && env.JIRA_EMAIL?.trim() && env.JIRA_API_TOKEN?.trim()),
+        github: Boolean(env.GITHUB_REPOSITORY?.trim() && env.GITHUB_TOKEN?.trim()),
+        supabase: supabaseBound,
+        testops: supabaseBound,
+        posthog: Boolean(env.POSTHOG_SUMMARY_URL?.trim()),
+      },
+    })
   })
 
   app.get("/api/health", (context) => context.json(healthPayload))

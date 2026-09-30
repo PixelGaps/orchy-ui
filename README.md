@@ -1,27 +1,24 @@
 # Orchy UI
 
-Deployable Orchy Cloud Control dashboard.
+Cloud-hosted Orchy Cloud Control operator surface.
 
-## Deployment
+## Architecture
 
-- Host: Render (free web service)
-- Framework: React + TypeScript + Vite
-- API facade: Hono on a Render Node web service
-- Deployment protection: app-level HTTP Basic Auth on Render
-- Dashboard-local persistence: Supabase
-- Initial domain: Render onrender.com service domain; no custom domain required
+- Render free web service in Frankfurt
+- React + TypeScript + Vite frontend
+- Hono Node API, same origin
+- Login page + secure HttpOnly session cookie
+- Supabase dashboard-local snapshots/preferences/audit only
+- Jira = work authority
+- GitHub = implementation/CI authority
+- TestOps/Supabase = assurance/execution/fleet authority
+- PostHog = observability
+- Madriguera = on-demand GPU/private/hardware executor only
 
-## Authority boundary
+Cloud Control never uses background polling. Missing authority bindings fail closed and are shown as UNBOUND rather than fabricated.
 
-This repository is **not** an operational source of truth.
+## Required server secrets
 
-- Jira OR: work state, scope, acceptance and blockers.
-- PixelGaps/orchy: backend/runtime/execution contracts/Mission-Core/CI.
-- Supabase ExecutionStore: execution/fleet/host state.
-- TestOps: assurance evidence.
-- PostHog: observability.
-- PixelGaps/madriguera-control: machine control.
+`JIRA_EMAIL`, `JIRA_API_TOKEN`, `GITHUB_TOKEN`, `SUPABASE_SECRET_KEY` (or service role), `POSTHOG_SUMMARY_URL`, and optional `POSTHOG_PERSONAL_API_KEY` are server-side only and intentionally not committed.
 
-Supabase tables owned by this UI may contain only cached projections, UI preferences and action audit. They must never become canonical work/execution/assurance state.
-
-Notion remains frozen. OR-634 must not execute without fresh explicit manual approval.
+Notion remains frozen and working. OR-634 requires fresh explicit manual approval.
