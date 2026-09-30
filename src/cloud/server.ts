@@ -35,14 +35,14 @@ export function createCloudApp(
 ) {
   const app = new Hono()
   const store = new SupabaseCloudStore(env, fetcher)
-  const identity = vercelOperatorIdentity(env)
+  const identity = cloudOperatorIdentity(env)
 
   app.use("/api/*", async (context, next) => {
     context.header("Cache-Control", "no-store")
     context.header("X-Content-Type-Options", "nosniff")
     context.header("Referrer-Policy", "no-referrer")
     try {
-      assertVercelDeploymentProtection(env)
+      assertDeploymentProtection(env)
     } catch (error) {
       const code =
         error instanceof Error
