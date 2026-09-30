@@ -1,21 +1,23 @@
-schema: orchy-ui.agent-contract.v3
+schema: orchy-ui.agent-contract.v4
 repository:
-  state: frozen-historical
+  state: active-minimal-support
   default_branch: main
-  active_development: forbidden
-  reactivation_requires: explicit-Jira-architecture-decision
+  direct_main: required
+  purpose: versioned-jira-to-chatgpt-launcher
+  standalone_dashboard: forbidden
+  hosting_required: false
 authority:
   operator_ui: Notion-Orchy-Operator-Dashboard
   work: Jira-OR
   backend_runtime: PixelGaps/orchy
   assurance: TestOps
-  execution: ExecutionStore+Mission-Core
 scope:
-  historical_only:
-    - abandoned-React-UI
-    - abandoned-Hono-API-facade
-    - abandoned-Render-Vercel-Cloudflare-hosting
+  owns:
+    - jira-key-validation
+    - jira-key-to-chatgpt-url-contract
+    - optional-minimal-node-redirect-service
   MUST_NOT_own:
+    - operator-dashboard
     - work-state
     - execution-lifecycle
     - Mission-Core
@@ -24,16 +26,12 @@ scope:
     - machine-control
     - secrets
 rules:
-  modify_only_for:
-    - archival-metadata
-    - security-cleanup
-    - explicit-reactivation
-  deployment_work: forbidden
-  provider_migration_work: forbidden
+  dependencies: minimize
+  background_polling: forbidden
   paid_resources: forbidden
-notion:
-  state: active-default-operator-ui
-  milestone: OR-620
-  parity_register: OR-647
-  retirement_ticket: OR-634
-  retirement_requires_fresh_manual_approval: true
+  canonical_state_copy: forbidden
+  mobile_ui: Notion-owned
+  changes_require: Jira-traceability+deterministic-tests
+versioning:
+  source: package.json
+  initial_repurposed_version: 1.0.0

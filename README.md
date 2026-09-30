@@ -1,33 +1,49 @@
-# Orchy UI — frozen historical experiment
+# Orchy UI launcher
 
-> **Inactive. Do not deploy or extend this repository.**
->
-> As of 2026-09-30, Orchy uses **Notion as the only active operator UI**. The standalone React/Hono/Render/Vercel/Cloudflare path was dropped to reduce infrastructure and connector complexity.
+Minimal, versioned Node support for the **Notion-first Orchy operator UI**.
 
-## Current operator surface
+This repository is **not a dashboard**. Its only active responsibility is the stable Jira-key → ChatGPT launch contract used by operator surfaces.
 
-- Notion: Orchy Operator Dashboard
-- Jira OR-620: Notion-only operator milestone
-- Jira OR-647: legacy UI parity and Notion limitation register
-- Existing Notion Test Assurance dashboard remains active
+## Contract
 
-## Authority
+Input Jira key:
 
-- Jira = work state, scope, acceptance and blockers
-- GitHub PixelGaps/orchy = source, runtime contracts and CI
-- TestOps / Supabase = assurance evidence
-- ExecutionStore + Mission Core = execution/fleet/host state
-- Madriguera = on-demand GPU/private/hardware executor
-- Notion = human-facing operator projection
+```text
+OR-601
+```
 
-## Repository status
+Canonical ChatGPT URL:
 
-This repository is retained only as historical implementation evidence for the abandoned standalone web-dashboard experiment.
+```text
+https://chatgpt.com/?prompt=OR-601
+```
 
-Do not:
-- resume React/Hono dashboard development;
-- add another hosting provider;
-- re-enable Render/Vercel/Cloudflare deployment work;
-- copy canonical operational state into this repository.
+The Node service additionally exposes:
 
-A future reactivation requires an explicit architecture decision in Jira/ADR first.
+- `GET /jira/OR-601` → `302` to the canonical ChatGPT URL
+- `GET /?key=OR-601` → same redirect
+- `GET /healthz` → implementation/version metadata
+
+Only `OR-<digits>` keys are accepted.
+
+## Development
+
+Requires Node 20+.
+
+```bash
+npm test
+npm run check
+npm start
+```
+
+There are no runtime dependencies.
+
+## Architecture
+
+- Notion remains the active, mobile-first operator UI.
+- Jira remains authoritative for work state.
+- This repository does not store or mirror Jira state.
+- No React/Hono/Vite dashboard is maintained here.
+- No hosting provider is required; the HTTP service is optional infrastructure if a stable redirect endpoint is later needed.
+
+Current implementation version: **1.0.0**.
