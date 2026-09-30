@@ -11,9 +11,9 @@ import {
   type SourceAdapter,
 } from "./read-model"
 import {
-  assertVercelDeploymentProtection,
+  assertDeploymentProtection,
   cloudControlEnvFromProcess,
-  vercelOperatorIdentity,
+  cloudOperatorIdentity,
   type CloudControlEnv,
 } from "./security"
 import { SupabaseCloudStore } from "./supabase-store"
@@ -21,10 +21,10 @@ import { SupabaseCloudStore } from "./supabase-store"
 const healthPayload = {
   status: "ok",
   service: "orchy-cloud-control",
-  stack: "vercel+hono+react",
+  stack: "render+hono+react",
   mode: "operator-read-models",
   authority: "canonical-source-projections",
-  auth: "vercel-deployment-protection",
+  auth: "render-basic-auth",
   cache: "supabase-dashboard-local",
 } as const
 
@@ -47,7 +47,7 @@ export function createCloudApp(
       const code =
         error instanceof Error
           ? error.message
-          : "VERCEL_DEPLOYMENT_PROTECTION_UNCONFIRMED"
+          : "RENDER_DEPLOYMENT_PROTECTION_UNCONFIRMED"
       return context.json({ status: "unavailable", code }, 503)
     }
     await next()
