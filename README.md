@@ -1,24 +1,33 @@
-# Orchy UI
+# Orchy UI — frozen historical experiment
 
-Cloud-hosted Orchy Cloud Control operator surface.
+> **Inactive. Do not deploy or extend this repository.**
+>
+> As of 2026-09-30, Orchy uses **Notion as the only active operator UI**. The standalone React/Hono/Render/Vercel/Cloudflare path was dropped to reduce infrastructure and connector complexity.
 
-## Architecture
+## Current operator surface
 
-- Render free web service in Frankfurt
-- React + TypeScript + Vite frontend
-- Hono Node API, same origin
-- Login page + secure HttpOnly session cookie
-- Supabase dashboard-local snapshots/preferences/audit only
-- Jira = work authority
-- GitHub = implementation/CI authority
-- TestOps/Supabase = assurance/execution/fleet authority
-- PostHog = observability
-- Madriguera = on-demand GPU/private/hardware executor only
+- Notion: Orchy Operator Dashboard
+- Jira OR-620: Notion-only operator milestone
+- Jira OR-647: legacy UI parity and Notion limitation register
+- Existing Notion Test Assurance dashboard remains active
 
-Cloud Control never uses background polling. Missing authority bindings fail closed and are shown as UNBOUND rather than fabricated.
+## Authority
 
-## Required server secrets
+- Jira = work state, scope, acceptance and blockers
+- GitHub PixelGaps/orchy = source, runtime contracts and CI
+- TestOps / Supabase = assurance evidence
+- ExecutionStore + Mission Core = execution/fleet/host state
+- Madriguera = on-demand GPU/private/hardware executor
+- Notion = human-facing operator projection
 
-`JIRA_EMAIL`, `JIRA_API_TOKEN`, `GITHUB_TOKEN`, `SUPABASE_SECRET_KEY` (or service role), `POSTHOG_SUMMARY_URL`, and optional `POSTHOG_PERSONAL_API_KEY` are server-side only and intentionally not committed.
+## Repository status
 
-Notion remains frozen and working. OR-634 requires fresh explicit manual approval.
+This repository is retained only as historical implementation evidence for the abandoned standalone web-dashboard experiment.
+
+Do not:
+- resume React/Hono dashboard development;
+- add another hosting provider;
+- re-enable Render/Vercel/Cloudflare deployment work;
+- copy canonical operational state into this repository.
+
+A future reactivation requires an explicit architecture decision in Jira/ADR first.
