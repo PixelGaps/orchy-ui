@@ -13,7 +13,7 @@ repository:
   routine_branches: forbidden
 
 scope:
-  owns: [Cloud-Control-React-UI,Vercel-serverless-API-facade,UI-tests,Vercel-config]
+  owns: [Cloud-Control-React-UI,Render-Hono-API-facade,UI-tests,Vercel-config]
   MUST_NOT_own: [work-state,execution-lifecycle,Mission-Core,TestOps-evidence,CI-fleet-authority,machine-control,secrets]
 
 deployment:
