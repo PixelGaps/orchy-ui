@@ -17,10 +17,10 @@ scope:
   MUST_NOT_own: [work-state,execution-lifecycle,Mission-Core,TestOps-evidence,CI-fleet-authority,machine-control,secrets]
 
 deployment:
-  provider: Vercel
+  provider: Render
   framework: Vite+React
-  api: Hono-Vercel-Functions
-  protection: Vercel-Authentication
+  api: Hono-Render-Node-web-service
+  protection: Render-app-level-basic-auth
   local_store: Supabase-dashboard-local-only
   public_unauthenticated_operator_surface: forbidden
 
