@@ -300,17 +300,17 @@ export function MissionsPage() {
                 description="Default provider visibility for quota review."
               />
             </div>
-            {preferences.data?.persistence !== "d1" && (
+            {preferences.data?.persistence !== "supabase" && (
               <StatusNotice
-                title="D1 preferences unavailable"
-                body="Controls are preview-only until the Cloud Control D1 binding is live. No alternate settings authority is used."
+                title="Supabase preferences unavailable"
+                body="Controls are preview-only until the Cloud Control Supabase binding is live. No alternate settings authority is used."
                 tone="warn"
               />
             )}
             <div className="page-actions">
               <Button
                 disabled={
-                  preferences.data?.persistence !== "d1" ||
+                  preferences.data?.persistence !== "supabase" ||
                   applyPreferences.isPending ||
                   resetPreferences.isPending
                 }
@@ -321,7 +321,7 @@ export function MissionsPage() {
               <Button
                 className="button-secondary"
                 disabled={
-                  preferences.data?.persistence !== "d1" ||
+                  preferences.data?.persistence !== "supabase" ||
                   applyPreferences.isPending ||
                   resetPreferences.isPending
                 }
@@ -331,7 +331,7 @@ export function MissionsPage() {
               </Button>
             </div>
             <p className="form-help">
-              <SlidersHorizontal size={13} /> Validated by the Worker, audited in D1, and reversible with Reset.
+              <SlidersHorizontal size={13} /> Validated by the Cloud Control API, audited in Supabase, and reversible with Reset.
             </p>
           </Card>
 
