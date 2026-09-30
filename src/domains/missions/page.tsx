@@ -257,7 +257,7 @@ export function MissionsPage() {
               kicker="OPERATOR SETTINGS"
               title="Cloud Control preferences"
               action={
-                <Badge tone={preferences.data?.persistence === "d1" ? "live" : "warn"}>
+                <Badge tone={preferences.data?.persistence === "supabase" ? "live" : "warn"}>
                   {preferences.data?.persistence ?? "loading"}
                 </Badge>
               }
