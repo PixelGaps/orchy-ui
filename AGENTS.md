@@ -1,28 +1,39 @@
-schema: orchy-ui.agent-contract.v2
+schema: orchy-ui.agent-contract.v3
+repository:
+  state: frozen-historical
+  default_branch: main
+  active_development: forbidden
+  reactivation_requires: explicit-Jira-architecture-decision
 authority:
+  operator_ui: Notion-Orchy-Operator-Dashboard
   work: Jira-OR
-  implementation_ui: PixelGaps/orchy-ui
   backend_runtime: PixelGaps/orchy
   assurance: TestOps
   execution: ExecutionStore+Mission-Core
-repository:
-  default_branch: main
-  direct_main: required
-  pull_requests: forbidden
-  routine_branches: forbidden
 scope:
-  owns: [Cloud-Control-React-UI,Render-Hono-API-facade,UI-tests,Render-config]
-  MUST_NOT_own: [work-state,execution-lifecycle,Mission-Core,TestOps-evidence,CI-fleet-authority,machine-control,secrets]
-deployment:
-  provider: Render
-  framework: Vite+React
-  api: Hono-Render-Node-web-service
-  protection: Render-app-session-auth
-  local_store: Supabase-dashboard-local-only
-  public_unauthenticated_operator_surface: forbidden
-  background_polling: forbidden
+  historical_only:
+    - abandoned-React-UI
+    - abandoned-Hono-API-facade
+    - abandoned-Render-Vercel-Cloudflare-hosting
+  MUST_NOT_own:
+    - work-state
+    - execution-lifecycle
+    - Mission-Core
+    - TestOps-evidence
+    - CI-fleet-authority
+    - machine-control
+    - secrets
+rules:
+  modify_only_for:
+    - archival-metadata
+    - security-cleanup
+    - explicit-reactivation
+  deployment_work: forbidden
+  provider_migration_work: forbidden
   paid_resources: forbidden
 notion:
-  state: frozen-preserved
+  state: active-default-operator-ui
+  milestone: OR-620
+  parity_register: OR-647
   retirement_ticket: OR-634
-  fresh_manual_approval_required: true
+  retirement_requires_fresh_manual_approval: true
