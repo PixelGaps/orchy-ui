@@ -44,10 +44,11 @@ export async function fetchCloudSource<T>(
     cache: "no-store",
     headers: { Accept: "application/json" },
   })
-  if (!response.ok) {
+  const payload = (await response.json()) as SourceReadModel<T>
+  if (!response.ok && payload.state !== "unavailable") {
     throw new Error(`Cloud source ${source} returned ${response.status}`)
   }
-  return response.json() as Promise<SourceReadModel<T>>
+  return payload
 }
 
 export async function refreshCloudSource<T>(
