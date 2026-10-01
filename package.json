@@ -1,15 +1,52 @@
 {
   "name": "@pixelgaps/orchy-ui",
   "private": true,
-  "version": "1.1.0",
-  "description": "Private zero-cost Orchy operator dashboard and Jira-to-ChatGPT implementation launcher",
+  "version": "2.0.0",
   "type": "module",
-  "engines": {
-    "node": ">=20"
-  },
   "scripts": {
-    "start": "node src/index.mjs",
-    "test": "node --test",
-    "check": "node --check src/index.mjs && node --test"
-  }
+    "dev": "vite --host 0.0.0.0",
+    "build": "npm run test:hooks && npm run check:hooks && tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit --pretty false",
+    "lint": "eslint src e2e",
+    "test:e2e:routes": "playwright test e2e/routes.spec.ts",
+    "test:e2e:ui-contract": "playwright test e2e/ui-contract.spec.ts",
+    "test:e2e:image-factory": "playwright test e2e/image-factory.spec.ts e2e/image-factory-backend.spec.ts",
+    "test:e2e:image-factory-live": "playwright test e2e/image-factory-live-evidence.spec.ts",
+    "test:e2e:healthchecks": "playwright test e2e/healthchecks.spec.ts",
+    "test:e2e:healthchecks:list": "playwright test e2e/healthchecks.spec.ts --list",
+    "test:e2e:new-task": "playwright test e2e/new-task.spec.ts",
+    "eslint": "eslint src e2e",
+    "test:unit": "bash scripts/web_test_toolchain.sh unit",
+    "test:coverage": "bash scripts/web_test_toolchain.sh coverage",
+    "check:hooks": "node scripts/check-react-hook-order.mjs",
+    "test:hooks": "node --test scripts/check-react-hook-order.test.mjs",
+    "test": "npm run test:hooks && npm run test:launcher",
+    "test:launcher": "node --test test/index.test.mjs"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.468.0",
+    "motion": "^12.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.0.0",
+    "recharts": "^3.0.0",
+    "tailwind-merge": "^3.0.0",
+    "hono": "4.13.9",
+    "jose": "6.2.12"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  },
+  "description": "Private zero-cost hosted Orchy operator dashboard"
 }
