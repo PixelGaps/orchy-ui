@@ -3,7 +3,8 @@ repository:
   state: active-hosted-operator-ui
   default_branch: main
   direct_main: required
-  purpose: private-zero-cost-orchy-operator-dashboard
+  purpose: authenticated-zero-cost-orchy-operator-dashboard
+  visibility: public-required-for-zero-cost-hosting
   standalone_dashboard: required
   hosting: Netlify-Free-Direct-Deploy
   retired_hosting: Render-forbidden
@@ -41,7 +42,9 @@ rules:
   unknown_host_quota: fail-closed
   canonical_state_copy: forbidden
   mobile_ui: first-class
-  private_authenticated_production: required
+  public_source_repository: required-for-free-hosting
+  authenticated_operator_access: required
+  repository_visibility_must_not_be-treated_as-runtime-auth: true
   changes_require: Jira-traceability+deterministic-tests
   Render: forbidden+retired
 migration:
