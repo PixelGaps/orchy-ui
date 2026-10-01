@@ -39,6 +39,15 @@ import {
 import { cn } from "@/lib/utils"\nimport { HostedRuntimeBridgePage } from "@/components/hosted-runtime-bridge"
 
 
+function HostedQueuePage() { return <HostedRuntimeBridgePage title="Queue" capability="The legacy direct execution queue" /> }
+function HostedImageFactoryPage() { return <HostedRuntimeBridgePage title="Image Factory" capability="Image generation and GPU workflow control" /> }
+function HostedLLMPage() { return <HostedRuntimeBridgePage title="LLM" capability="Local vLLM model/runtime control" /> }
+function HostedComfyUIPage() { return <HostedRuntimeBridgePage title="ComfyUI" capability="Private ComfyUI runtime control" /> }
+function HostedHealthcheckPage() { return <HostedRuntimeBridgePage title="Healthcheck" capability="Private-host healthcheck execution" /> }
+function HostedLogsPage() { return <HostedRuntimeBridgePage title="Logs" capability="Private runtime and execution logs" /> }
+function HostedSettingsPage() { return <HostedRuntimeBridgePage title="Global Settings" capability="Typed private runtime configuration" /> }
+
+
 function AppShell({ children }: Readonly<{ children: ReactNode }>) {
   const [open, setOpen] = useState(false)
   const [compact, setCompact] = useState(
@@ -313,8 +322,6 @@ function AppShell({ children }: Readonly<{ children: ReactNode }>) {
 
 export default function App() {
   const hosted = import.meta.env.PROD && !(import.meta.env.VITE_ORCHY_API_BASE_URL ?? "").trim()
-  const hostBound = (title: string, capability: string) =>
-    hosted ? () => <HostedRuntimeBridgePage title={title} capability={capability} /> : null
   return (
     <AppShell>
       <DomainRoutes
@@ -323,13 +330,13 @@ export default function App() {
           Assurance: TestAssurancePage,
           Issues: IssuesPage,
           Missions: MissionsPage,
-          Queue: hostBound("Queue", "The legacy direct execution queue") ?? QueuePage,
-          ImageFactory: hostBound("Image Factory", "Image generation and GPU workflow control") ?? ImageFactory,
-          LLM: hostBound("LLM", "Local vLLM model/runtime control") ?? LLMPage,
-          ComfyUI: hostBound("ComfyUI", "Private ComfyUI runtime control") ?? ComfyUIPage,
-          Healthcheck: hostBound("Healthcheck", "Private-host healthcheck execution") ?? HealthcheckPage,
-          Logs: hostBound("Logs", "Private runtime and execution logs") ?? LogsPage,
-          GlobalSettings: hostBound("Global Settings", "Typed private runtime configuration") ?? GlobalSettingsPage,
+          Queue: hosted ? HostedQueuePage : QueuePage,
+          ImageFactory: hosted ? HostedImageFactoryPage : ImageFactory,
+          LLM: hosted ? HostedLLMPage : LLMPage,
+          ComfyUI: hosted ? HostedComfyUIPage : ComfyUIPage,
+          Healthcheck: hosted ? HostedHealthcheckPage : HealthcheckPage,
+          Logs: hosted ? HostedLogsPage : LogsPage,
+          GlobalSettings: hosted ? HostedSettingsPage : GlobalSettingsPage,
         }}
       />
     </AppShell>
