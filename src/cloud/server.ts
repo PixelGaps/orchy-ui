@@ -16,6 +16,7 @@ import {
   type CloudControlEnv,
 } from "./security"
 import { SupabaseCloudStore } from "./supabase-store"
+import { JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT } from "./fallback-snapshots"
 
 const healthPayload = {
   status: "ok",
@@ -73,6 +74,20 @@ export function createCloudApp(
       store,
       fetcher,
     )
+    if (refreshed.state === "unavailable" && source === "jira") {
+      return context.json({
+        source: "jira",
+        authority: adapter.authority,
+        state: "stale",
+        observedAt: JIRA_FALLBACK_OBSERVED_AT,
+        ageSeconds: Math.max(
+          0,
+          Math.floor((Date.now() - Date.parse(JIRA_FALLBACK_OBSERVED_AT)) / 1000),
+        ),
+        payload: JIRA_FALLBACK_SNAPSHOT,
+        errorCode: refreshed.errorCode ?? "JIRA_LIVE_BINDING_UNAVAILABLE",
+      })
+    }
     return context.json(refreshed, refreshed.state === "unavailable" ? 503 : 200)
   })
 
