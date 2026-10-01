@@ -1,4 +1,4 @@
-import type { JiraProjection, TestOpsProjection } from "./projections"
+import type { GitHubProjection, JiraProjection, TestOpsProjection } from "./projections"
 
 export const JIRA_FALLBACK_SNAPSHOT: JiraProjection = {
   "openCount": 59,
@@ -1310,3 +1310,174 @@ export const TESTOPS_FALLBACK_SNAPSHOT: TestOpsProjection = {
   findings: []
 }
 export const TESTOPS_FALLBACK_OBSERVED_AT = "2026-09-30T23:59:00.000Z"
+
+
+export const GITHUB_FALLBACK_SNAPSHOT: GitHubProjection = {
+  "repository": "PixelGaps/orchy",
+  "defaultBranch": "main",
+  "headSha": "dc40c26243057e38ed2263ccc68ba57dd0d7430a",
+  "openWorkflowRuns": 0,
+  "recentRuns": [
+    {
+      "id": 36800759742,
+      "name": "OR-336 Hostless Quality Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "dc40c26243057e38ed2263ccc68ba57dd0d7430a",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36800759742"
+    },
+    {
+      "id": 36799853225,
+      "name": "OR-336 Hostless Quality Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "fa6f286faa06c94b20841379c45e656a8e4ca874",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36799853225"
+    },
+    {
+      "id": 36798747383,
+      "name": "OR closure portability and flakes",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "6a639966af8c62451aee651357611b29f1f5857d",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36798747383"
+    },
+    {
+      "id": 36798630645,
+      "name": "OR closure portability and flakes",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "bb8326ea834ee9a75913ff8852d2ca0edb4e5b0f",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36798630645"
+    },
+    {
+      "id": 36796531014,
+      "name": "OR closure portability and flakes",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "1ac14b653ac6f0cd4513e80e5adf1736481137b6",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36796531014"
+    },
+    {
+      "id": 36796038414,
+      "name": "OR closure portability and flakes",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "0ae725b87930288571cf3d0984e9bfcfa3c49fe4",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36796038414"
+    },
+    {
+      "id": 36795911873,
+      "name": "OR closure portability and flakes",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "f22eb4eda711281e4158442e670a0f11b103e584",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36795911873"
+    },
+    {
+      "id": 36795483533,
+      "name": "OR closure portability and flakes",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "666e8e6b5f83a5be5a325f6d539f35e90bdaadd5",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36795483533"
+    },
+    {
+      "id": 36795054766,
+      "name": "OR-336 Hostless Quality Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "9bdaaa2817a0f9ece6b3338287e93ca88232d421",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36795054766"
+    },
+    {
+      "id": 36794973377,
+      "name": "OR-336 Hostless Coverage Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "e85bdfaaa8877f390a0d160cfd9418cbba9ce80a",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36794973377"
+    },
+    {
+      "id": 36794840362,
+      "name": "OR-336 Hostless Quality Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "d257fda68e5cc14413a62ad4600272db883b4d90",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36794840362"
+    },
+    {
+      "id": 36794616870,
+      "name": "OR-336 Hostless Quality Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "b62909351fd5eef2baa0829f656cf122fa6bcf77",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36794616870"
+    },
+    {
+      "id": 36793990784,
+      "name": "OR-336 Hostless Quality Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "455b4e98baaf19c1b6ce6c14dac30808fbbb26e9",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36793990784"
+    },
+    {
+      "id": 36793647934,
+      "name": "OR-336 Hostless Quality Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "7f55c874daa4b11bdafcf2a017b9e60417971bb8",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36793647934"
+    },
+    {
+      "id": 36793527300,
+      "name": "OR-336 Ruff Safe Autofix",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "a2ac6863f3facdd2e53e703663f9d65351e68f2e",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36793527300"
+    },
+    {
+      "id": 36793388308,
+      "name": "OR-336 Hostless Quality Sweep",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "fd1acb2eaddc0a150316155214fbd4e8c67066b5",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36793388308"
+    },
+    {
+      "id": 36791281689,
+      "name": "OR-388 Focused Mutation",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "d2fc1ffc9efbc19a53eacc545939b5afd05c4c66",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36791281689"
+    },
+    {
+      "id": 36790241514,
+      "name": "OR-385 Focused Mutation",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "b4cbd427815b1107d5bb029f5acfef6e6f2ae9f7",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36790241514"
+    },
+    {
+      "id": 36790196667,
+      "name": "OR-388 Focused Mutation",
+      "status": "completed",
+      "conclusion": "failure",
+      "headSha": "2c17ed30a3a1fd6b92905a870d8353b03e41817e",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36790196667"
+    },
+    {
+      "id": 36790089003,
+      "name": "OR-387 Focused Mutation",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "ed4053f1387e478f9b22d5c1fd215c44809b6dc9",
+      "htmlUrl": "https://github.com/PixelGaps/orchy/actions/runs/36790089003"
+    }
+  ]
+}
+export const GITHUB_FALLBACK_OBSERVED_AT = "2026-10-01T08:48:19.270Z"

@@ -3,8 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { apiUrl } from "@/lib/api-base"
 
 import type { SourceReadModel, CloudSource } from "./read-model"
-import type { GitHubProjection, JiraProjection, TestOpsProjection } from "./projections"
-import { JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT, TESTOPS_FALLBACK_OBSERVED_AT, TESTOPS_FALLBACK_SNAPSHOT } from "./fallback-snapshots"
+import { GITHUB_FALLBACK_OBSERVED_AT, GITHUB_FALLBACK_SNAPSHOT, JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT, TESTOPS_FALLBACK_OBSERVED_AT, TESTOPS_FALLBACK_SNAPSHOT } from "./fallback-snapshots"
 import {
   DEFAULT_OPERATOR_PREFERENCES,
   mergeOperatorPreferences,
@@ -27,44 +26,7 @@ function staleModel<T>(source: CloudSource, authority: string, observedAt: strin
   }
 }
 
-async function fetchPublicGitHub(): Promise<SourceReadModel<GitHubProjection>> {
-  const [repoResponse, runsResponse] = await Promise.all([
-    fetch("https://api.github.com/repos/PixelGaps/orchy", { cache: "no-store" }),
-    fetch("https://api.github.com/repos/PixelGaps/orchy/actions/runs?per_page=20", { cache: "no-store" }),
-  ])
-  if (!repoResponse.ok || !runsResponse.ok) throw new Error("GITHUB_PUBLIC_API_FAILED")
-  const repo = await repoResponse.json() as { default_branch?: string }
-  const runs = await runsResponse.json() as { workflow_runs?: Array<Record<string, unknown>> }
-  const recentRuns = (runs.workflow_runs ?? []).flatMap((run) => {
-    if (
-      typeof run.id !== "number" ||
-      typeof run.name !== "string" ||
-      typeof run.status !== "string" ||
-      typeof run.head_sha !== "string" ||
-      typeof run.html_url !== "string"
-    ) return []
-    return [{
-      id: run.id,
-      name: run.name,
-      status: run.status,
-      conclusion: typeof run.conclusion === "string" ? run.conclusion : null,
-      headSha: run.head_sha,
-      htmlUrl: run.html_url,
-    }]
-  })
-  const payload: GitHubProjection = {
-    repository: "PixelGaps/orchy",
-    defaultBranch: repo.default_branch ?? "main",
-    headSha: recentRuns[0]?.headSha ?? null,
-    openWorkflowRuns: recentRuns.filter((run) => run.status !== "completed").length,
-    recentRuns,
-  }
-  const observedAt = new Date().toISOString()
-  return { source: "github", authority: "GitHub source and CI", state: "fresh", observedAt, ageSeconds: 0, payload, errorCode: null }
-}
-
 async function fetchWithResilientFallback<T>(source: CloudSource): Promise<SourceReadModel<T>> {
-  if (source === "github") return fetchPublicGitHub() as Promise<SourceReadModel<T>>
   try {
     const response = await fetch(apiUrl(`/api/cloud-control/sources/${source}`), {
       cache: "no-store",
@@ -77,6 +39,9 @@ async function fetchWithResilientFallback<T>(source: CloudSource): Promise<Sourc
   }
   if (source === "jira") {
     return staleModel("jira", "Jira OR work state", JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT, "JIRA_SERVER_BINDING_UNAVAILABLE") as SourceReadModel<T>
+  }
+  if (source === "github") {
+    return staleModel("github", "GitHub source and CI", GITHUB_FALLBACK_OBSERVED_AT, GITHUB_FALLBACK_SNAPSHOT, "GITHUB_SERVER_BINDING_UNAVAILABLE") as SourceReadModel<T>
   }
   if (source === "testops") {
     return staleModel("testops", "Frozen TestOps evidence", TESTOPS_FALLBACK_OBSERVED_AT, TESTOPS_FALLBACK_SNAPSHOT, "TESTOPS_LIVE_STORE_UNAVAILABLE") as SourceReadModel<T>
@@ -126,7 +91,6 @@ export async function fetchCloudSource<T>(
 export async function refreshCloudSource<T>(
   source: CloudSource,
 ): Promise<SourceReadModel<T>> {
-  if (source === "github") return fetchPublicGitHub() as Promise<SourceReadModel<T>>
   try {
     const response = await fetch(
       apiUrl(`/api/cloud-control/sources/${source}/refresh`),
