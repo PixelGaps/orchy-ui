@@ -1,0 +1,190 @@
+
+@media (max-width: 720px) {
+  .mission-health-metrics,
+  .mission-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quota-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .quota-copy {
+    width: 100%;
+  }
+
+  .quota-values {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-card-actions {
+    flex-wrap: wrap;
+  }
+
+  .mission-card-actions .button {
+    flex: 1 1 auto;
+  }
+
+  .mission-board-controls,
+  .mission-board-stats,
+  .mission-output-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mission-board-count {
+    justify-items: start;
+  }
+
+  .mission-board-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-card-head,
+  .mission-meta-line {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mission-card-status {
+    justify-items: start;
+  }
+}
+
+
+/* Overview subsection navigation. */
+.overview-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--line);
+}
+
+.overview-summary-cell {
+  appearance: none;
+  min-width: 0;
+  padding: 13px 15px;
+  border: 0;
+  background: rgba(7, 12, 22, .94);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: background .16s ease, box-shadow .16s ease;
+}
+
+.overview-summary-cell:hover,
+.overview-summary-cell.is-active {
+  background: rgba(80, 227, 255, .055);
+}
+
+.overview-summary-cell.is-active {
+  box-shadow: inset 0 2px 0 var(--cyan);
+}
+
+.overview-summary-cell small,
+.overview-summary-cell span {
+  display: block;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.overview-summary-cell strong {
+  display: block;
+  margin: 5px 0 4px;
+  overflow: hidden;
+  font-size: 15px;
+  letter-spacing: -.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overview-summary-cell span {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.overview-section-nav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.overview-section-tab {
+  appearance: none;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(7, 12, 22, .72);
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .16s ease, background .16s ease, color .16s ease;
+}
+
+.overview-section-tab:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.overview-section-tab.is-active {
+  border-color: rgba(80, 227, 255, .34);
+  background: rgba(80, 227, 255, .065);
+  color: var(--text);
+}
+
+.overview-section-tab strong,
+.overview-section-tab small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overview-section-tab strong {
+  font-size: 11px;
+}
+
+.overview-section-tab small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+@media (max-width: 760px) {
+  .overview-summary-strip,
+  .overview-section-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* OR-311/312 — compact operator density system and shell. */
+:root {
+  --radius-sm: 8px;
+  --radius-md: 11px;
+  --radius-lg: 14px;
+  --space-1: 4px;
+  --space-2: 7px;
+  --space-3: 10px;
+  --space-4: 14px;
+  --space-5: 18px;
+  --control-h: 34px;
+  --control-h-compact: 30px;
+  --panel-pad: 14px;
+  --radius: var(--radius-lg);
+  --shadow: 0 14px 42px rgba(0, 0, 0, .28);
+}

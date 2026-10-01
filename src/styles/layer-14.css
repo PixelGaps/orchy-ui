@@ -1,0 +1,181 @@
+
+.mission-step {
+  min-height: 36px;
+}
+
+.factory-command-grid {
+  align-items: start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.factory-command-grid .control-form {
+  gap: 8px;
+  padding: 12px;
+}
+
+.factory-command-grid .control-form textarea {
+  min-height: 88px;
+}
+
+.factory-policy-details {
+  margin: 2px 0;
+  border-radius: 9px;
+  background: rgba(5, 10, 18, .48);
+}
+
+.factory-policy-details .collapsible-content {
+  padding: 10px;
+}
+
+.factory-policy-details textarea {
+  min-height: 120px;
+}
+
+.factory-result-disclosure,
+.factory-lineage-disclosure,
+.factory-gallery-disclosure {
+  margin-bottom: 9px;
+}
+
+.factory-result-disclosure .collapsible-trigger,
+.factory-lineage-disclosure .collapsible-trigger,
+.factory-gallery-disclosure .collapsible-trigger {
+  min-height: 40px;
+}
+
+.factory-result-card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: rgba(5, 10, 18, .42);
+}
+
+.factory-result-card::after {
+  display: none;
+}
+
+.factory-result-card .panel-header {
+  padding: 9px 12px;
+}
+
+.factory-result-card .config-grid {
+  gap: 1px;
+}
+
+.factory-result-card .config-item {
+  padding: 8px 10px;
+}
+
+.factory-lineage-disclosure .candidate-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  padding: 10px;
+}
+
+.factory-lineage-disclosure .candidate-card {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.factory-gallery-disclosure > .collapsible-content > .gallery-section {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 720px) {
+  .quota-card {
+    grid-template-columns: 72px minmax(0, 1fr);
+    justify-items: stretch;
+  }
+
+  .quota-gauge-wrap {
+    width: 68px;
+    height: 68px;
+  }
+
+  .quota-gauge {
+    width: 66px;
+    height: 66px;
+  }
+
+  .mission-board-grid,
+  .factory-lineage-disclosure .candidate-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* OR-316/318/319 — dense operations, settings and research/runtime surfaces. */
+.healthcheck-summary,
+.logs-summary,
+.deep-research-summary,
+.settings-summary {
+  margin-bottom: 10px;
+}
+
+.health-list {
+  display: grid;
+  gap: 7px;
+}
+
+.healthcheck-row .collapsible-trigger {
+  min-height: 38px;
+}
+
+.health-body-compact {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.health-body-compact p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.logs-grid {
+  grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.logs-filter {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.logs-filter input {
+  min-width: 0;
+  height: 30px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: rgba(4, 8, 15, .88);
+  font-size: 10px;
+}
+
+.logs-filter span {
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.logs-data-list {
+  max-height: 62vh;
+  overflow: auto;
+}
+
+.logs-data-list .data-row {
+  min-height: 42px;
+}

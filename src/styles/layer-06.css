@@ -1,0 +1,180 @@
+.gallery-subgroup-head strong {
+  color: var(--text);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.gallery-subgroup-head span {
+  font-size: 10px;
+}
+.gallery-artifact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 11px;
+}
+.gallery-artifact-card {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: rgba(5,10,18,.72);
+}
+.gallery-artifact-passed {
+  border-color: rgba(89,230,167,.24);
+}
+.gallery-artifact-failed {
+  border-color: rgba(255,116,143,.24);
+}
+.gallery-image-frame {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 11px;
+  background:
+    linear-gradient(45deg, rgba(255,255,255,.035) 25%, transparent 25% 75%, rgba(255,255,255,.035) 75%),
+    linear-gradient(45deg, rgba(255,255,255,.035) 25%, transparent 25% 75%, rgba(255,255,255,.035) 75%);
+  background-size: 18px 18px;
+  background-position: 0 0, 9px 9px;
+}
+.gallery-image-frame img,
+.gallery-pack-member img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+.gallery-selected {
+  position: absolute;
+  right: 7px;
+  top: 7px;
+  padding: 4px 6px;
+  border: 1px solid rgba(89,230,167,.28);
+  border-radius: 7px;
+  color: #baf6d7;
+  background: rgba(5,18,14,.84);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .07em;
+}
+.gallery-artifact-meta,
+.gallery-pack-head,
+.gallery-pack-foot,
+.gallery-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+}
+.gallery-artifact-meta {
+  margin-top: 10px;
+  align-items: flex-start;
+}
+.gallery-artifact-meta strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.gallery-stat-row {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.gallery-pack-card {
+  padding: 16px;
+  border: 1px solid rgba(255,190,84,.28);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255,190,84,.08), rgba(255,255,255,.018) 38%, rgba(155,123,255,.04));
+}
+.gallery-pack-head {
+  align-items: flex-start;
+  margin-bottom: 13px;
+}
+.gallery-pack-head h3 {
+  margin: 4px 0 0;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+.gallery-ready-chip,
+.gallery-pack-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 7px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .05em;
+}
+.gallery-ready-chip {
+  color: #ffe5a8;
+  border: 1px solid rgba(255,190,84,.38);
+  background: #332812;
+}
+.gallery-pack-count {
+  color: var(--muted);
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.025);
+}
+.gallery-pack-members {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 9px;
+}
+.gallery-pack-member {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,190,84,.15);
+  border-radius: 12px;
+  background: rgba(5,10,18,.65);
+}
+.gallery-pack-member img {
+  aspect-ratio: 1 / 1;
+}
+.gallery-pack-member span {
+  display: block;
+  padding: 7px 8px;
+  color: #f5ddb0;
+  font-size: 9px;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.gallery-pack-foot {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+.gallery-pack-foot span {
+  padding: 5px 7px;
+  border: 1px solid rgba(255,190,84,.13);
+  border-radius: 7px;
+  background: rgba(255,190,84,.035);
+}
+
+@media (max-width: 720px) {
+  .gallery-artifact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .gallery-pack-head {
+    flex-direction: column;
+  }
+  .gallery-pack-members {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .gallery-artifact-grid,
+  .gallery-pack-members {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Overview Mission and quota observability. */
