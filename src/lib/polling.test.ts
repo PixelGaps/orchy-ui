@@ -31,32 +31,31 @@ describe("polling policy", () => {
     expect(hasActiveExecutions(undefined)).toBe(false)
   })
 
-  it("selects fast and idle execution intervals", () => {
-    expect(executionPollInterval([execution("running")])).toBe(750)
-    expect(executionPollInterval([])).toBe(5000)
+  it("disables execution background polling", () => {
+    expect(executionPollInterval([execution("running")])).toBe(false)
+    expect(executionPollInterval([])).toBe(false)
   })
 
-  it("selects healthcheck intervals from latest execution state", () => {
-    expect(healthcheckPollInterval([{ latest: execution("retrying") } as never])).toBe(1000)
-    expect(healthcheckPollInterval([{ latest: execution("completed") } as never])).toBe(5000)
-    expect(healthcheckPollInterval(undefined)).toBe(5000)
+  it("disables healthcheck background polling", () => {
+    expect(healthcheckPollInterval([{ latest: execution("retrying") } as never])).toBe(false)
+    expect(healthcheckPollInterval(undefined)).toBe(false)
   })
 
-  it("selects overview intervals from backend active executions", () => {
-    expect(overviewPollInterval({ active_executions: [execution("running")] } as never)).toBe(1500)
-    expect(overviewPollInterval(undefined)).toBe(5000)
+  it("disables overview background polling", () => {
+    expect(overviewPollInterval({ active_executions: [execution("running")] } as never)).toBe(false)
+    expect(overviewPollInterval(undefined)).toBe(false)
   })
 
-  it("combines log execution and healthcheck activity", () => {
+  it("disables logs background polling", () => {
     expect(logsPollInterval({
       executions: [execution("completed")],
       healthchecks: [execution("cancelling")],
-    } as never)).toBe(750)
-    expect(logsPollInterval(undefined)).toBe(5000)
+    } as never)).toBe(false)
+    expect(logsPollInterval(undefined)).toBe(false)
   })
 
-  it("selects runtime active and idle intervals", () => {
-    expect(runtimePollInterval(true)).toBe(2000)
-    expect(runtimePollInterval(false)).toBe(10000)
+  it("disables runtime background polling", () => {
+    expect(runtimePollInterval(true)).toBe(false)
+    expect(runtimePollInterval(false)).toBe(false)
   })
 })
