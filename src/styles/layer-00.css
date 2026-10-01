@@ -1,0 +1,190 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --bg: #060911;
+  --bg-soft: #0a1020;
+  --panel: rgba(13, 20, 35, 0.82);
+  --panel-strong: rgba(17, 26, 44, 0.94);
+  --line: rgba(148, 163, 184, 0.14);
+  --line-strong: rgba(148, 163, 184, 0.24);
+  --text: #f5f8fc;
+  --muted: #91a0b5;
+  --subtle: #5f6d81;
+  --cyan: #50e3ff;
+  --cyan-soft: rgba(80, 227, 255, 0.12);
+  --violet: #9b7bff;
+  --green: #59e6a7;
+  --amber: #ffc868;
+  --red: #ff748f;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+  --radius: 22px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  min-width: 320px;
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 15% -10%, rgba(80, 227, 255, .08), transparent 34rem),
+    radial-gradient(circle at 95% 10%, rgba(155, 123, 255, .09), transparent 36rem),
+    linear-gradient(180deg, #060911 0%, #08101a 52%, #060911 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .17;
+  background-image:
+    linear-gradient(rgba(255,255,255,.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.026) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(to bottom, #000, transparent 88%);
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+::selection { background: rgba(80, 227, 255, .28); }
+
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+}
+
+.ambient {
+  position: fixed;
+  z-index: 0;
+  width: 420px;
+  height: 420px;
+  border-radius: 999px;
+  filter: blur(85px);
+  pointer-events: none;
+  opacity: .13;
+}
+
+.ambient-one {
+  background: var(--cyan);
+  left: -220px;
+  top: 18vh;
+  animation: ambientDrift 16s ease-in-out infinite alternate;
+}
+
+.ambient-two {
+  background: var(--violet);
+  right: -230px;
+  top: 5vh;
+  animation: ambientDrift 19s ease-in-out infinite alternate-reverse;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 22px 16px;
+  border-right: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(7, 10, 18, .95), rgba(8, 13, 23, .82));
+  backdrop-filter: blur(24px);
+  z-index: 30;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  text-decoration: none;
+}
+
+.brand strong { display: block; font-size: 20px; letter-spacing: -.02em; }
+.brand small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.brand-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 13px;
+  border: 1px solid rgba(80, 227, 255, .24);
+  background: linear-gradient(135deg, rgba(80,227,255,.13), rgba(155,123,255,.17));
+  box-shadow: 0 0 30px rgba(80, 227, 255, .08);
+}
+
+.brand-mark::before,
+.brand-mark::after,
+.brand-mark span {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+}
+
+.brand-mark::before {
+  inset: 8px;
+  border: 1px solid rgba(255,255,255,.6);
+}
+
+.brand-mark::after {
+  inset: 12px;
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  box-shadow: 0 0 18px rgba(80, 227, 255, .48);
+  animation: pulse 2.3s ease-in-out infinite;
+}
+
+.nav-scroll { overflow-y: auto; scrollbar-width: none; }
+.nav-scroll::-webkit-scrollbar { display: none; }
+.nav-group { display: grid; gap: 5px; margin-bottom: 17px; }
+.nav-label {
+  padding: 0 11px 4px;
+  color: #526078;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.nav-link {
+  position: relative;
+  display: grid;
+  grid-template-columns: 20px 1fr 14px;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 9px 11px;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  transition: .18s ease;
+}
