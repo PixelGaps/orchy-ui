@@ -2,7 +2,7 @@ import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const VERSION = "1.0.0";
+export const VERSION = "1.1.0";
 const JIRA_KEY = /^OR-\d+$/;
 
 export function normalizeJiraKey(value) {
@@ -15,7 +15,7 @@ export function normalizeJiraKey(value) {
 
 export function chatgptUrlForJira(value) {
   const url = new URL("https://chatgpt.com/");
-  url.searchParams.set("prompt", normalizeJiraKey(value));
+  url.searchParams.set("prompt", `Implement ${normalizeJiraKey(value)}`);
   return url.toString();
 }
 
@@ -24,7 +24,7 @@ export function handleRequest(req, res) {
 
   if (requestUrl.pathname === "/healthz") {
     res.writeHead(200, { "content-type": "application/json; charset=utf-8" });
-    res.end(JSON.stringify({ service: "orchy-ui", version: VERSION, role: "jira-chatgpt-launcher" }));
+    res.end(JSON.stringify({ service: "orchy-ui", version: VERSION, role: "operator-ui-bootstrap" }));
     return;
   }
 
@@ -48,7 +48,7 @@ export function handleRequest(req, res) {
   res.end(JSON.stringify({
     service: "orchy-ui",
     version: VERSION,
-    purpose: "Redirect a Jira OR key to ChatGPT with the key populated",
+    purpose: "Bootstrap Orchy operator UI actions and redirect Jira OR keys to ChatGPT implementation prompts",
     usage: ["/jira/OR-601", "/?key=OR-601"]
   }));
 }
