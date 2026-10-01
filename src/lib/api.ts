@@ -1,4 +1,4 @@
-import type {
+import { apiUrl } from "@/lib/api-base"\n\nimport type {
 CancellationResponse,
 CapabilityRegistry,
 ComfyUIRuntime,
@@ -83,7 +83,7 @@ export async function api<T>(
   path: string,
   init?: RequestInit,
 ): Promise<T> {
-  const response = await fetch(path, {
+  const response = await fetch(apiUrl(path), {
     ...init,
     cache: "no-store",
     headers: {

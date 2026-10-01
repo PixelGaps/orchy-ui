@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"\n\nimport { apiUrl } from "@/lib/api-base"
 
 import type { SourceReadModel, CloudSource } from "./read-model"
 import {
@@ -38,7 +38,7 @@ function writePreferences(preferences: OperatorPreferences): OperatorPreferences
 export async function fetchCloudSource<T>(
   source: CloudSource,
 ): Promise<SourceReadModel<T>> {
-  const response = await fetch(`/api/cloud-control/sources/${source}`, {
+  const response = await fetch(apiUrl(`/api/cloud-control/sources/${source}`), {
     cache: "no-store",
     headers: { Accept: "application/json" },
   })
@@ -52,7 +52,7 @@ export async function refreshCloudSource<T>(
   source: CloudSource,
 ): Promise<SourceReadModel<T>> {
   const response = await fetch(
-    `/api/cloud-control/sources/${source}/refresh`,
+    apiUrl(`/api/cloud-control/sources/${source}/refresh`),
     {
       method: "POST",
       cache: "no-store",
@@ -113,7 +113,7 @@ export function sourceTone(
 }
 
 export async function cancelCloudOperation(id: string) {
-  const response = await fetch(`/api/cloud-control/operations/${encodeURIComponent(id)}/cancel`, {
+  const response = await fetch(apiUrl(`/api/cloud-control/operations/${encodeURIComponent(id)}/cancel`), {
     method: "POST",
     cache: "no-store",
     headers: { Accept: "application/json" },
