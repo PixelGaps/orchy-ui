@@ -11,7 +11,9 @@ ListChecks,
 } from "lucide-react"
 import { Navigate,Route,Routes } from "react-router-dom"
 
-export const domainNav = [
+const hosted = import.meta.env.PROD && !(import.meta.env.VITE_ORCHY_API_BASE_URL ?? "").trim()
+
+const allDomainNav = [
   { to: "/", label: "Overview", icon: Home, group: "Command" },
   { to: "/assurance", label: "Test Assurance", icon: ShieldCheck, group: "Command" },
   { to: "/issues", label: "Issues", icon: ListChecks, group: "Command" },
@@ -24,6 +26,9 @@ export const domainNav = [
   { to: "/logs", label: "Logs", icon: TerminalSquare, group: "Operations" },
   { to: "/settings", label: "Global Settings", icon: Cog, group: "Operations" },
 ]
+
+const hostedRoutes = new Set(["/", "/assurance", "/issues", "/missions"])
+export const domainNav = hosted ? allDomainNav.filter((item) => hostedRoutes.has(item.to)) : allDomainNav
 
 type DomainPages = {
   Overview: ComponentType
@@ -46,13 +51,13 @@ export function DomainRoutes({ pages }: Readonly<{ pages: DomainPages }>) {
       <Route path="/assurance" element={<pages.Assurance />} />
       <Route path="/issues" element={<pages.Issues />} />
       <Route path="/missions" element={<pages.Missions />} />
-      <Route path="/queue" element={<pages.Queue />} />
-      <Route path="/image-factory" element={<pages.ImageFactory />} />
-      <Route path="/llm" element={<pages.LLM />} />
-      <Route path="/comfyui" element={<pages.ComfyUI />} />
-      <Route path="/healthcheck" element={<pages.Healthcheck />} />
-      <Route path="/logs" element={<pages.Logs />} />
-      <Route path="/settings" element={<pages.GlobalSettings />} />
+      <Route path="/queue" element={hosted ? <Navigate to="/missions" replace /> : <pages.Queue />} />
+      <Route path="/image-factory" element={hosted ? <Navigate to="/missions" replace /> : <pages.ImageFactory />} />
+      <Route path="/llm" element={hosted ? <Navigate to="/missions" replace /> : <pages.LLM />} />
+      <Route path="/comfyui" element={hosted ? <Navigate to="/missions" replace /> : <pages.ComfyUI />} />
+      <Route path="/healthcheck" element={hosted ? <Navigate to="/" replace /> : <pages.Healthcheck />} />
+      <Route path="/logs" element={hosted ? <Navigate to="/assurance" replace /> : <pages.Logs />} />
+      <Route path="/settings" element={hosted ? <Navigate to="/missions" replace /> : <pages.GlobalSettings />} />
       <Route path="/tasks" element={<Navigate to="/" replace />} />
       <Route path="/validation" element={<Navigate to="/" replace />} />
       <Route path="/comfyui/image-factory" element={<Navigate to="/image-factory" replace />} />
