@@ -144,12 +144,12 @@ export function QueuePage() {
   const jobsQuery = useQuery({
     queryKey:["gateway-full-queue",queryString],
     queryFn:() => api<GatewayQueueList>(`/api/gateway/jobs?${queryString}`),
-    refetchInterval:5000,
+    refetchInterval:false,
   })
   const healthQuery = useQuery({
     queryKey:["gateway-queue-health"],
     queryFn:() => api<GatewayQueueHealth>("/api/gateway/health"),
-    refetchInterval:5000,
+    refetchInterval:false,
   })
   const activeId = selectedId || jobsQuery.data?.jobs[0]?.id || ""
   const detailQuery = useQuery({
