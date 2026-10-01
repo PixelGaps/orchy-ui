@@ -1,49 +1,39 @@
-# Orchy UI launcher
+# Orchy UI
 
-Minimal, versioned Node support for the **Notion-first Orchy operator UI**.
+Private, zero-cost hosted operator dashboard for Orchy.
 
-This repository is **not a dashboard**. Its only active responsibility is the stable Jira-key → ChatGPT launch contract used by operator surfaces.
+## Authority boundaries
 
-## Contract
+- **This repository** owns the browser UI and Vercel deployment.
+- **PixelGaps/orchy** owns backend/runtime APIs, Mission Core, ExecutionStore, Image Factory, LLM and ComfyUI behavior.
+- **Jira OR** owns work state and acceptance.
+- **TestOps** owns advanced assurance evidence.
+- **Notion** remains a fallback/reference projection during migration.
 
-Input Jira key:
+## Hosting
+
+Primary host: **Vercel Hobby** under the PixelGaps team.
+
+Hard rules:
+- private authenticated production;
+- zero paid spend;
+- no automatic paid overage;
+- no background polling;
+- no canonical state copy;
+- no secrets in browser-readable state.
+
+## Jira → ChatGPT action
+
+The dashboard preserves the stable Jira launcher contract:
 
 ```text
-OR-601
+OR-601 -> https://chatgpt.com/?prompt=Implement%20OR-601
 ```
-
-Canonical ChatGPT URL:
-
-```text
-https://chatgpt.com/?prompt=OR-601
-```
-
-The Node service additionally exposes:
-
-- `GET /jira/OR-601` → `302` to the canonical ChatGPT URL
-- `GET /?key=OR-601` → same redirect
-- `GET /healthz` → implementation/version metadata
 
 Only `OR-<digits>` keys are accepted.
 
-## Development
+## Migration
 
-Requires Node 20+.
+The historical React/Vite dashboard currently retained under `PixelGaps/orchy/apps/web` is migration source only. Its UI capability is moving here under OR-670, after which the copy in the backend repository must be removed.
 
-```bash
-npm test
-npm run check
-npm start
-```
-
-There are no runtime dependencies.
-
-## Architecture
-
-- Notion remains the active, mobile-first operator UI.
-- Jira remains authoritative for work state.
-- This repository does not store or mirror Jira state.
-- No React/Hono/Vite dashboard is maintained here.
-- No hosting provider is required; the HTTP service is optional infrastructure if a stable redirect endpoint is later needed.
-
-Current implementation version: **1.0.0**.
+Current implementation version: **1.1.0**.
