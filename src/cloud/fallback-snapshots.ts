@@ -1,4 +1,4 @@
-import type { JiraProjection, TestOpsProjection } from "./projections"
+import type { JiraProjection } from "./projections"
 
 export const JIRA_FALLBACK_SNAPSHOT = {
   "openCount": 64,
@@ -888,24 +888,3 @@ export const JIRA_FALLBACK_SNAPSHOT = {
   ]
 } as const satisfies JiraProjection
 export const JIRA_FALLBACK_OBSERVED_AT = "2026-10-01T02:45:00.000Z"
-
-
-export const TESTOPS_FALLBACK_OBSERVED_AT = "2026-09-30T23:59:00.000Z"
-
-export const TESTOPS_FALLBACK_SNAPSHOT = {
-  target: "PixelGaps/orchy",
-  layers: [
-    { layerId: "01", runId: "github-36610058030-report-v1", revision: "a21d165906fc73b9d180c27486d7bba2b7967bcb", outcome: "PASS", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 8181, jiraMilestone: "OR-590" },
-    { layerId: "02", runId: "github-36612283534", revision: "16f786996e7af8bbfdf798f99c8bfdab577e3a33", outcome: "PASS", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 42163, jiraMilestone: "OR-594" },
-    { layerId: "03", runId: "github-36613975980", revision: "405d42150f80ea6101243a4feab9221f3a088a49", outcome: "PASS", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 5850, jiraMilestone: "OR-598" },
-    { layerId: "04", runId: "github-36615308611", revision: "1a983ae87478eed8549f58ad9e2c539147dca2f5", outcome: "PASS", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 6633, jiraMilestone: "OR-600" },
-    { layerId: "05", runId: "github-36638357589", revision: "f15221c14451692e6d439ddfe54e679d0eb2893b", outcome: "PASS", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 41000, jiraMilestone: "OR-601" },
-    { layerId: "06", runId: "github-36630013004", revision: "c6878e7cd67e5febfe780f14514625179cc572dc", outcome: "PASS", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 33000, jiraMilestone: "OR-602" },
-    { layerId: "07", runId: "github-36639460120", revision: "f7c1cf41452c2af9cf3ab113120f885454140f1d", outcome: "PASS", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 39000, jiraMilestone: "OR-603" },
-    { layerId: "08", runId: "github-36640165720", revision: "553da67e209bfd30aa2e3bb6acaa0cccf2b08ef4", outcome: "PASS", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 35000, jiraMilestone: "OR-604" },
-    { layerId: "09", runId: "buildkite-48", revision: "e709a09af40375929aeb0295179eef56040aad8a", outcome: "FAIL", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 48564, jiraMilestone: "OR-605" },
-    { layerId: "10", runId: "buildkite-56", revision: "74f0bb5b0b8bf98e3815e79b18cfd57abeb75b5d", outcome: "FAIL", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 396320, jiraMilestone: "OR-606" },
-    { layerId: "12", runId: "or608-layer12-0931b839", revision: "0931b8390067b3f5122b2a7e69ebd7910a2b3f4f", outcome: "ERROR", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 302398, jiraMilestone: "OR-608" }
-  ],
-  findings: []
-} satisfies TestOpsProjection
