@@ -6,6 +6,7 @@ repository:
   purpose: private-zero-cost-orchy-operator-dashboard
   standalone_dashboard: required
   hosting: Netlify-Free-Direct-Deploy
+  retired_hosting: Render-forbidden
 authority:
   operator_ui: PixelGaps/orchy-ui
   work: Jira-OR
@@ -42,6 +43,7 @@ rules:
   mobile_ui: first-class
   private_authenticated_production: required
   changes_require: Jira-traceability+deterministic-tests
+  Render: forbidden+retired
 migration:
   source: PixelGaps/orchy/apps/web
   destination: PixelGaps/orchy-ui
