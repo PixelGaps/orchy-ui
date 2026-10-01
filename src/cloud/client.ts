@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { apiUrl } from "@/lib/api-base"
 
 import type { SourceReadModel, CloudSource } from "./read-model"
+import type { GitHubProjection, JiraProjection, TestOpsProjection } from "./projections"
+import { JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT, TESTOPS_FALLBACK_OBSERVED_AT, TESTOPS_FALLBACK_SNAPSHOT } from "./fallback-snapshots"
 import {
   DEFAULT_OPERATOR_PREFERENCES,
   mergeOperatorPreferences,
@@ -12,6 +14,84 @@ import {
 } from "./preferences"
 
 const PREFERENCES_KEY = "orchy.operator-preferences.v1"
+
+function staleModel<T>(source: CloudSource, authority: string, observedAt: string, payload: T, errorCode: string): SourceReadModel<T> {
+  return {
+    source,
+    authority,
+    state: "stale",
+    observedAt,
+    ageSeconds: Math.max(0, Math.floor((Date.now() - Date.parse(observedAt)) / 1000)),
+    payload,
+    errorCode,
+  }
+}
+
+async function fetchPublicGitHub(): Promise<SourceReadModel<GitHubProjection>> {
+  const [repoResponse, runsResponse] = await Promise.all([
+    fetch("https://api.github.com/repos/PixelGaps/orchy", { cache: "no-store" }),
+    fetch("https://api.github.com/repos/PixelGaps/orchy/actions/runs?per_page=20", { cache: "no-store" }),
+  ])
+  if (!repoResponse.ok || !runsResponse.ok) throw new Error("GITHUB_PUBLIC_API_FAILED")
+  const repo = await repoResponse.json() as { default_branch?: string }
+  const runs = await runsResponse.json() as { workflow_runs?: Array<Record<string, unknown>> }
+  const recentRuns = (runs.workflow_runs ?? []).flatMap((run) => {
+    if (
+      typeof run.id !== "number" ||
+      typeof run.name !== "string" ||
+      typeof run.status !== "string" ||
+      typeof run.head_sha !== "string" ||
+      typeof run.html_url !== "string"
+    ) return []
+    return [{
+      id: run.id,
+      name: run.name,
+      status: run.status,
+      conclusion: typeof run.conclusion === "string" ? run.conclusion : null,
+      headSha: run.head_sha,
+      htmlUrl: run.html_url,
+    }]
+  })
+  const payload: GitHubProjection = {
+    repository: "PixelGaps/orchy",
+    defaultBranch: repo.default_branch ?? "main",
+    headSha: recentRuns[0]?.headSha ?? null,
+    openWorkflowRuns: recentRuns.filter((run) => run.status !== "completed").length,
+    recentRuns,
+  }
+  const observedAt = new Date().toISOString()
+  return { source: "github", authority: "GitHub source and CI", state: "fresh", observedAt, ageSeconds: 0, payload, errorCode: null }
+}
+
+async function fetchWithResilientFallback<T>(source: CloudSource): Promise<SourceReadModel<T>> {
+  if (source === "github") return fetchPublicGitHub() as Promise<SourceReadModel<T>>
+  try {
+    const response = await fetch(apiUrl(`/api/cloud-control/sources/${source}`), {
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    })
+    const payload = (await response.json()) as SourceReadModel<T>
+    if (response.ok || payload.state === "unavailable" || payload.state === "stale") return payload
+  } catch {
+    // fall through to authoritative bundled fallback where available
+  }
+  if (source === "jira") {
+    return staleModel("jira", "Jira OR work state", JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT, "JIRA_SERVER_BINDING_UNAVAILABLE") as SourceReadModel<T>
+  }
+  if (source === "testops") {
+    return staleModel("testops", "Frozen TestOps evidence", TESTOPS_FALLBACK_OBSERVED_AT, TESTOPS_FALLBACK_SNAPSHOT, "TESTOPS_LIVE_STORE_UNAVAILABLE") as SourceReadModel<T>
+  }
+  return {
+    source,
+    authority: source,
+    state: "unavailable",
+    observedAt: null,
+    ageSeconds: null,
+    payload: null,
+    errorCode: "SOURCE_UNAVAILABLE",
+  }
+}
+
 
 function browserStorage(): Storage | null {
   return typeof window === "undefined" ? null : window.localStorage
@@ -40,33 +120,28 @@ function writePreferences(preferences: OperatorPreferences): OperatorPreferences
 export async function fetchCloudSource<T>(
   source: CloudSource,
 ): Promise<SourceReadModel<T>> {
-  const response = await fetch(apiUrl(`/api/cloud-control/sources/${source}`), {
-    cache: "no-store",
-    headers: { Accept: "application/json" },
-  })
-  const payload = (await response.json()) as SourceReadModel<T>
-  if (!response.ok && payload.state !== "unavailable") {
-    throw new Error(`Cloud source ${source} returned ${response.status}`)
-  }
-  return payload
+  return fetchWithResilientFallback<T>(source)
 }
 
 export async function refreshCloudSource<T>(
   source: CloudSource,
 ): Promise<SourceReadModel<T>> {
-  const response = await fetch(
-    apiUrl(`/api/cloud-control/sources/${source}/refresh`),
-    {
-      method: "POST",
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-    },
-  )
-  const payload = (await response.json()) as SourceReadModel<T>
-  if (!response.ok && payload.state !== "unavailable") {
-    throw new Error(`Cloud source ${source} refresh returned ${response.status}`)
+  if (source === "github") return fetchPublicGitHub() as Promise<SourceReadModel<T>>
+  try {
+    const response = await fetch(
+      apiUrl(`/api/cloud-control/sources/${source}/refresh`),
+      {
+        method: "POST",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+      },
+    )
+    const payload = (await response.json()) as SourceReadModel<T>
+    if (response.ok || payload.state === "unavailable" || payload.state === "stale") return payload
+  } catch {
+    // fall back below
   }
-  return payload
+  return fetchWithResilientFallback<T>(source)
 }
 
 export function useCloudSource<T>(source: CloudSource) {

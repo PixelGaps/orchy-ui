@@ -1,12 +1,12 @@
-import type { JiraProjection } from "./projections"
+import type { JiraProjection, TestOpsProjection } from "./projections"
 
-export const JIRA_FALLBACK_SNAPSHOT = {
-  "openCount": 64,
+export const JIRA_FALLBACK_SNAPSHOT: JiraProjection = {
+  "openCount": 59,
   "byStatus": {
-    "In Progress": 38,
-    "To Do": 18,
+    "In Progress": 42,
     "In Review": 8,
-    "Done": 9
+    "To Do": 9,
+    "Done": 10
   },
   "issues": [
     {
@@ -17,9 +17,13 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "linear-milestone",
+        "linear-milestone-id-1a885b37-640c-415a-90e1-d9c810c34271",
+        "linear-progress-22-5"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-11",
-      "updated": null
+      "updated": "2026-09-29T13:59:57.789+0200"
     },
     {
       "key": "OR-16",
@@ -29,21 +33,29 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "priority": "Medium",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "linear-milestone",
+        "linear-milestone-id-a6640997-6668-44f0-aab8-02f1b395545c",
+        "linear-progress-29-17"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-16",
-      "updated": null
+      "updated": "2026-09-29T14:04:10.722+0200"
     },
     {
       "key": "OR-18",
       "summary": "Milestone — Orchy capability platforms & factory expansion",
-      "status": "To Do",
+      "status": "In Progress",
       "statusCategory": "In Progress",
       "priority": "Medium",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "linear-milestone",
+        "linear-milestone-id-88df4b3d-7edb-4856-b8fe-9b99e343061a",
+        "linear-progress-0"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-18",
-      "updated": null
+      "updated": "2026-10-01T09:33:13.532+0200"
     },
     {
       "key": "OR-108",
@@ -52,22 +64,56 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-11",
+      "labels": [
+        "area/image-factory",
+        "area/pipeline",
+        "area/testing",
+        "constraint/host-required",
+        "evidence/empirical",
+        "evidence/validation-deferred",
+        "linear-estimate-2",
+        "linear-id-pix-162",
+        "linear-source",
+        "linear-status-backlog",
+        "reconciled-2026-09-29"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-108",
-      "updated": null
+      "updated": "2026-09-29T14:02:12.956+0200"
     },
     {
       "key": "OR-138",
       "summary": "ORCHY-122 — Real-host specialized runtime and factory certification",
-      "status": "To Do",
+      "status": "In Progress",
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-18",
+      "labels": [
+        "area/3d",
+        "area/comfyui",
+        "area/comfyui-platform",
+        "area/document-ai",
+        "area/llm",
+        "area/llm-platform",
+        "area/media-factory",
+        "area/model-runtime",
+        "area/runtime",
+        "area/scientific-ai",
+        "area/speech",
+        "area/testing",
+        "area/vision",
+        "constraint/host-required",
+        "evidence/empirical",
+        "evidence/validation-deferred",
+        "linear-estimate-5",
+        "linear-id-pix-227",
+        "linear-source",
+        "linear-status-backlog",
+        "state/blocked-host-offline"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-138",
-      "updated": null
+      "updated": "2026-10-01T10:38:39.934+0200"
     },
     {
       "key": "OR-153",
@@ -76,10 +122,25 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-16",
+      "labels": [
+        "area/control-plane",
+        "area/image-factory",
+        "area/runtime",
+        "area/testing",
+        "area/ui",
+        "constraint/host-required",
+        "evidence/empirical",
+        "evidence/validation-deferred",
+        "linear-estimate-5",
+        "linear-id-pix-212",
+        "linear-source",
+        "linear-status-backlog",
+        "mode/fast-development",
+        "state/implementation-complete"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-153",
-      "updated": null
+      "updated": "2026-09-30T05:15:01.406+0200"
     },
     {
       "key": "OR-207",
@@ -88,22 +149,32 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-39",
+      "labels": [
+        "image-factory",
+        "leaf-validation",
+        "profile-icons",
+        "reconciled-2026-09-29",
+        "scope-v1"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-207",
-      "updated": null
+      "updated": "2026-09-29T14:00:02.664+0200"
     },
     {
       "key": "OR-236",
       "summary": "Video Factory M6 — DEFERRED host commissioning and real-video validation",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "Medium",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-234",
+      "labels": [
+        "deferred",
+        "host-validation",
+        "video-factory"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-236",
-      "updated": null
+      "updated": "2026-09-29T14:04:15.175+0200"
     },
     {
       "key": "OR-273",
@@ -113,9 +184,19 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "area/image-factory",
+        "area/testing",
+        "evidence/empirical",
+        "mode/fast-development",
+        "priority/frozen",
+        "quality/accuracy",
+        "scope-v1",
+        "state/implementation-complete",
+        "validation/deferred"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-273",
-      "updated": null
+      "updated": "2026-09-29T14:00:06.200+0200"
     },
     {
       "key": "OR-278",
@@ -124,10 +205,20 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-273",
+      "labels": [
+        "area/image-factory",
+        "area/testing",
+        "constraint/host-required",
+        "mode/fast-development",
+        "pbr",
+        "quality/accuracy",
+        "scope-v1",
+        "state/implementation-complete",
+        "validation/deferred"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-278",
-      "updated": null
+      "updated": "2026-09-29T14:00:08.516+0200"
     },
     {
       "key": "OR-280",
@@ -136,10 +227,20 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-273",
+      "labels": [
+        "area/image-factory",
+        "area/testing",
+        "benchmark",
+        "calibration",
+        "mode/fast-development",
+        "quality/accuracy",
+        "scope-v1",
+        "state/implementation-complete",
+        "validation/deferred"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-280",
-      "updated": null
+      "updated": "2026-09-29T14:02:19.729+0200"
     },
     {
       "key": "OR-281",
@@ -148,10 +249,20 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-273",
+      "labels": [
+        "area/image-factory",
+        "area/testing",
+        "benchmark",
+        "mission/required",
+        "mode/fast-development",
+        "quality/accuracy",
+        "scope-v1",
+        "state/implementation-complete",
+        "validation/deferred"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-281",
-      "updated": null
+      "updated": "2026-09-29T14:02:47.671+0200"
     },
     {
       "key": "OR-287",
@@ -163,19 +274,22 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "parentKey": null,
       "labels": [],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-287",
-      "updated": null
+      "updated": "2026-09-29T14:00:10.736+0200"
     },
     {
       "key": "OR-290",
       "summary": "QA-GPUV — Pending GPU/real-host accuracy certification",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-278",
+      "labels": [
+        "evidence/validation-deferred",
+        "mode/fast-development"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-290",
-      "updated": null
+      "updated": "2026-09-29T14:02:49.963+0200"
     },
     {
       "key": "OR-296",
@@ -184,10 +298,18 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-273",
+      "labels": [
+        "area/image-factory",
+        "area/testing",
+        "benchmark",
+        "constraint/host-required",
+        "mode/fast-development",
+        "quality/accuracy",
+        "validation/deferred"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-296",
-      "updated": null
+      "updated": "2026-09-29T14:00:13.408+0200"
     },
     {
       "key": "OR-300",
@@ -196,22 +318,34 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-280",
+      "labels": [
+        "area/image-factory",
+        "area/testing",
+        "mode/fast-development",
+        "quality/accuracy",
+        "validation/deferred"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-300",
-      "updated": null
+      "updated": "2026-09-29T14:02:52.208+0200"
     },
     {
       "key": "OR-301",
       "summary": "QA-08V — Deferred integrated accuracy certification",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-281",
+      "labels": [
+        "area/image-factory",
+        "area/testing",
+        "mode/fast-development",
+        "quality/accuracy",
+        "validation/deferred"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-301",
-      "updated": null
+      "updated": "2026-09-29T14:02:54.667+0200"
     },
     {
       "key": "OR-336",
@@ -220,10 +354,10 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Subtask",
-      "parentKey": null,
+      "parentKey": "OR-287",
       "labels": [],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-336",
-      "updated": null
+      "updated": "2026-10-01T03:21:47.335+0200"
     },
     {
       "key": "OR-337",
@@ -232,10 +366,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-605",
+      "labels": [
+        "coverage-static-sonar",
+        "inherited-testing-debt",
+        "layer-09",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-337",
-      "updated": null
+      "updated": "2026-09-30T05:37:59.122+0200"
     },
     {
       "key": "OR-354",
@@ -244,10 +383,18 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-153",
+      "labels": [
+        "area/image-factory",
+        "area/runtime",
+        "area/testing",
+        "constraint/host-required",
+        "evidence/empirical",
+        "quality/accuracy",
+        "validation/deferred"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-354",
-      "updated": null
+      "updated": "2026-09-30T05:39:15.119+0200"
     },
     {
       "key": "OR-356",
@@ -257,21 +404,39 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "director",
+        "gamification",
+        "gpu-efficiency",
+        "host-validation-umbrella",
+        "image-factory",
+        "mission-rpg-v3",
+        "mission-spec-v2",
+        "missions",
+        "progression",
+        "rpg",
+        "top-priority"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-356",
-      "updated": null
+      "updated": "2026-09-29T14:00:37.245+0200"
     },
     {
       "key": "OR-372",
       "summary": "Milestone — Testing assurance 2026: effectiveness, resilience and evidence closure",
-      "status": "To Do",
+      "status": "In Progress",
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "2026",
+        "advanced-testing",
+        "quality",
+        "reliability",
+        "testing"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-372",
-      "updated": null
+      "updated": "2026-10-01T09:33:17.626+0200"
     },
     {
       "key": "OR-379",
@@ -280,10 +445,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-372",
+      "labels": [
+        "closeout",
+        "docs",
+        "evidence",
+        "testing"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-379",
-      "updated": null
+      "updated": "2026-09-29T14:02:56.891+0200"
     },
     {
       "key": "OR-381",
@@ -292,10 +462,20 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-372",
+      "labels": [
+        "advanced-testing",
+        "blocked",
+        "chaos",
+        "deferred-validation",
+        "hardware-only",
+        "host-validation",
+        "private-network",
+        "reconciled-2026-09-29",
+        "zero-dc"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-381",
-      "updated": null
+      "updated": "2026-09-29T23:33:39.055+0200"
     },
     {
       "key": "OR-385",
@@ -304,10 +484,18 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-373",
+      "labels": [
+        "advanced-testing",
+        "historical-baseline",
+        "measured-baseline",
+        "mutation",
+        "rebaseline-required",
+        "reconciled-2026-09-29",
+        "survivor-debt"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-385",
-      "updated": null
+      "updated": "2026-10-01T09:30:56.385+0200"
     },
     {
       "key": "OR-387",
@@ -316,34 +504,35 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-373",
+      "labels": [
+        "advanced-testing",
+        "historical-baseline",
+        "measured-baseline",
+        "mutation",
+        "rebaseline-required",
+        "reconciled-2026-09-29",
+        "survivor-debt"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-387",
-      "updated": null
-    },
-    {
-      "key": "OR-388",
-      "summary": "MUT-DEBT — Mission progression survivors (rebaseline current SHA)",
-      "status": "In Progress",
-      "statusCategory": "In Progress",
-      "priority": "High",
-      "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
-      "browseUrl": "https://espalwebs.atlassian.net/browse/OR-388",
-      "updated": null
+      "updated": "2026-10-01T09:30:58.368+0200"
     },
     {
       "key": "OR-399",
       "summary": "HOST-TA26-O07 — Final advanced-assurance evidence reconciliation",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-379",
+      "labels": [
+        "advanced-testing",
+        "closeout",
+        "evidence",
+        "host-validation"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-399",
-      "updated": null
+      "updated": "2026-09-29T23:33:51.552+0200"
     },
     {
       "key": "OR-410",
@@ -352,10 +541,20 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-356",
+      "labels": [
+        "acceptance",
+        "deferred-validation",
+        "gpu",
+        "host-validation",
+        "madriguera",
+        "mission-rpg-v3",
+        "missions",
+        "rpg",
+        "top-priority"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-410",
-      "updated": null
+      "updated": "2026-10-01T09:32:24.788+0200"
     },
     {
       "key": "OR-441",
@@ -365,9 +564,20 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "priority": "Highest",
       "type": "Task",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "OR-431",
+        "autotune",
+        "deferred-validation",
+        "host-validation",
+        "inference",
+        "madriguera",
+        "missions",
+        "reconciled-2026-09-29",
+        "runtime",
+        "vllm"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-441",
-      "updated": null
+      "updated": "2026-09-29T14:00:50.543+0200"
     },
     {
       "key": "OR-447",
@@ -377,9 +587,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "dashboard",
+        "host-validation-umbrella",
+        "mission-core",
+        "missions",
+        "self-improvement"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-447",
-      "updated": null
+      "updated": "2026-10-01T03:33:23.607+0200"
     },
     {
       "key": "OR-453",
@@ -388,34 +604,51 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-447",
+      "labels": [
+        "deep-research",
+        "deferred-validation",
+        "host-validation",
+        "madriguera",
+        "mission-core",
+        "missions",
+        "self-improvement"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-453",
-      "updated": null
+      "updated": "2026-10-01T04:40:04.522+0200"
     },
     {
       "key": "OR-457",
       "summary": "Rotate exposed cloud-runner credentials after onboarding",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "High",
       "type": "Task",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "cloud-runner",
+        "credentials",
+        "security"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-457",
-      "updated": null
+      "updated": "2026-09-29T14:03:24.025+0200"
     },
     {
       "key": "OR-479",
       "summary": "Qualify Azure Pipelines Free runner when Microsoft account is unblocked",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "Medium",
       "type": "Task",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "azure",
+        "cloud-runner",
+        "deferred",
+        "zero-spend"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-479",
-      "updated": null
+      "updated": "2026-09-29T14:04:17.490+0200"
     },
     {
       "key": "OR-481",
@@ -424,22 +657,32 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-480",
+      "labels": [
+        "buildkite",
+        "cloud-runner",
+        "coverage",
+        "sonar"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-481",
-      "updated": null
+      "updated": "2026-09-30T14:42:25.887+0200"
     },
     {
       "key": "OR-495",
       "summary": "Milestone — Agentic Coding reconciliation: lean execution loop and New Task recovery",
-      "status": "To Do",
+      "status": "In Progress",
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "agentic-coding",
+        "audit-2026-09-27",
+        "new-task",
+        "reconciliation"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-495",
-      "updated": null
+      "updated": "2026-10-01T09:33:21.989+0200"
     },
     {
       "key": "OR-504",
@@ -448,22 +691,34 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-495",
+      "labels": [
+        "agentic-coding",
+        "new-task",
+        "reconciliation"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-504",
-      "updated": null
+      "updated": "2026-09-30T14:32:08.896+0200"
     },
     {
       "key": "OR-515",
       "summary": "Milestone — Recursive Mission Self-Improvement v1 (near-singularity)",
-      "status": "To Do",
+      "status": "In Progress",
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "agentic-coding",
+        "dashboard",
+        "host-validation-umbrella",
+        "missions",
+        "recursive-improvement",
+        "self-improvement",
+        "singularity-v1"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-515",
-      "updated": null
+      "updated": "2026-10-01T09:33:25.695+0200"
     },
     {
       "key": "OR-518",
@@ -472,22 +727,38 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-515",
+      "labels": [
+        "benchmark",
+        "deferred-validation",
+        "exact-sha",
+        "host-validation",
+        "madriguera",
+        "missions",
+        "qualification",
+        "recursive-improvement"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-518",
-      "updated": null
+      "updated": "2026-09-29T14:01:55.428+0200"
     },
     {
       "key": "OR-521",
       "summary": "Milestone — Agentic Coding 16GB efficiency + runtime selection v2",
-      "status": "To Do",
+      "status": "In Progress",
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "16gb-vram",
+        "agentic-coding",
+        "benchmark",
+        "exact-sha",
+        "local-llm",
+        "runtime-selection"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-521",
-      "updated": null
+      "updated": "2026-10-01T09:33:29.835+0200"
     },
     {
       "key": "OR-524",
@@ -496,10 +767,16 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-521",
+      "labels": [
+        "16gb-vram",
+        "agentic-coding",
+        "host-required",
+        "model-benchmark",
+        "vllm"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-524",
-      "updated": null
+      "updated": "2026-09-30T11:52:12.439+0200"
     },
     {
       "key": "OR-525",
@@ -508,10 +785,16 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-521",
+      "labels": [
+        "agentic-coding",
+        "aider",
+        "cline",
+        "opencode",
+        "runtime-selection"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-525",
-      "updated": null
+      "updated": "2026-09-30T11:52:14.689+0200"
     },
     {
       "key": "OR-527",
@@ -520,10 +803,17 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-521",
+      "labels": [
+        "agentic-coding",
+        "aider",
+        "benchmark",
+        "cline",
+        "opencode",
+        "runtime-selection"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-527",
-      "updated": null
+      "updated": "2026-09-30T11:52:18.765+0200"
     },
     {
       "key": "OR-528",
@@ -532,10 +822,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-521",
+      "labels": [
+        "agentic-coding",
+        "benchmark",
+        "native-strength",
+        "runtime-selection"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-528",
-      "updated": null
+      "updated": "2026-09-29T14:03:31.350+0200"
     },
     {
       "key": "OR-529",
@@ -544,10 +839,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-521",
+      "labels": [
+        "agentic-coding",
+        "benchmark",
+        "chatgpt-reference",
+        "local-llm"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-529",
-      "updated": null
+      "updated": "2026-09-29T14:03:55.328+0200"
     },
     {
       "key": "OR-530",
@@ -556,10 +856,16 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-521",
+      "labels": [
+        "agentic-coding",
+        "promotion",
+        "reconciliation",
+        "rollback",
+        "runtime-selection"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-530",
-      "updated": null
+      "updated": "2026-09-29T14:05:06.690+0200"
     },
     {
       "key": "OR-532",
@@ -568,46 +874,73 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Medium",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-480",
+      "labels": [
+        "arm64",
+        "cloud-runner",
+        "oci",
+        "persistent-service",
+        "sonar",
+        "zero-spend"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-532",
-      "updated": null
+      "updated": "2026-10-01T10:30:13.217+0200"
     },
     {
       "key": "OR-534",
       "summary": "Deferred empirical Mission evidence — drift, freshness and shadow challenger",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-446",
+      "labels": [
+        "cloud-detached",
+        "deferred-validation",
+        "empirical-validation",
+        "missions",
+        "reconciled-2026-09-29",
+        "self-improvement"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-534",
-      "updated": null
+      "updated": "2026-09-29T14:03:59.638+0200"
     },
     {
       "key": "OR-535",
       "summary": "Deferred empirical Strategy Lab acceptance — real challenger to next-Mission champion",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-455",
+      "labels": [
+        "cloud-detached",
+        "deferred-validation",
+        "empirical-validation",
+        "missions",
+        "reconciled-2026-09-29",
+        "self-improvement",
+        "strategy-lab"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-535",
-      "updated": null
+      "updated": "2026-09-29T14:04:01.939+0200"
     },
     {
       "key": "OR-548",
       "summary": "RESEARCH-CARRYOVER — Deferred Surfer empirical qualification after repository retirement",
       "status": "To Do",
-      "statusCategory": "In Progress",
+      "statusCategory": "To Do",
       "priority": "High",
       "type": "Task",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "deferred-validation",
+        "missions",
+        "research",
+        "surfer-retirement"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-548",
-      "updated": null
+      "updated": "2026-10-01T03:33:30.121+0200"
     },
     {
       "key": "OR-557",
@@ -616,10 +949,17 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-549",
+      "labels": [
+        "execution-reliability-v2",
+        "p1",
+        "recovery",
+        "tailscale",
+        "wif",
+        "zero-dc"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-557",
-      "updated": null
+      "updated": "2026-09-30T14:47:36.337+0200"
     },
     {
       "key": "OR-590",
@@ -628,10 +968,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "fast-web",
+        "layer-01",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-590",
-      "updated": null
+      "updated": "2026-09-29T20:47:26.442+0200"
     },
     {
       "key": "OR-594",
@@ -640,10 +985,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "fast-python",
+        "layer-02",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-594",
-      "updated": null
+      "updated": "2026-09-30T03:51:42.850+0200"
     },
     {
       "key": "OR-598",
@@ -652,10 +1002,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "layer-03",
+        "property-state-machine",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-598",
-      "updated": null
+      "updated": "2026-09-29T21:41:48.478+0200"
     },
     {
       "key": "OR-600",
@@ -664,10 +1019,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "layer-04",
+        "security",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-600",
-      "updated": null
+      "updated": "2026-10-01T02:34:14.789+0200"
     },
     {
       "key": "OR-601",
@@ -676,10 +1036,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "fuzz",
+        "layer-05",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-601",
-      "updated": null
+      "updated": "2026-10-01T02:11:28.081+0200"
     },
     {
       "key": "OR-602",
@@ -688,10 +1053,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "layer-06",
+        "performance",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-602",
-      "updated": null
+      "updated": "2026-10-01T03:24:28.321+0200"
     },
     {
       "key": "OR-603",
@@ -700,10 +1070,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "layer-07",
+        "portability",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-603",
-      "updated": null
+      "updated": "2026-10-01T03:24:31.485+0200"
     },
     {
       "key": "OR-604",
@@ -712,10 +1087,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "flakes",
+        "layer-08",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-604",
-      "updated": null
+      "updated": "2026-10-01T03:24:35.053+0200"
     },
     {
       "key": "OR-605",
@@ -724,10 +1104,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "coverage-static-sonar",
+        "layer-09",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-605",
-      "updated": null
+      "updated": "2026-09-30T03:19:11.582+0200"
     },
     {
       "key": "OR-606",
@@ -736,10 +1121,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "layer-10",
+        "mutation",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-606",
-      "updated": null
+      "updated": "2026-10-01T09:32:28.349+0200"
     },
     {
       "key": "OR-607",
@@ -748,22 +1138,32 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "browser-e2e",
+        "layer-11",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-607",
-      "updated": null
+      "updated": "2026-09-29T23:49:23.579+0200"
     },
     {
       "key": "OR-608",
       "summary": "TEST LAYER 12 — Live Chaos / Soak / Recovery",
-      "status": "In Progress",
-      "statusCategory": "In Progress",
+      "status": "Done",
+      "statusCategory": "Done",
       "priority": "High",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "layer-12",
+        "live-chaos-soak-recovery",
+        "test-layer-parent",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-608",
-      "updated": null
+      "updated": "2026-10-01T10:40:05.713+0200"
     },
     {
       "key": "OR-620",
@@ -773,33 +1173,34 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "cloud-control",
+        "mobile-first",
+        "notion-operator",
+        "notion-parity",
+        "supabase",
+        "test-assurance",
+        "zero-spend"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-620",
-      "updated": null
-    },
-    {
-      "key": "OR-635",
-      "summary": "Layer 12 cannot start: Madriguera wake unavailable and Tailscale recovery key invalid",
-      "status": "In Progress",
-      "statusCategory": "In Progress",
-      "priority": "High",
-      "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
-      "browseUrl": "https://espalwebs.atlassian.net/browse/OR-635",
-      "updated": null
+      "updated": "2026-10-01T09:30:22.911+0200"
     },
     {
       "key": "OR-644",
       "summary": "Layer 10 current target regresses frozen mutation score and survivor ratchets",
-      "status": "To Do",
+      "status": "In Progress",
       "statusCategory": "In Progress",
       "priority": "High",
       "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-606",
+      "labels": [
+        "deferred-remediation",
+        "layer-10",
+        "mutation",
+        "quality-regression"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-644",
-      "updated": null
+      "updated": "2026-10-01T09:33:34.043+0200"
     },
     {
       "key": "OR-647",
@@ -808,22 +1209,32 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-620",
+      "labels": [
+        "notion-operator",
+        "notion-parity",
+        "ui-gap-register",
+        "zero-spend"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-647",
-      "updated": null
+      "updated": "2026-10-01T09:30:24.556+0200"
     },
     {
       "key": "OR-648",
       "summary": "Emergency Supabase-independent 12-layer certification sweep",
-      "status": "To Do",
+      "status": "In Progress",
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-579",
+      "labels": [
+        "12-layer-sweep",
+        "emergency-certification",
+        "supabase-outage",
+        "testops"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-648",
-      "updated": null
+      "updated": "2026-10-01T09:29:57.812+0200"
     },
     {
       "key": "OR-651",
@@ -833,9 +1244,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "priority": "Highest",
       "type": "Epic",
       "parentKey": null,
-      "labels": [],
+      "labels": [
+        "execution-reliability",
+        "p0",
+        "quota-resilience",
+        "supabase-optional",
+        "zero-spend"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-651",
-      "updated": null
+      "updated": "2026-10-01T09:31:46.088+0200"
     },
     {
       "key": "OR-656",
@@ -844,34 +1261,15 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-651",
+      "labels": [
+        "architecture",
+        "p0",
+        "supabase-optional",
+        "validation"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-656",
-      "updated": null
-    },
-    {
-      "key": "OR-661",
-      "summary": "Milestone — Astra Medium: intelligence integrity & decision calibration",
-      "status": "To Do",
-      "statusCategory": "In Progress",
-      "priority": "Highest",
-      "type": "Epic",
-      "parentKey": null,
-      "labels": [],
-      "browseUrl": "https://espalwebs.atlassian.net/browse/OR-661",
-      "updated": null
-    },
-    {
-      "key": "OR-669",
-      "summary": "ASTRA-REPAIR P1 — Causal repair routing and verified-case retrieval tournament",
-      "status": "In Progress",
-      "statusCategory": "In Progress",
-      "priority": "High",
-      "type": "Subtask",
-      "parentKey": null,
-      "labels": [],
-      "browseUrl": "https://espalwebs.atlassian.net/browse/OR-669",
-      "updated": null
+      "updated": "2026-10-01T09:31:47.792+0200"
     },
     {
       "key": "OR-670",
@@ -880,11 +1278,35 @@ export const JIRA_FALLBACK_SNAPSHOT = {
       "statusCategory": "In Progress",
       "priority": "Highest",
       "type": "Task",
-      "parentKey": null,
-      "labels": [],
+      "parentKey": "OR-620",
+      "labels": [
+        "netlify",
+        "operator-ui",
+        "public-repo",
+        "zero-cost"
+      ],
       "browseUrl": "https://espalwebs.atlassian.net/browse/OR-670",
-      "updated": null
+      "updated": "2026-10-01T09:30:21.016+0200"
     }
   ]
-} as const satisfies JiraProjection
-export const JIRA_FALLBACK_OBSERVED_AT = "2026-10-01T02:45:00.000Z"
+}
+export const JIRA_FALLBACK_OBSERVED_AT = "2026-10-01T08:45:20.797Z"
+
+export const TESTOPS_FALLBACK_SNAPSHOT: TestOpsProjection = {
+  target: "PixelGaps/orchy",
+  layers: [
+    { layerId: "01", runId: "github-36610058030-report-v1", revision: "a21d165906fc73b9d180c27486d7bba2b7967bcb", outcome: "PASS", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 8181, jiraMilestone: "OR-590" },
+    { layerId: "02", runId: "github-36612283534", revision: "16f786996e7af8bbfdf798f99c8bfdab577e3a33", outcome: "PASS", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 42163, jiraMilestone: "OR-594" },
+    { layerId: "03", runId: "github-36613975980", revision: "405d42150f80ea6101243a4feab9221f3a088a49", outcome: "PASS", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 5850, jiraMilestone: "OR-598" },
+    { layerId: "04", runId: "github-36615308611", revision: "1a983ae87478eed8549f58ad9e2c539147dca2f5", outcome: "PASS", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 6633, jiraMilestone: "OR-600" },
+    { layerId: "05", runId: "github-36638357589", revision: "f15221c14451692e6d439ddfe54e679d0eb2893b", outcome: "PASS", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 41000, jiraMilestone: "OR-601" },
+    { layerId: "06", runId: "github-36630013004", revision: "c6878e7cd67e5febfe780f14514625179cc572dc", outcome: "PASS", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 33000, jiraMilestone: "OR-602" },
+    { layerId: "07", runId: "github-36639460120", revision: "f7c1cf41452c2af9cf3ab113120f885454140f1d", outcome: "PASS", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 39000, jiraMilestone: "OR-603" },
+    { layerId: "08", runId: "github-36640165720", revision: "553da67e209bfd30aa2e3bb6acaa0cccf2b08ef4", outcome: "PASS", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 35000, jiraMilestone: "OR-604" },
+    { layerId: "09", runId: "buildkite-48", revision: "e709a09af40375929aeb0295179eef56040aad8a", outcome: "FAIL", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 48564, jiraMilestone: "OR-605" },
+    { layerId: "10", runId: "buildkite-56", revision: "74f0bb5b0b8bf98e3815e79b18cfd57abeb75b5d", outcome: "FAIL", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 396320, jiraMilestone: "OR-606" },
+    { layerId: "12", runId: "or608-layer12-0931b839", revision: "0931b8390067b3f5122b2a7e69ebd7910a2b3f4f", outcome: "ERROR", finishedAt: "2026-09-30T23:59:00.000Z", durationMs: 302398, jiraMilestone: "OR-608" }
+  ],
+  findings: []
+}
+export const TESTOPS_FALLBACK_OBSERVED_AT = "2026-09-30T23:59:00.000Z"
