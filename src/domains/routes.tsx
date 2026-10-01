@@ -27,8 +27,8 @@ const allDomainNav = [
   { to: "/settings", label: "Global Settings", icon: Cog, group: "Operations" },
 ]
 
-const hostedRoutes = new Set(["/", "/assurance", "/issues", "/missions"])
-export const domainNav = hosted ? allDomainNav.filter((item) => hostedRoutes.has(item.to)) : allDomainNav
+const hostedRoutes = new Set(["/", "/assurance", "/issues", "/missions", "/logs"])
+export const domainNav = hosted ? allDomainNav.filter((item) => hostedRoutes.has(item.to)).map((item) => item.to === "/logs" ? { ...item, label: "Runs" } : item) : allDomainNav
 
 type DomainPages = {
   Overview: ComponentType
@@ -56,7 +56,7 @@ export function DomainRoutes({ pages }: Readonly<{ pages: DomainPages }>) {
       <Route path="/llm" element={hosted ? <Navigate to="/missions" replace /> : <pages.LLM />} />
       <Route path="/comfyui" element={hosted ? <Navigate to="/missions" replace /> : <pages.ComfyUI />} />
       <Route path="/healthcheck" element={hosted ? <Navigate to="/" replace /> : <pages.Healthcheck />} />
-      <Route path="/logs" element={hosted ? <Navigate to="/assurance" replace /> : <pages.Logs />} />
+      <Route path="/logs" element={<pages.Logs />} />
       <Route path="/settings" element={hosted ? <Navigate to="/missions" replace /> : <pages.GlobalSettings />} />
       <Route path="/tasks" element={<Navigate to="/" replace />} />
       <Route path="/validation" element={<Navigate to="/" replace />} />

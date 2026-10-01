@@ -1,5 +1,5 @@
 import {
-Activity,Play,TerminalSquare
+Activity,Play,RefreshCw,TerminalSquare
 } from "lucide-react"
 import {
 useState
@@ -26,6 +26,8 @@ Execution
 } from "@/lib/contracts"
 import { logsPollInterval } from "@/lib/polling"
 import { cn } from "@/lib/utils"
+import type { GitHubProjection } from "@/cloud/projections"
+import { sourceAgeLabel, sourceTone, useCloudSource, useRefreshCloudSources } from "@/cloud/client"
 import {
 SectionTabs,
 SemanticEvents,
@@ -54,7 +56,7 @@ export function formatExecutionTimestamp(item: Execution, now = Date.now()) {
   return `${Math.round(age / 3_600_000)}h ago`
 }
 
-export function LogsPage() {
+function PrivateLogsPage() {
   const [tab, setTab] = useDomainTab("executions")
   const [params] = useSearchParams()
   const [filter, setFilter] = useState("")
@@ -310,3 +312,59 @@ export function LogsPage() {
   )
 }
 
+
+
+function HostedRunsPage() {
+  const github = useCloudSource<GitHubProjection>("github")
+  const refresh = useRefreshCloudSources(["github"])
+  const runs = github.data?.payload?.recentRuns ?? []
+  return (
+    <>
+      <PageHeader
+        eyebrow="GitHub CI"
+        title="Runs"
+        description="Recent Orchy workflow runs from the canonical private GitHub repository. Live when a server token is available; otherwise the latest retained snapshot is shown explicitly as stale."
+        badge={<Badge tone={sourceTone(github.data)}>GitHub · {github.data?.state ?? "loading"} · {sourceAgeLabel(github.data)}</Badge>}
+      />
+      <div className="page-actions">
+        <button
+          type="button"
+          className="button button-secondary"
+          disabled={refresh.isPending}
+          onClick={() => refresh.mutate()}
+        >
+          <RefreshCw size={14} /> {refresh.isPending ? "Refreshing" : "Refresh CI"}
+        </button>
+      </div>
+      <CompactSummary
+        items={[
+          { label: "Recent runs", value: runs.length },
+          { label: "Active", value: github.data?.payload?.openWorkflowRuns ?? 0, tone: github.data?.payload?.openWorkflowRuns ? "cyan" : "neutral" },
+          { label: "Head", value: github.data?.payload?.headSha?.slice(0, 10) ?? "—" },
+          { label: "Source", value: github.data?.state ?? "loading", tone: sourceTone(github.data) },
+        ]}
+      />
+      <Card>
+        <PanelHeader kicker="GITHUB ACTIONS" title="Recent workflow runs" />
+        <div className="data-list">
+          {runs.map((run) => (
+            <a className="data-row" href={run.htmlUrl} target="_blank" rel="noreferrer" key={run.id}>
+              <span className="row-icon"><Play size={15} /></span>
+              <div>
+                <strong>{run.name}</strong>
+                <small>{run.headSha.slice(0, 10)} · {run.status}</small>
+              </div>
+              <Badge tone={statusTone(run.conclusion || run.status)}>{run.conclusion || run.status}</Badge>
+            </a>
+          ))}
+          {!runs.length && <EmptyState title="No CI runs available" body="Refresh GitHub or update the retained snapshot." />}
+        </div>
+      </Card>
+    </>
+  )
+}
+
+export function LogsPage() {
+  const hosted = import.meta.env.PROD && !(import.meta.env.VITE_ORCHY_API_BASE_URL ?? "").trim()
+  return hosted ? <HostedRunsPage /> : <PrivateLogsPage />
+}
