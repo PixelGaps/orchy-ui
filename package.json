@@ -1,10 +1,12 @@
 {
   "name": "@pixelgaps/orchy-ui",
   "private": true,
-  "version": "1.0.0",
-  "description": "Minimal Node Jira-to-ChatGPT launcher contract for the Notion-first Orchy operator UI",
+  "version": "1.1.0",
+  "description": "Private zero-cost Orchy operator dashboard and Jira-to-ChatGPT implementation launcher",
   "type": "module",
-  "engines": {"node": ">=20"},
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node src/index.mjs",
     "test": "node --test",
