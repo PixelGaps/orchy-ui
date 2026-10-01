@@ -12,7 +12,7 @@ test("rejects keys outside Orchy Jira", () => {
 });
 
 test("builds canonical ChatGPT prompt URL", () => {
-  assert.equal(chatgptUrlForJira("OR-601"), "https://chatgpt.com/?prompt=OR-601");
+  assert.equal(chatgptUrlForJira("OR-601"), "https://chatgpt.com/?prompt=Implement+OR-601");
 });
 
 test("HTTP redirect carries only the Jira key", async (t) => {
@@ -23,7 +23,7 @@ test("HTTP redirect carries only the Jira key", async (t) => {
 
   const response = await fetch(`http://127.0.0.1:${port}/jira/or-601`, { redirect: "manual" });
   assert.equal(response.status, 302);
-  assert.equal(response.headers.get("location"), "https://chatgpt.com/?prompt=OR-601");
+  assert.equal(response.headers.get("location"), "https://chatgpt.com/?prompt=Implement+OR-601");
 });
 
 test("health endpoint exposes implementation version", async (t) => {
@@ -36,5 +36,5 @@ test("health endpoint exposes implementation version", async (t) => {
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(body.version, VERSION);
-  assert.equal(body.role, "jira-chatgpt-launcher");
+  assert.equal(body.role, "operator-ui-bootstrap");
 });
