@@ -1,0 +1,184 @@
+
+.button-primary {
+  background: linear-gradient(135deg, #62e5fb, #8eeaf5 58%, #a998ff);
+  box-shadow: 0 5px 18px rgba(80, 227, 255, .12);
+}
+
+.button-primary:hover {
+  box-shadow: 0 6px 20px rgba(80, 227, 255, .17);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  box-shadow: 0 0 0 3px rgba(89,230,167,.18), 0 0 10px rgba(89,230,167,.28);
+  animation: none;
+}
+
+.empty-orb,
+.metric-glow {
+  opacity: .07;
+  filter: blur(24px);
+  animation: none;
+}
+
+.orbital,
+.factory-reactor,
+.signal-line {
+  display: none;
+}
+
+.badge-live {
+  background: rgba(89, 230, 167, .055);
+}
+.badge-warn {
+  background: rgba(255, 200, 104, .16);
+}
+.badge-danger {
+  background: rgba(255, 116, 143, .055);
+}
+.badge-cyan {
+  background: rgba(80, 227, 255, .055);
+}
+
+.compact-summary-item strong,
+.console-summary strong,
+.metric-card > strong,
+.quota-gauge-center strong,
+.mission-health-metrics strong,
+.mission-stats strong,
+.quota-values strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.panel-header,
+.collapsible-trigger,
+.data-row,
+.config-item {
+  border-color: rgba(148, 163, 184, .12);
+}
+
+.nav-active {
+  background: rgba(80, 227, 255, .055);
+  border-color: rgba(80, 227, 255, .16);
+  box-shadow: inset 2px 0 0 var(--cyan);
+}
+
+.section-tab-active,
+.overview-section-tab.is-active,
+.overview-summary-cell.is-active {
+  box-shadow: inset 0 -2px 0 var(--cyan);
+}
+
+.chart-wrap .recharts-cartesian-grid line {
+  stroke: rgba(148, 163, 184, .065);
+}
+
+
+/* OR-340 expert dashboard UX hardening v2 */
+:root {
+  --font-meta: 10px;
+  --font-small: 11px;
+  --font-body: 12px;
+  --font-control: 12px;
+}
+
+.kicker,
+.eyebrow,
+.nav-label,
+.compact-summary-item > span,
+.dense-kv-item dt,
+.mission-output-strip small,
+.quota-values small,
+.console-summary small,
+.metric-top > span {
+  font-size: var(--font-meta);
+}
+
+.compact-summary-item small,
+.dense-kv-item small,
+.data-row small,
+.config-item small,
+.form-help,
+.candidate-path,
+.quota-meta,
+.collapsible-title small,
+.mission-title-copy p,
+.mission-list-meta,
+.command-palette-help {
+  font-size: var(--font-small);
+  line-height: 1.4;
+}
+
+.button,
+input,
+select,
+textarea {
+  font-size: var(--font-control);
+}
+
+.data-row strong,
+.config-item strong,
+.collapsible-title strong,
+.mission-list-main strong,
+.panel-header h2 {
+  font-size: var(--font-body);
+}
+
+.query-state-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 34px;
+  margin: 0 0 10px;
+  padding: 7px 10px;
+  border: 1px solid rgba(80, 227, 255, .16);
+  border-radius: 9px;
+  background: rgba(80, 227, 255, .045);
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+.query-state-notice.is-error {
+  border-color: rgba(255, 200, 104, .22);
+  background: #342b17;
+  color: #fff0c2;
+}
+
+.query-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  color: var(--text);
+  background: transparent;
+  font: inherit;
+  font-weight: 800;
+}
+
+.collapsible-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.collapsible-header-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 8px;
+}
+
+.collapsible-header .collapsible-trigger {
+  min-width: 0;
+}
+
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 89;
+  border: 0;
+  background: rgba(0, 0, 0, .58);
+  backdrop-filter: blur(2px);
+}

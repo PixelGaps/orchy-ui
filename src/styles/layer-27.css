@@ -1,0 +1,21 @@
+/* OR-629 — cloud-native Missions, quotas and audited operator preferences. */
+.mission-preference-controls {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.mission-list-dense .data-row {
+  min-height: 38px;
+  padding-block: 5px;
+}
+
+.mission-list-dense .data-row small {
+  line-height: 1.25;
+}
+
+@media (min-width: 980px) {
+  .mission-preference-controls {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

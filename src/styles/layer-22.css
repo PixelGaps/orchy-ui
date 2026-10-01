@@ -1,0 +1,33 @@
+.mission-rpg-evidence {
+  display: grid;
+  gap: .35rem;
+  border-top: 1px solid var(--border);
+  margin-top: .75rem;
+  padding-top: .75rem;
+}
+.mission-rpg-mastery-grid label > span,
+.mission-rpg-targets,
+.mission-rpg-scorecard,
+.mission-rpg-reward {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+}
+.mission-rpg-mastery-grid progress {
+  width: 100%;
+  accent-color: var(--cyan);
+}
+.mission-rpg-evidence span {
+  min-width: 8rem;
+}
+.mission-rpg-evidence small {
+  display: block;
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .mission-rpg-mastery-grid progress,
+  .mission-rpg-evidence * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

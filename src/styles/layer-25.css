@@ -1,0 +1,407 @@
+/* OR-626 — Cloud Overview + Test Assurance. */
+.cloud-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cloud-source-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cloud-overview-summary,
+.assurance-summary {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+.cloud-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cloud-overview-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  padding: 10px;
+}
+
+.cloud-overview-list span {
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--border);
+  background: var(--surface-control);
+}
+
+.cloud-overview-list strong,
+.cloud-overview-list small {
+  display: block;
+}
+
+.cloud-overview-list strong {
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cloud-overview-list small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+.cloud-panel-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 9px 12px;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  font-size: var(--font-small);
+  font-weight: 850;
+}
+
+.cloud-panel-link:hover {
+  background: var(--surface-raised);
+}
+
+.cloud-kv {
+  display: grid;
+  margin: 0;
+  padding: 10px 12px;
+}
+
+.cloud-kv > div {
+  display: grid;
+  grid-template-columns: minmax(110px, .45fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cloud-kv > div:last-child {
+  border-bottom: 0;
+}
+
+.cloud-kv dt {
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+.cloud-kv dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  text-align: right;
+  font-size: var(--font-small);
+  font-weight: 800;
+}
+
+.cloud-panel-note {
+  margin: 0;
+  padding: 0 12px 12px;
+  color: var(--muted);
+  font-size: var(--font-small);
+  line-height: 1.45;
+}
+
+.cloud-authority-panel {
+  margin-top: 10px;
+}
+
+.cloud-authority-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px;
+}
+
+.cloud-authority-grid > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-control);
+}
+
+.cloud-authority-grid strong {
+  text-transform: capitalize;
+}
+
+.cloud-authority-grid span,
+.cloud-authority-grid small {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+  font-size: var(--font-small);
+}
+
+.assurance-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, .5fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.assurance-journey {
+  display: grid;
+  gap: 8px;
+}
+
+.assurance-layer {
+  padding: 0;
+}
+
+.assurance-layer-head {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.assurance-layer-number {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  color: var(--cyan);
+  background: var(--surface-control);
+  font-size: 11px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.assurance-layer-head strong,
+.assurance-layer-head small {
+  display: block;
+}
+
+.assurance-layer-head small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+.assurance-layer-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  padding: 8px 10px;
+}
+
+.assurance-layer-metrics > span {
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-control);
+}
+
+.assurance-layer-metrics small,
+.assurance-layer-metrics strong {
+  display: block;
+}
+
+.assurance-layer-metrics small {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: var(--font-meta);
+}
+
+.assurance-layer-metrics strong {
+  font-size: var(--font-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.assurance-evidence {
+  border-top: 1px solid var(--border);
+}
+
+.assurance-evidence summary {
+  min-height: 42px;
+  padding: 12px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: var(--font-small);
+  font-weight: 850;
+}
+
+.assurance-evidence dl {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0 12px 10px;
+}
+
+.assurance-evidence dl > div {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.assurance-evidence dt {
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+.assurance-evidence dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--font-small);
+}
+
+.assurance-evidence > p {
+  margin: 0;
+  padding: 0 12px 12px;
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+.assurance-findings {
+  display: grid;
+  gap: 6px;
+  padding: 0 12px 12px;
+}
+
+.assurance-findings > div {
+  display: grid;
+  gap: 2px;
+  padding: 8px 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-control);
+}
+
+.assurance-findings strong {
+  font-size: var(--font-small);
+}
+
+.assurance-findings span {
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+.assurance-chart-panel {
+  position: sticky;
+  top: 10px;
+}
+
+.assurance-chart {
+  height: 260px;
+  padding: 12px 8px 4px 0;
+  color: var(--cyan);
+}
+
+.assurance-authority {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--cyan);
+  background: var(--surface-control);
+}
+
+.assurance-authority p {
+  margin: 0;
+}
+
+.assurance-authority strong,
+.assurance-authority span {
+  display: block;
+}
+
+.assurance-authority span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: var(--font-small);
+}
+
+@media (max-width: 1050px) {
+  .assurance-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .assurance-chart-panel {
+    position: static;
+  }
+
+  .cloud-authority-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .cloud-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cloud-toolbar .button {
+    width: 100%;
+  }
+
+  .cloud-overview-summary,
+  .assurance-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cloud-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cloud-overview-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cloud-authority-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .assurance-layer-head {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .assurance-layer-head > .badge {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .assurance-layer-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .assurance-evidence dl > div,
+  .cloud-kv > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .cloud-kv dd {
+    text-align: left;
+  }
+}
+
+@media (max-width: 390px) {
+  .cloud-overview-summary,
+  .assurance-summary,
+  .cloud-overview-list {
+    grid-template-columns: 1fr;
+  }
+}
