@@ -12,7 +12,9 @@ Private, zero-cost hosted operator dashboard for Orchy.
 
 ## Hosting
 
-Primary host: **Vercel Hobby** under the PixelGaps team.
+Primary host: **Netlify Free (Credit-based)** using prebuilt/manual deploys.
+
+The private `PixelGaps/orchy-ui` GitHub repository is deliberately **not** connected to Netlify because private organization Git integration is a paid feature. Build artifacts are produced by an existing zero-cost CI runner and deployed with the Netlify CLI/API.
 
 Hard rules:
 - private authenticated production;
