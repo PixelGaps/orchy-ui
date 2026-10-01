@@ -5,7 +5,7 @@ repository:
   direct_main: required
   purpose: private-zero-cost-orchy-operator-dashboard
   standalone_dashboard: required
-  hosting: Vercel-Hobby
+  hosting: Netlify-Free-Direct-Deploy
 authority:
   operator_ui: PixelGaps/orchy-ui
   work: Jira-OR
