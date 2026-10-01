@@ -71,7 +71,7 @@ async function fetchWithResilientFallback<T>(source: CloudSource): Promise<Sourc
       headers: { Accept: "application/json" },
     })
     const payload = (await response.json()) as SourceReadModel<T>
-    if (response.ok || payload.state === "unavailable" || payload.state === "stale") return payload
+    if (response.ok || payload.state === "stale") return payload
   } catch {
     // fall through to authoritative bundled fallback where available
   }
@@ -137,7 +137,7 @@ export async function refreshCloudSource<T>(
       },
     )
     const payload = (await response.json()) as SourceReadModel<T>
-    if (response.ok || payload.state === "unavailable" || payload.state === "stale") return payload
+    if (response.ok || payload.state === "stale") return payload
   } catch {
     // fall back below
   }
