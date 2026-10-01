@@ -1,1 +1,1 @@
-export { default } from "../src/cloud/server"\n
+export { default } from "../src/cloud/server"
