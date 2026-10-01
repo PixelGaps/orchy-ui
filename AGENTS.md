@@ -2,6 +2,9 @@ schema: orchy-ui.agent-contract.v5
 repository:
   state: active-hosted-operator-ui
   default_branch: main
+  branches: main-only
+  non_main_refs: forbidden
+  temporary_branches: forbidden
   direct_main: required
   purpose: authenticated-zero-cost-orchy-operator-dashboard
   visibility: public-required-for-zero-cost-hosting
