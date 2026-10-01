@@ -1,4 +1,6 @@
-import { apiUrl } from "@/lib/api-base"\n\nimport type {
+import { apiUrl } from "@/lib/api-base"
+
+import type {
 CancellationResponse,
 CapabilityRegistry,
 ComfyUIRuntime,
