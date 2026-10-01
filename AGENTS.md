@@ -1,37 +1,49 @@
-schema: orchy-ui.agent-contract.v4
+schema: orchy-ui.agent-contract.v5
 repository:
-  state: active-minimal-support
+  state: active-hosted-operator-ui
   default_branch: main
   direct_main: required
-  purpose: versioned-jira-to-chatgpt-launcher
-  standalone_dashboard: forbidden
-  hosting_required: false
+  purpose: private-zero-cost-orchy-operator-dashboard
+  standalone_dashboard: required
+  hosting: Vercel-Hobby
 authority:
-  operator_ui: Notion-Orchy-Operator-Dashboard
+  operator_ui: PixelGaps/orchy-ui
   work: Jira-OR
   backend_runtime: PixelGaps/orchy
   assurance: TestOps
+  execution: PixelGaps/orchy::ExecutionStore+Mission-Core
+  fallback_projection: Notion-Orchy-Operator-Dashboard
 scope:
   owns:
-    - jira-key-validation
+    - React-Vite-operator-dashboard
+    - dashboard-routing+mobile-desktop-UX
+    - Jira-key-validation
     - jira-key-to-chatgpt-url-contract
-    - optional-minimal-node-redirect-service
+    - Implement-OR-xxx-actions
+    - Vercel-hosting-config
+    - quota-visualization
+    - source-freshness-stale-unavailable-semantics
+    - authenticated-mediated-operator-actions
   MUST_NOT_own:
-    - operator-dashboard
-    - work-state
+    - canonical-work-state
+    - backend-domain-logic
     - execution-lifecycle
     - Mission-Core
-    - TestOps-evidence
+    - TestOps-evidence-authority
     - CI-fleet-authority
     - machine-control
-    - secrets
+    - browser-secrets
 rules:
   dependencies: minimize
   background_polling: forbidden
   paid_resources: forbidden
+  automatic_paid_overage: forbidden
+  unknown_host_quota: fail-closed
   canonical_state_copy: forbidden
-  mobile_ui: Notion-owned
+  mobile_ui: first-class
+  private_authenticated_production: required
   changes_require: Jira-traceability+deterministic-tests
-versioning:
-  source: package.json
-  initial_repurposed_version: 1.0.0
+migration:
+  source: PixelGaps/orchy/apps/web
+  destination: PixelGaps/orchy-ui
+  source_cleanup_after_verified_parity: required
