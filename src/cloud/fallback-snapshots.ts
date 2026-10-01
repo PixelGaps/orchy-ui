@@ -908,4 +908,4 @@ export const TESTOPS_FALLBACK_SNAPSHOT = {
     { layerId: "12", runId: "or608-layer12-0931b839", revision: "0931b8390067b3f5122b2a7e69ebd7910a2b3f4f", outcome: "ERROR", finishedAt: TESTOPS_FALLBACK_OBSERVED_AT, durationMs: 302398, jiraMilestone: "OR-608" }
   ],
   findings: []
-} as const satisfies TestOpsProjection
+} satisfies TestOpsProjection
