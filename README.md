@@ -14,7 +14,9 @@ Private, zero-cost hosted operator dashboard for Orchy.
 
 Primary host: **Netlify Free (Credit-based)** using prebuilt/manual deploys.
 
-The private `PixelGaps/orchy-ui` GitHub repository is deliberately **not** connected to Netlify because private organization Git integration is a paid feature. Build artifacts are produced by an existing zero-cost CI runner and deployed with the Netlify CLI/API.
+The `PixelGaps/orchy-ui` repository is deliberately **not** dependent on Netlify Git integration. Build artifacts are produced by an existing zero-cost CI runner and deployed with the Netlify CLI/API.
+
+**Render hosting is retired and forbidden for this repository.** `npm run check:no-render` is part of the production build and rejects Render deployment files, Render service environment markers, and Render-hosted URLs.
 
 Hard rules:
 - private authenticated production;
