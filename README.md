@@ -36,6 +36,6 @@ Only `OR-<digits>` keys are accepted.
 
 ## Migration
 
-The historical React/Vite dashboard currently retained under `PixelGaps/orchy/apps/web` is migration source only. Its UI capability is moving here under OR-670, after which the copy in the backend repository must be removed.
+The React/Vite dashboard has been migrated here from `PixelGaps/orchy/apps/web` under OR-670. The backend-repo copy remains only until standalone build/parity validation is complete, then it must be removed.
 
-Current implementation version: **1.1.0**.
+Current implementation version: **2.0.0**.

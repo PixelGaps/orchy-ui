@@ -2,7 +2,7 @@ import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const VERSION = "1.1.0";
+export const VERSION = "2.0.0";
 const JIRA_KEY = /^OR-\d+$/;
 
 export function normalizeJiraKey(value) {
