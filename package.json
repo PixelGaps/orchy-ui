@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "npm run test:hooks && npm run check:hooks && tsc --noEmit && vite build",
+    "check:no-render": "node scripts/check-no-render-hosting.mjs",
+    "build": "npm run check:no-render && npm run test:hooks && npm run check:hooks && tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit --pretty false",
     "lint": "eslint src e2e",
     "test:e2e:routes": "playwright test e2e/routes.spec.ts",
