@@ -20,8 +20,7 @@
     "test:coverage": "bash scripts/web_test_toolchain.sh coverage",
     "check:hooks": "node scripts/check-react-hook-order.mjs",
     "test:hooks": "node --test scripts/check-react-hook-order.test.mjs",
-    "test": "npm run test:hooks && npm run test:launcher",
-    "test:launcher": "node --test test/index.test.mjs"
+    "test": "npm run test:hooks && npm run test:unit"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",

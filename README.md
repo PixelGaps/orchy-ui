@@ -4,7 +4,7 @@ Private, zero-cost hosted operator dashboard for Orchy.
 
 ## Authority boundaries
 
-- **This repository** owns the browser UI and Vercel deployment.
+- **This repository** owns the browser UI and Netlify direct-deploy configuration.
 - **PixelGaps/orchy** owns backend/runtime APIs, Mission Core, ExecutionStore, Image Factory, LLM and ComfyUI behavior.
 - **Jira OR** owns work state and acceptance.
 - **TestOps** owns advanced assurance evidence.
@@ -24,15 +24,9 @@ Hard rules:
 - no canonical state copy;
 - no secrets in browser-readable state.
 
-## Jira → ChatGPT action
+## Issue implementation action
 
-The dashboard preserves the stable Jira launcher contract:
-
-```text
-OR-601 -> https://chatgpt.com/?prompt=Implement%20OR-601
-```
-
-Only `OR-<digits>` keys are accepted.
+The migrated dashboard owns the native **Implement OR-xxx** action. There is no standalone Jira redirect/launcher service in this repository.
 
 ## Migration
 

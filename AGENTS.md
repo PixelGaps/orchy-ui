@@ -18,9 +18,8 @@ scope:
     - React-Vite-operator-dashboard
     - dashboard-routing+mobile-desktop-UX
     - Jira-key-validation
-    - jira-key-to-chatgpt-url-contract
     - Implement-OR-xxx-actions
-    - Vercel-hosting-config
+    - Netlify-direct-deploy-config
     - quota-visualization
     - source-freshness-stale-unavailable-semantics
     - authenticated-mediated-operator-actions
