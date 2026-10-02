@@ -162,3 +162,6 @@ test("compact Image Factory keeps launch surface primary and advanced detail opt
   await expect(page.getByRole("button", { name: /Profile & advanced controls/ })).toHaveAttribute("aria-expanded", "false")
   await expect(page.getByRole("button", { name: /Start production/i })).toBeVisible()
 })
+
+
+test("dense operator collections expose semantic structures", async ({ page }) => {\n  await mockApi(page)\n  await page.goto("/missions")\n  await expect(page.getByRole("table", { name: "Runner availability and allowance" })).toBeVisible()\n  await expect(page.getByRole("table", { name: "Service and tool quotas" })).toBeVisible()\n  await page.goto("/queue")\n  await expect(page.getByRole("list", { name: "All retained gateway jobs" })).toBeVisible()\n})\n
