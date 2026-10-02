@@ -7,9 +7,10 @@ PanelLeftOpen,
 Search,
 X,
 } from "lucide-react"
-import { AnimatePresence,motion,useReducedMotion } from "motion/react"
 import {
+lazy,
 ReactNode,
+Suspense,
 useEffect,
 useRef,
 useState,
@@ -20,20 +21,20 @@ useLocation,
 useNavigate,
 } from "react-router-dom"
 
-import { TestAssurancePage } from "@/domains/assurance/page"
-import { ComfyUIPage } from "@/domains/comfyui/page"
-import { ImageFactory } from "@/domains/comfyui/image-factory/page"
-import { HealthcheckPage } from "@/domains/healthcheck/page"
-import { LLMPage } from "@/domains/llm/page"
-import { IssuesPage } from "@/domains/issues/page"
-import { LogsPage } from "@/domains/logs/page"
-import { MissionsPage } from "@/domains/missions/page"
-import { Overview } from "@/domains/overview/page"
-import { QueuePage } from "@/domains/queue/page"
-import { WorkbenchPage } from "@/domains/workbench/page"
+const TestAssurancePage = lazy(() => import("@/domains/assurance/page").then((module) => ({ default: module.TestAssurancePage })))
+const ComfyUIPage = lazy(() => import("@/domains/comfyui/page").then((module) => ({ default: module.ComfyUIPage })))
+const ImageFactory = lazy(() => import("@/domains/comfyui/image-factory/page").then((module) => ({ default: module.ImageFactory })))
+const HealthcheckPage = lazy(() => import("@/domains/healthcheck/page").then((module) => ({ default: module.HealthcheckPage })))
+const LLMPage = lazy(() => import("@/domains/llm/page").then((module) => ({ default: module.LLMPage })))
+const IssuesPage = lazy(() => import("@/domains/issues/page").then((module) => ({ default: module.IssuesPage })))
+const LogsPage = lazy(() => import("@/domains/logs/page").then((module) => ({ default: module.LogsPage })))
+const MissionsPage = lazy(() => import("@/domains/missions/page").then((module) => ({ default: module.MissionsPage })))
+const Overview = lazy(() => import("@/domains/overview/page").then((module) => ({ default: module.Overview })))
+const QueuePage = lazy(() => import("@/domains/queue/page").then((module) => ({ default: module.QueuePage })))
+const WorkbenchPage = lazy(() => import("@/domains/workbench/page").then((module) => ({ default: module.WorkbenchPage })))
 
 import { DomainRoutes,domainNav as nav } from "@/domains/routes"
-import { GlobalSettingsPage } from "@/domains/settings/page"
+const GlobalSettingsPage = lazy(() => import("@/domains/settings/page").then((module) => ({ default: module.GlobalSettingsPage })))
 import {
   OperatorFeedbackViewport,
 } from "@/components/ui/primitives"
@@ -52,7 +53,6 @@ function AppShell({ children }: Readonly<{ children: ReactNode }>) {
   const menuButtonRef = useRef<HTMLButtonElement | null>(null)
   const sidebarRef = useRef<HTMLElement | null>(null)
   const commandInputRef = useRef<HTMLInputElement | null>(null)
-  const reduceMotion = useReducedMotion()
 
   useEffect(() => setOpen(false), [location.pathname])
 
@@ -265,18 +265,7 @@ function AppShell({ children }: Readonly<{ children: ReactNode }>) {
       )}
 
       <main id="orchy-main-content" className="content" tabIndex={-1}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={reduceMotion ? false : { opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduceMotion ? undefined : { opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.16 }}
-            className="page"
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
+        <div className="page">{children}</div>
       </main>
 
       <nav className="mobile-bottom-nav" aria-label="Mobile primary navigation">
@@ -315,6 +304,7 @@ function AppShell({ children }: Readonly<{ children: ReactNode }>) {
 export default function App() {
   return (
     <AppShell>
+      <Suspense fallback={<div className="route-loading" role="status">Loading page…</div>}>
       <DomainRoutes
         pages={{
           Overview,
@@ -331,6 +321,7 @@ export default function App() {
           Workbench: WorkbenchPage,
         }}
       />
+      </Suspense>
     </AppShell>
   )
 }
