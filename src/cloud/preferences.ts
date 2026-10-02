@@ -65,7 +65,8 @@ export function mergeOperatorPreferences(
   stored: Partial<OperatorPreferences>,
 ): OperatorPreferences {
   return {
-    ...DEFAULT_OPERATOR_PREFERENCES,
-    ...stored,
+    historyLimit: stored.historyLimit ?? DEFAULT_OPERATOR_PREFERENCES.historyLimit,
+    denseOperations: stored.denseOperations ?? DEFAULT_OPERATOR_PREFERENCES.denseOperations,
+    defaultFleetView: stored.defaultFleetView ?? DEFAULT_OPERATOR_PREFERENCES.defaultFleetView,
   }
 }
