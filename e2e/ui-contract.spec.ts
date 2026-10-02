@@ -165,3 +165,5 @@ test("compact Image Factory keeps launch surface primary and advanced detail opt
 
 
 test("dense operator collections expose semantic structures", async ({ page }) => {\n  await mockApi(page)\n  await page.goto("/missions")\n  await expect(page.getByRole("table", { name: "Runner availability and allowance" })).toBeVisible()\n  await expect(page.getByRole("table", { name: "Service and tool quotas" })).toBeVisible()\n  await page.goto("/queue")\n  await expect(page.getByRole("list", { name: "All retained gateway jobs" })).toBeVisible()\n})\n
+
+test("mobile dense collections reflow without forced table width", async ({ page }) => {\n  await page.setViewportSize({ width: 390, height: 844 })\n  await mockApi(page)\n  await page.goto("/missions")\n  const table = page.getByRole("table", { name: "Runner availability and allowance" })\n  await expect(table).toBeVisible()\n  await expect(table).toHaveCSS("overflow-x", "visible")\n})\n
