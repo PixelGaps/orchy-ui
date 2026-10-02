@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CompactSummary,
+  DataTable,
   EmptyState,
   PageHeader,
   PanelHeader,
@@ -323,30 +324,35 @@ export function QueuePage() {
               ))}
             </div>
           )}
-          <div className="data-list" aria-label="All retained gateway jobs">
-            {jobs.map((job)=>(
-              <div className="data-row queue-job-row" key={job.id}>
-                <input
-                  aria-label={`Select ${job.request_id}`}
-                  type="checkbox"
-                  checked={selected.has(job.id)}
-                  onChange={(event)=>{
-                    const next=new Set(selected)
-                    if (event.target.checked) next.add(job.id)
-                    else next.delete(job.id)
-                    setSelected(next)
-                  }}
-                />
-                <button type="button" className="queue-row-select" onClick={()=>setSelectedId(job.id)}>
-                  <span><strong>{job.job}</strong><small>{job.repo} · {job.request_id} · {job.target_sha.slice(0,8)}</small></span>
-                  <span><Badge tone={tone(job.status)}>{job.status}</Badge><Badge tone={tone(job.policy?.health || "unknown")}>{job.policy?.classification || "UNKNOWN"}</Badge></span>
-                </button>
-              </div>
-            ))}
-            {!jobs.length && !jobsQuery.isPending && (
-              <EmptyState title={jobsQuery.data?.status === "empty" ? "No matching jobs" : "Queue history is empty"} body="Adjust filters or inspect the native Supabase transport surface." />
-            )}
-          </div>
+          {jobs.length ? (
+            <DataTable
+              label="All retained gateway jobs"
+              columns={["Select", "Job", "Repository / request / SHA", "State", "Health", "Open"]}
+              rows={jobs.map((job) => ({
+                key: job.id,
+                cells: [
+                  <input
+                    aria-label={`Select ${job.request_id}`}
+                    type="checkbox"
+                    checked={selected.has(job.id)}
+                    onChange={(event)=>{
+                      const next=new Set(selected)
+                      if (event.target.checked) next.add(job.id)
+                      else next.delete(job.id)
+                      setSelected(next)
+                    }}
+                  />,
+                  job.job,
+                  <small>{job.repo} · {job.request_id} · {job.target_sha.slice(0,8)}</small>,
+                  <Badge tone={tone(job.status)}>{job.status}</Badge>,
+                  <Badge tone={tone(job.policy?.health || "unknown")}>{job.policy?.classification || "UNKNOWN"}</Badge>,
+                  <button type="button" className="button button-ghost button-compact" onClick={()=>setSelectedId(job.id)}>Inspect</button>,
+                ],
+              }))}
+            />
+          ) : !jobsQuery.isPending ? (
+            <EmptyState title={jobsQuery.data?.status === "empty" ? "No matching jobs" : "Queue history is empty"} body="Adjust filters or inspect the native Supabase transport surface." />
+          ) : null}
           <div className="page-actions">
             <Button disabled={cursorHistory.length === 0} onClick={()=>setCursorHistory((items)=>items.slice(0,-1))}>Previous</Button>
             <Button disabled={!jobsQuery.data?.has_more || !jobsQuery.data.next_cursor} onClick={()=>jobsQuery.data?.next_cursor && setCursorHistory((items)=>[...items,jobsQuery.data!.next_cursor!])}>Next</Button>
