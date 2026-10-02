@@ -9,11 +9,13 @@
 import { expect, test, type Page } from "@playwright/test"
 
 const ROUTES = [
-  ["/", "Control plane overview"],
-  ["/image-factory", "Image Factory"],
-  ["/deep-research", "Deep Research"],
-  ["/agentic", "Agentic Coding"],
+  ["/", "Overview"],
+  ["/assurance", "Test Assurance"],
+  ["/issues", "Issues"],
+  ["/missions", "Missions"],
   ["/workbench", "Agentic Workbench"],
+  ["/queue", "Queue"],
+  ["/image-factory", "Image Factory"],
   ["/llm", "LLM"],
   ["/comfyui", "ComfyUI"],
   ["/healthcheck", "Healthcheck"],
@@ -22,8 +24,9 @@ const ROUTES = [
 ] as const
 
 const REDIRECTS = [
-  ["/tasks", "/agentic?tab=tasks"],
-  ["/validation", "/agentic?tab=validation"],
+  ["/tasks", "/"],
+  ["/validation", "/"],
+  ["/comfyui/image-factory", "/image-factory"],
   ["/runtime", "/llm?tab=runtime"],
   ["/configuration", "/llm?tab=settings"],
   ["/runs", "/logs?tab=ci"],
