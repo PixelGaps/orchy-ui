@@ -20,6 +20,9 @@ vi.mock("motion/react", async () => {
 vi.mock("@/domains/assurance/page", () => ({ TestAssurancePage: () => <div>Assurance stub</div> }))
 vi.mock("@/domains/overview/page", () => ({ Overview: () => <div>Overview stub</div> }))
 vi.mock("@/domains/issues/page", () => ({ IssuesPage: () => <div>Issues stub</div> }))
+vi.mock("@/domains/missions/page", () => ({ MissionsPage: () => <div>Missions stub</div> }))
+vi.mock("@/domains/queue/page", () => ({ QueuePage: () => <div>Queue stub</div> }))
+vi.mock("@/domains/llm/workbench/page", () => ({ AgenticWorkbenchPage: () => <div>Workbench stub</div> }))
 vi.mock("@/domains/llm/agentic/page", () => ({ AgenticCodingPage: () => <div>Agentic stub</div> }))
 vi.mock("@/domains/comfyui/image-factory/page", () => ({ ImageFactory: () => <div>Image stub</div> }))
 vi.mock("@/domains/llm/deep-research/page", () => ({ DeepResearchPage: () => <div>Research stub</div> }))
@@ -29,7 +32,7 @@ vi.mock("@/domains/healthcheck/page", () => ({ HealthcheckPage: () => <div>Healt
 vi.mock("@/domains/logs/page", () => ({ LogsPage: () => <div>Logs stub</div> }))
 vi.mock("@/domains/settings/page", () => ({ GlobalSettingsPage: () => <div>Settings stub</div> }))
 
-import App, { MissionsPage } from "./App"
+import App from "./App"
 
 describe("App shell", () => {
   beforeEach(() => {
@@ -259,10 +262,13 @@ describe("App shell", () => {
     expect(screen.getByRole("navigation", { name: "Primary navigation" })).toHaveClass("sidebar-open")
   })
 
-  it("renders the Missions route wrapper", () => {
-    render(<MemoryRouter><MissionsPage /></MemoryRouter>)
-    expect(screen.getByRole("heading", { name: "Missions" })).toBeInTheDocument()
-    expect(screen.getByText(/Mission control migration pending/)).toBeInTheDocument()
+  it("renders the Missions route through the shell", () => {
+    render(
+      <MemoryRouter initialEntries={["/missions"]}>
+        <App />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText("Missions stub")).toBeInTheDocument()
   })
 
 })
