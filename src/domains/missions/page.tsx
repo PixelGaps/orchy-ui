@@ -223,13 +223,9 @@ export function MissionsPage() {
               action={<Badge tone={sourceTone(fleet.data)}>fleet · {sourceAgeLabel(fleet.data)}</Badge>}
             />
             <div className="data-list semantic-table" role="table" aria-label="Runner availability and allowance">\n              {visibleProviders.map((provider) => (
-                <div className="data-row" role="row" key={provider.provider}>
-                  <span>
+                <div className="data-row" role="row" key={provider.provider}>\n                  <span role="cell">
                     <strong>{provider.provider}</strong>
-                    <small>priority {provider.priority} · observed {provider.observedAt ?? "unknown"}</small>
-                  </span>
-                  <span>
-                    <Badge tone={provider.qualified ? "live" : "warn"}>{provider.status}</Badge>
+                    <small>priority {provider.priority} · observed {provider.observedAt ?? "unknown"}</small>\n                  </span>\n                  <span role="cell">\n                    <Badge tone={provider.qualified ? "live" : "warn"}>{provider.status}</Badge>
                     <strong>{provider.remainingRunnerMinutes}/{provider.limitRunnerMinutes} min</strong>
                   </span>
                 </div>
@@ -245,12 +241,9 @@ export function MissionsPage() {
               action={<Badge tone="cyan">runtime API</Badge>}
             />
             <div className="data-list semantic-table" role="table" aria-label="Service and tool quotas">\n              {productQuotas.map((quota) => (
-                <div className="data-row product-quota-row" role="row" key={quota.id}>
-                  <span>
+                <div className="data-row product-quota-row" role="row" key={quota.id}>\n                  <span role="cell">
                     <strong>{quota.product}</strong>
-                    <small>{quota.quota} · {quota.source}</small>
-                  </span>
-                  <span>
+                    <small>{quota.quota} · {quota.source}</small>\n                  </span>\n                  <span role="cell">
                     <Badge tone={quota.exhausted ? "danger" : quota.status === "warning" ? "warn" : quota.status === "ok" ? "live" : "neutral"}>
                       {quota.status}
                     </Badge>
