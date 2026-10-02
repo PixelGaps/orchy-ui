@@ -39,7 +39,15 @@ async function mockApi(page: Page): Promise<void> {
     const path = url.pathname
 
     let body: unknown = {}
-    if (path === "/api/executions") body = []
+    if (path === "/api/cloud-control/sources/jira") {
+      body = { source: "jira", state: "fresh", fetchedAt: new Date().toISOString(), payload: { openCount: 0, issues: [] } }
+    } else if (path === "/api/workbench/repositories") {
+      body = { repositories: [] }
+    } else if (path === "/api/workbench/plugins") {
+      body = { plugins: [] }
+    } else if (path === "/api/operator/queue") {
+      body = { health: { status: "ok", components: {} }, jobs: [], capabilities: [] }
+    } else     if (path === "/api/executions") body = []
     else if (path === "/api/execution") body = {}
     else if (path === "/api/repositories") body = []
     else if (path === "/api/runs") body = []
