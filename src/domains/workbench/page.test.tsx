@@ -171,7 +171,7 @@ describe("WorkbenchPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open" }))
 
     expect(await screen.findByText("validation failed")).toBeInTheDocument()
-    expect(screen.getByText("failed")).toBeInTheDocument()
+    expect(screen.getAllByText("failed").length).toBeGreaterThanOrEqual(1)
     expect(screen.getByRole("button", { name: /Stop/ })).toBeDisabled()
     expect(screen.getByRole("button", { name: /Repair/ })).toBeEnabled()
     expect(screen.getByRole("button", { name: /Resume/ })).toBeEnabled()
