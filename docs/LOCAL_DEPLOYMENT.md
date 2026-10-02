@@ -22,7 +22,7 @@ From an exact `PixelGaps/orchy-ui` checkout on Madriguera:
 sudo bash scripts/install-local-socket.sh
 ```
 
-The installer refuses to fall back to a wildcard/LAN listener if `tailscale0` is absent. It performs deterministic build validation before enabling the socket and verifies the baseline state is `socket=active`, `service=inactive`.
+The installer refuses to fall back to a wildcard/LAN listener if `tailscale0` is absent. It discovers an already-installed Node.js >=20.19 runtime that includes npm, copies that runtime into `/opt/orchy-ui/node-runtime`, and records `ORCHY_UI_NODE_BIN_DIR` in `/etc/orchy-ui.env`. This avoids depending on login-shell/NVM paths during later socket activations and does not install a global package. It performs deterministic build validation before enabling the socket and verifies the baseline state is `socket=active`, `service=inactive`.
 
 Configuration lives in `/etc/orchy-ui.env`. The shipped defaults contain no secrets. The access boundary is the existing authenticated Tailscale/private operator path; repository visibility is not runtime authentication.
 

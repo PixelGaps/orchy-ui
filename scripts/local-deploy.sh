@@ -14,6 +14,11 @@ REPO_DIR="${ORCHY_UI_REPO_DIR:-/opt/orchy-ui/source}"
 STATE_DIR="${ORCHY_UI_STATE_DIR:-/var/lib/orchy-ui}"
 BRANCH="${ORCHY_UI_BRANCH:-main}"
 REMOTE_URL="${ORCHY_UI_REMOTE_URL:-https://github.com/PixelGaps/orchy-ui.git}"
+NODE_BIN_DIR="${ORCHY_UI_NODE_BIN_DIR:-}"
+if [[ -n "$NODE_BIN_DIR" ]]; then
+  [[ "$NODE_BIN_DIR" = /* ]] || { echo "[orchy-ui deploy] ERROR: ORCHY_UI_NODE_BIN_DIR must be absolute" >&2; exit 1; }
+  export PATH="$NODE_BIN_DIR:/usr/bin:/bin"
+fi
 
 log() { printf '[orchy-ui deploy] %s\n' "$*" >&2; }
 fail() { log "ERROR: $*"; exit 1; }
@@ -21,6 +26,7 @@ fail() { log "ERROR: $*"; exit 1; }
 for command in git npm node flock tar; do
   command -v "$command" >/dev/null 2>&1 || fail "required command missing: $command"
 done
+node -e 'const [major,minor]=process.versions.node.split(".").map(Number); if (major < 20 || (major === 20 && minor < 19)) process.exit(1)' || fail "Node.js >=20.19 is required by Vite 7"
 
 mkdir -p "$STATE_DIR/releases" "$STATE_DIR/npm-cache"
 exec 9>"$STATE_DIR/deploy.lock"

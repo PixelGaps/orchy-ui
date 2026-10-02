@@ -14,7 +14,7 @@ Environment=NPM_CONFIG_CACHE=/var/lib/orchy-ui/npm-cache
 EnvironmentFile=-/etc/orchy-ui.env
 StateDirectory=orchy-ui
 ExecStartPre=/usr/bin/bash /opt/orchy-ui/source/scripts/local-deploy.sh
-ExecStart=/usr/bin/env node /var/lib/orchy-ui/current/local-socket-server.mjs
+ExecStart=/usr/bin/bash /opt/orchy-ui/source/scripts/local-run.sh
 Restart=no
 TimeoutStartSec=180
 TimeoutStopSec=15
