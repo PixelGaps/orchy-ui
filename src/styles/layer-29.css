@@ -1,0 +1,32 @@
+/* OR-689 Agentic Workbench — intentionally flat, dense operator UI. */
+.workbench-page{display:grid;gap:12px}
+.workbench-status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
+.workbench-grid{display:grid;grid-template-columns:minmax(180px,240px) minmax(0,1fr) minmax(220px,300px);min-height:620px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--panel)}
+.workbench-rail,.workbench-context{padding:12px;background:color-mix(in srgb,var(--panel) 94%,var(--surface));overflow:auto}
+.workbench-rail{border-right:1px solid var(--border)}
+.workbench-context{border-left:1px solid var(--border)}
+.workbench-main{min-width:0;display:flex;flex-direction:column;background:var(--background)}
+.workbench-rail-head,.workbench-context-head,.workbench-thread-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.workbench-session-list,.workbench-event-list,.workbench-context-list{display:grid;gap:7px}
+.workbench-session{width:100%;text-align:left;border:1px solid var(--border);border-radius:8px;padding:9px;background:transparent}
+.workbench-session[aria-current="true"]{background:var(--surface);border-color:var(--primary)}
+.workbench-session strong,.workbench-session small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.workbench-session small,.workbench-muted{color:var(--muted-foreground);font-size:11px}
+.workbench-transcript{flex:1;overflow:auto;padding:16px;display:grid;align-content:start;gap:10px}
+.workbench-message{max-width:86%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;white-space:pre-wrap}
+.workbench-message.user{justify-self:end;background:var(--surface)}
+.workbench-message.assistant{justify-self:start}
+.workbench-tool{border:1px solid var(--border);border-radius:8px;padding:9px;background:var(--panel)}
+.workbench-tool summary{cursor:pointer;display:flex;gap:8px;align-items:center}
+.workbench-tool pre,.workbench-diff{overflow:auto;max-height:240px;font-size:11px;white-space:pre-wrap;margin-top:8px}
+.workbench-composer{border-top:1px solid var(--border);padding:12px;display:grid;gap:8px}
+.workbench-composer textarea{min-height:84px;resize:vertical}
+.workbench-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.workbench-actions{display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap}
+.workbench-attachment{display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:7px;padding:6px 8px;font-size:12px}
+.workbench-capability{border:1px solid var(--border);border-radius:8px;padding:9px}
+.workbench-capability strong,.workbench-capability small{display:block}
+.workbench-blocker{border:1px solid var(--warning);border-radius:8px;padding:9px;font-size:12px}
+.workbench-empty{text-align:center;color:var(--muted-foreground);padding:48px 16px}
+@media(max-width:980px){.workbench-grid{grid-template-columns:190px minmax(0,1fr)}.workbench-context{display:none}}
+@media(max-width:680px){.workbench-grid{display:block;min-height:0}.workbench-rail{display:none}.workbench-main{min-height:70vh}.workbench-controls{grid-template-columns:1fr 1fr}.workbench-message{max-width:94%}}

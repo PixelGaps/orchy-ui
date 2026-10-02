@@ -12,7 +12,7 @@ const ROUTES = [
   ["/", "Control plane overview"],
   ["/image-factory", "Image Factory"],
   ["/deep-research", "Deep Research"],
-  ["/agentic", "Agentic Coding"],
+  ["/agentic", "Agentic Coding"],\n  ["/workbench", "Agentic Workbench"],
   ["/llm", "LLM"],
   ["/comfyui", "ComfyUI"],
   ["/healthcheck", "Healthcheck"],
