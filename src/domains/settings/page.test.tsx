@@ -2,7 +2,7 @@
  * Test documentation — executable specification
  * OR-647 keeps the required operator surfaces and platform limits explicit in the UI.
  */
-import { render, screen } from "@testing-library/react"
+import { render, screen, within } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
 vi.mock("@/domains/shared", () => ({
@@ -15,6 +15,7 @@ describe("GlobalSettingsPage operator parity register", () => {
   it("renders every required surface and explicit platform boundary", () => {
     render(<GlobalSettingsPage />)
 
+    const register = screen.getByLabelText("Operator surface parity")
     expect(screen.getByText("12/12 surfaced")).toBeInTheDocument()
     for (const label of [
       "Overview",
@@ -30,7 +31,7 @@ describe("GlobalSettingsPage operator parity register", () => {
       "Global Settings",
       "Quotas",
     ]) {
-      expect(screen.getAllByText(label).length).toBeGreaterThanOrEqual(1)
+      expect(within(register).getByText(label, { exact: true })).toBeInTheDocument()
     }
 
     expect(screen.getByText(/Vercel and Netlify remain quarantined/)).toBeInTheDocument()
