@@ -77,17 +77,19 @@ export function MissionsPage() {
     refetchOnWindowFocus: false,
   })
   const [draft, setDraft] = useState<OperatorPreferences>(DEFAULT_OPERATOR_PREFERENCES)
+  const [preferencesDirty, setPreferencesDirty] = useState(false)
 
   useEffect(() => {
-    if (preferences.data?.preferences) {
+    if (preferences.data?.preferences && !preferencesDirty) {
       setDraft(preferences.data.preferences)
     }
-  }, [preferences.data?.preferences])
+  }, [preferences.data?.preferences, preferencesDirty])
 
   const applyPreferences = useMutation({
     mutationFn: () => updateOperatorPreferences(draft),
     onSuccess: async (next) => {
       setDraft(next)
+      setPreferencesDirty(false)
       notifyOperator("Operator preferences applied and audited", "success")
       await queryClient.invalidateQueries({ queryKey: ["operator-preferences"] })
     },
@@ -102,6 +104,7 @@ export function MissionsPage() {
     mutationFn: resetOperatorPreferences,
     onSuccess: async (next) => {
       setDraft(next)
+      setPreferencesDirty(false)
       notifyOperator("Operator preferences reset to defaults", "success")
       await queryClient.invalidateQueries({ queryKey: ["operator-preferences"] })
     },
@@ -311,18 +314,20 @@ export function MissionsPage() {
                 min={10}
                 max={100}
                 step={10}
-                onChange={(historyLimit) =>
+                onChange={(historyLimit) => {
+                  setPreferencesDirty(true)
                   setDraft((current) => ({ ...current, historyLimit }))
-                }
+                }}
                 description="Number of retained mission rows shown in this view."
                 formatValue={(value) => `${value} rows`}
               />
               <Switch
                 label="Dense mission rows"
                 checked={draft.denseOperations}
-                onCheckedChange={(denseOperations) =>
+                onCheckedChange={(denseOperations) => {
+                  setPreferencesDirty(true)
                   setDraft((current) => ({ ...current, denseOperations }))
-                }
+                }}
                 description="Reduce vertical spacing for high-volume operation review."
               />
               <SelectControl
@@ -332,13 +337,14 @@ export function MissionsPage() {
                   { value: "eligible", label: "Qualified providers only" },
                   { value: "all", label: "All providers" },
                 ]}
-                onChange={(defaultFleetView) =>
+                onChange={(defaultFleetView) => {
+                  setPreferencesDirty(true)
                   setDraft((current) => ({
                     ...current,
                     defaultFleetView:
                       defaultFleetView === "all" ? "all" : "eligible",
                   }))
-                }
+                }}
                 description="Default provider visibility for quota review."
               />
             </div>
