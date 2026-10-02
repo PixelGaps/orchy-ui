@@ -309,6 +309,39 @@ export function CompactSummary({
   )
 }
 
+export function DataTable({
+  label,
+  columns,
+  rows,
+  className,
+}: Readonly<{
+  label: string
+  columns: string[]
+  rows: Array<{ key: string; cells: ReactNode[] }>
+  className?: string
+}>) {
+  return (
+    <div className={cn("data-table-scroll", className)} tabIndex={0} role="region" aria-label={label}>
+      <table className="data-table">
+        <caption className="sr-only">{label}</caption>
+        <thead>
+          <tr>{columns.map((column) => <th scope="col" key={column}>{column}</th>)}</tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.key}>
+              {row.cells.map((cell, index) => index === 0
+                ? <th scope="row" key={index}>{cell}</th>
+                : <td key={index}>{cell}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+
 export function DenseKeyValueGrid({
   items,
   className,
