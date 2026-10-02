@@ -8,7 +8,8 @@ export type WorkbenchEffort = "LOW" | "MEDIUM" | "HIGH"
 export type WorkbenchAttachmentRequest = {
   name: string
   media_type: string
-  data_base64: string
+  data_base64?: string
+  repository_path?: string
   source: string
 }
 
