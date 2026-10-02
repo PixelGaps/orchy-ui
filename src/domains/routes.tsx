@@ -20,7 +20,8 @@ const allDomainNav = [
   { to: "/missions", label: "Missions", icon: CircleGauge, group: "Command" },
   { to: "/queue", label: "Queue", icon: ListChecks, group: "Command" },
   { to: "/image-factory", label: "Image Factory", icon: Factory, group: "Workflows" },
-  { to: "/llm", label: "LLM", icon: Server, group: "Runtimes" },\n  { to: "/workbench", label: "Workbench", icon: Code2, group: "Workflows" },
+  { to: "/llm", label: "LLM", icon: Server, group: "Runtimes" },
+  { to: "/workbench", label: "Workbench", icon: Code2, group: "Workflows" },
   { to: "/comfyui", label: "ComfyUI", icon: Factory, group: "Runtimes" },
   { to: "/healthcheck", label: "Healthcheck", icon: ShieldCheck, group: "Operations" },
   { to: "/logs", label: "Logs", icon: TerminalSquare, group: "Operations" },
@@ -38,6 +39,7 @@ type DomainPages = {
   Queue: ComponentType
   ImageFactory: ComponentType
   LLM: ComponentType
+  Workbench: ComponentType
   ComfyUI: ComponentType
   Healthcheck: ComponentType
   Logs: ComponentType
@@ -53,7 +55,8 @@ export function DomainRoutes({ pages }: Readonly<{ pages: DomainPages }>) {
       <Route path="/missions" element={<pages.Missions />} />
       <Route path="/queue" element={hosted ? <Navigate to="/missions" replace /> : <pages.Queue />} />
       <Route path="/image-factory" element={hosted ? <Navigate to="/missions" replace /> : <pages.ImageFactory />} />
-      <Route path="/llm" element={hosted ? <Navigate to="/missions" replace /> : <pages.LLM />} />\n      <Route path="/workbench" element={hosted ? <Navigate to="/missions" replace /> : <pages.Workbench />} />
+      <Route path="/llm" element={hosted ? <Navigate to="/missions" replace /> : <pages.LLM />} />
+      <Route path="/workbench" element={hosted ? <Navigate to="/missions" replace /> : <pages.Workbench />} />
       <Route path="/comfyui" element={hosted ? <Navigate to="/missions" replace /> : <pages.ComfyUI />} />
       <Route path="/healthcheck" element={hosted ? <Navigate to="/" replace /> : <pages.Healthcheck />} />
       <Route path="/logs" element={<pages.Logs />} />
