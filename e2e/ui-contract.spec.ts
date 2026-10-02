@@ -47,6 +47,10 @@ async function mockApi(page: Page): Promise<void> {
         id: "orchy", name: "Orchy", remote_identity: "PixelGaps/orchy",
         default_branch: "main", available: true, writable: true, reason: "",
       }]
+    } else if (path === "/api/gateway/jobs" || path.startsWith("/api/gateway/jobs?")) {
+      body = { jobs: [], next_cursor: null, total: 0 }
+    } else if (path === "/api/gateway/health") {
+      body = { status: "live", workers: [], components: {}, capabilities: [] }
     } else if (path === "/api/executions") {
       body = []
     } else if (path === "/api/logs") {
