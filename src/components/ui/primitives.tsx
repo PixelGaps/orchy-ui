@@ -1,7 +1,6 @@
 import { useEffect,useId,useState } from "react"
 import type { ButtonHTMLAttributes,HTMLAttributes,ReactNode } from "react"
 import { Check,ChevronDown,Copy,RefreshCw } from "lucide-react"
-import { motion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
@@ -25,9 +24,9 @@ export function GlowCard({
   children: ReactNode
 }>) {
   return (
-    <motion.div className={cn("glass-card glow-card", className)}>
+    <div className={cn("glass-card glow-card", className)}>
       {children}
-    </motion.div>
+    </div>
   )
 }
 
