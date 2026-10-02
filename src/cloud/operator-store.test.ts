@@ -21,7 +21,8 @@ class MemoryStatement implements D1StatementLike {
     if (!this.query.startsWith("SELECT value_json")) return null
     const key = `${String(this.values[0])}:${String(this.values[1])}`
     const value = this.db.preferences.get(key)
-    return (value == null ? null : { value_json: value }) as T | null
+    if (value == null) return null
+    return { value_json: value } as T
   }
 
   async run() {
