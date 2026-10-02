@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { apiUrl } from "@/lib/api-base"
 
 import type { SourceReadModel, CloudSource } from "./read-model"
-import { GITHUB_FALLBACK_OBSERVED_AT, GITHUB_FALLBACK_SNAPSHOT, JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT, TESTOPS_FALLBACK_OBSERVED_AT, TESTOPS_FALLBACK_SNAPSHOT } from "./fallback-snapshots"
 import {
   DEFAULT_OPERATOR_PREFERENCES,
   mergeOperatorPreferences,
@@ -14,46 +13,61 @@ import {
 
 const PREFERENCES_KEY = "orchy.operator-preferences.v1"
 
-function staleModel<T>(source: CloudSource, authority: string, observedAt: string, payload: T, errorCode: string): SourceReadModel<T> {
-  return {
-    source,
-    authority,
-    state: "stale",
-    observedAt,
-    ageSeconds: Math.max(0, Math.floor((Date.now() - Date.parse(observedAt)) / 1000)),
-    payload,
-    errorCode,
-  }
+const SOURCE_AUTHORITIES: Record<CloudSource, string> = {
+  jira: "Jira OR work state",
+  github: "GitHub source and CI",
+  testops: "TestOps retained local evidence",
+  posthog: "PostHog observability",
+  host: "Madriguera local control plane",
+  operations: "Execution operations",
+  fleet: "CI fleet state",
 }
 
-async function fetchWithResilientFallback<T>(source: CloudSource): Promise<SourceReadModel<T>> {
-  try {
-    const response = await fetch(apiUrl(`/api/cloud-control/sources/${source}`), {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-    })
-    const payload = (await response.json()) as SourceReadModel<T>
-    if (response.ok || payload.state === "stale") return payload
-  } catch {
-    // fall through to authoritative bundled fallback where available
-  }
-  if (source === "jira") {
-    return staleModel("jira", "Jira OR work state", JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT, "JIRA_SERVER_BINDING_UNAVAILABLE") as SourceReadModel<T>
-  }
-  if (source === "github") {
-    return staleModel("github", "GitHub source and CI", GITHUB_FALLBACK_OBSERVED_AT, GITHUB_FALLBACK_SNAPSHOT, "GITHUB_SERVER_BINDING_UNAVAILABLE") as SourceReadModel<T>
-  }
-  if (source === "testops") {
-    return staleModel("testops", "Frozen TestOps evidence", TESTOPS_FALLBACK_OBSERVED_AT, TESTOPS_FALLBACK_SNAPSHOT, "TESTOPS_LIVE_STORE_UNAVAILABLE") as SourceReadModel<T>
-  }
+function unavailableModel<T>(
+  source: CloudSource,
+  errorCode: string,
+): SourceReadModel<T> {
   return {
     source,
-    authority: source,
+    authority: SOURCE_AUTHORITIES[source],
     state: "unavailable",
     observedAt: null,
     ageSeconds: null,
     payload: null,
-    errorCode: "SOURCE_UNAVAILABLE",
+    errorCode,
+  }
+}
+
+async function fetchSourceModel<T>(
+  source: CloudSource,
+  init?: RequestInit,
+): Promise<SourceReadModel<T>> {
+  try {
+    const response = await fetch(
+      apiUrl(
+        init?.method === "POST"
+          ? `/api/cloud-control/sources/${source}/refresh`
+          : `/api/cloud-control/sources/${source}`,
+      ),
+      {
+        ...init,
+        cache: "no-store",
+        headers: { Accept: "application/json", ...(init?.headers ?? {}) },
+      },
+    )
+    if (!response.ok) {
+      return unavailableModel(source, `SOURCE_HTTP_${response.status}`)
+    }
+    const payload = (await response.json()) as SourceReadModel<T>
+    if (
+      payload?.source !== source ||
+      !["fresh", "stale", "unavailable"].includes(payload?.state)
+    ) {
+      return unavailableModel(source, "SOURCE_PAYLOAD_INVALID")
+    }
+    return payload
+  } catch {
+    return unavailableModel(source, "SOURCE_UNAVAILABLE")
   }
 }
 
@@ -85,27 +99,13 @@ function writePreferences(preferences: OperatorPreferences): OperatorPreferences
 export async function fetchCloudSource<T>(
   source: CloudSource,
 ): Promise<SourceReadModel<T>> {
-  return fetchWithResilientFallback<T>(source)
+  return fetchSourceModel<T>(source)
 }
 
 export async function refreshCloudSource<T>(
   source: CloudSource,
 ): Promise<SourceReadModel<T>> {
-  try {
-    const response = await fetch(
-      apiUrl(`/api/cloud-control/sources/${source}/refresh`),
-      {
-        method: "POST",
-        cache: "no-store",
-        headers: { Accept: "application/json" },
-      },
-    )
-    const payload = (await response.json()) as SourceReadModel<T>
-    if (response.ok || payload.state === "stale") return payload
-  } catch {
-    // fall back below
-  }
-  return fetchWithResilientFallback<T>(source)
+  return fetchSourceModel<T>(source, { method: "POST" })
 }
 
 export function useCloudSource<T>(source: CloudSource) {
