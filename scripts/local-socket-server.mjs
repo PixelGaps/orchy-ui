@@ -1,4 +1,4 @@
-import { createReadStream } from "node:fs"
+import { createReadStream, realpathSync } from "node:fs"
 import { promises as fs } from "node:fs"
 import http from "node:http"
 import https from "node:https"
@@ -345,8 +345,16 @@ async function main() {
   throw new Error("orchy-ui requires systemd socket activation (LISTEN_FDS=1)")
 }
 
-const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
-if (isMain) {
+export function isMainModule(argvPath = process.argv[1], modulePath = fileURLToPath(import.meta.url)) {
+  if (!argvPath) return false
+  try {
+    return realpathSync(argvPath) === realpathSync(modulePath)
+  } catch {
+    return path.resolve(argvPath) === path.resolve(modulePath)
+  }
+}
+
+if (isMainModule()) {
   main().catch((error) => {
     console.error(error instanceof Error ? error.message : error)
     process.exitCode = 1

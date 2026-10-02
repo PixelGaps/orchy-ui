@@ -7,7 +7,7 @@ import { once } from "node:events"
 import test from "node:test"
 import { fileURLToPath } from "node:url"
 
-import { createLocalUiServer, inheritedSocketFd } from "./local-socket-server.mjs"
+import { createLocalUiServer, inheritedSocketFd, isMainModule } from "./local-socket-server.mjs"
 
 async function listen(server) {
   server.listen(0, "127.0.0.1")
@@ -20,6 +20,19 @@ async function close(server) {
   server.close()
   await once(server, "close")
 }
+
+test("symlinked release entrypoint is recognized as the executable module", async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "orchy-ui-entrypoint-"))
+  t.after(() => fs.rm(root, { recursive: true, force: true }))
+  const release = path.join(root, "releases", "sha")
+  await fs.mkdir(release, { recursive: true })
+  const real = path.join(release, "runtime.mjs")
+  await fs.writeFile(real, "export default true\n")
+  const current = path.join(root, "current")
+  await fs.symlink(release, current, "dir")
+  assert.equal(isMainModule(path.join(current, "runtime.mjs"), real), true)
+  assert.equal(isMainModule(path.join(current, "runtime.mjs"), path.join(root, "other.mjs")), false)
+})
 
 test("inheritedSocketFd accepts only the current systemd service PID", () => {
   assert.equal(inheritedSocketFd({ LISTEN_FDS: "1", LISTEN_PID: "42" }, 42), 3)
