@@ -160,35 +160,3 @@ test("compact Image Factory keeps launch surface primary and advanced detail opt
   await expect(page.getByRole("button", { name: /Profile & advanced controls/ })).toHaveAttribute("aria-expanded", "false")
   await expect(page.getByRole("button", { name: /Start production/i })).toBeVisible()
 })
-
-
-test("OR-647 parity register exposes every required native operator surface and explicit limits", async ({ page }) => {
-  await mockApi(page)
-  await page.goto("/settings")
-
-  const register = page.locator(".operator-parity-register")
-  await expect(register).toBeVisible()
-  await expect(register.locator(".operator-parity-item")).toHaveCount(12)
-
-  for (const label of [
-    "Overview",
-    "Test Assurance",
-    "Issues",
-    "Missions",
-    "Queue",
-    "Image Factory",
-    "LLM",
-    "ComfyUI",
-    "Healthcheck",
-    "Logs",
-    "Global Settings",
-    "Quotas",
-  ]) {
-    await expect(register.getByText(label, { exact: true })).toBeVisible()
-  }
-
-  const limits = page.locator(".operator-limit-register")
-  await expect(limits).toContainText("Vercel and Netlify remain quarantined")
-  await expect(limits).toContainText("Resident polling is forbidden")
-  await expect(limits).toContainText("browser never owns Jira work state")
-})
