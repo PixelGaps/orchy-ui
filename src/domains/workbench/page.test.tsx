@@ -136,9 +136,11 @@ describe("WorkbenchPage", () => {
     fireEvent.change(screen.getByLabelText("Exact target SHA"), { target: { value: "bad" } })
     expect(screen.getByText("Exact 40-character SHA required.")).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText("Exact target SHA"), { target: { value: SHA } })
-    fireEvent.change(screen.getByLabelText("Runtime"), { target: { value: "cline" } })
-    fireEvent.change(screen.getByLabelText("Effort"), { target: { value: "HIGH" } })
+    expect(screen.getByLabelText("Runtime")).toHaveValue("aider")
+    expect(screen.getByLabelText("Effort")).toHaveValue("MEDIUM")
+    expect(screen.getByRole("option", { name: "OpenCode · deferred" })).toBeDisabled()
     fireEvent.click(screen.getByRole("checkbox", { name: /local-echo/ }))
+    fireEvent.change(screen.getByLabelText("Repository paths"), { target: { value: "src/app.py" } })
     fireEvent.change(screen.getByLabelText("Task"), { target: { value: "Implement the change" } })
     fireEvent.change(screen.getByLabelText(/Acceptance criteria/), {
       target: { value: "Tests pass\nNo unrelated changes" },
@@ -150,9 +152,10 @@ describe("WorkbenchPage", () => {
       task: "Implement the change",
       repository_id: "agents-sandbox",
       target_sha: SHA,
-      runtime: "cline",
-      effort: "HIGH",
+      runtime: "aider",
+      effort: "MEDIUM",
       enabled_plugins: ["local-echo"],
+      attachments: [expect.objectContaining({ repository_path: "src/app.py", source: "repository" })],
       acceptance: ["Tests pass", "No unrelated changes"],
     })))
     expect(await screen.findByText("Inspecting repository")).toBeInTheDocument()
