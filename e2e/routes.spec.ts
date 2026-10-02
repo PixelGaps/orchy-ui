@@ -44,7 +44,7 @@ async function mockApi(page: Page): Promise<void> {
     } else if (path === "/api/repositories") {
       body = []
     } else if (path === "/api/workbench/plugins") {
-      body = { plugins: [] }
+      body = []
     } else if (path === "/api/gateway/jobs" || path.startsWith("/api/gateway/jobs?")) {
       body = { jobs: [], next_cursor: null, total: 0 }
     } else if (path === "/api/gateway/health") {
