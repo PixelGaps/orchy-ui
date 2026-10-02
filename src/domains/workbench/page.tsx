@@ -378,6 +378,7 @@ export function WorkbenchPage() {
               <label>
                 <span>Repository</span>
                 <select
+                  aria-label="Repository"
                   value={repositoryId}
                   onChange={(event) => setRepositoryId(event.target.value)}
                   disabled={Boolean(session)}
@@ -398,6 +399,7 @@ export function WorkbenchPage() {
               <label>
                 <span>Exact target SHA</span>
                 <input
+                  aria-label="Exact target SHA"
                   value={targetSha}
                   onChange={(event) => setTargetSha(event.target.value.trim().toLowerCase())}
                   disabled={Boolean(session)}
@@ -413,6 +415,7 @@ export function WorkbenchPage() {
               <label>
                 <span>Runtime</span>
                 <select
+                  aria-label="Runtime"
                   value={runtime}
                   onChange={(event) => setRuntime(event.target.value as WorkbenchRuntime)}
                   disabled={Boolean(session)}
@@ -425,6 +428,7 @@ export function WorkbenchPage() {
               <label>
                 <span>Effort</span>
                 <select
+                  aria-label="Effort"
                   value={effort}
                   onChange={(event) => setEffort(event.target.value as WorkbenchEffort)}
                   disabled={Boolean(session)}
@@ -544,6 +548,7 @@ export function WorkbenchPage() {
                   <Paperclip size={14} />
                   <span>Attach files</span>
                   <input
+                    aria-label="Attachments"
                     type="file"
                     multiple
                     onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
