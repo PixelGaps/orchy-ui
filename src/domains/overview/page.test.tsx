@@ -26,6 +26,8 @@ describe("Local Overview", () => {
   it("renders Jira, GitHub, TestOps and host projections", () => {
     sourceState.values = {
       jira: {
+        source: "jira",
+        authority: "Jira OR work state",
         state: "fresh",
         payload: {
           openCount: 4,
@@ -34,6 +36,8 @@ describe("Local Overview", () => {
         },
       },
       github: {
+        source: "github",
+        authority: "GitHub source and CI",
         state: "fresh",
         payload: {
           repository: "PixelGaps/orchy",
@@ -44,10 +48,14 @@ describe("Local Overview", () => {
         },
       },
       testops: {
+        source: "testops",
+        authority: "TestOps retained local evidence",
         state: "fresh",
         payload: { target: "PixelGaps/orchy", layers: [], findings: [] },
       },
       host: {
+        source: "host",
+        authority: "Madriguera local control plane",
         state: "fresh",
         payload: {
           hostId: "primary-host",
@@ -79,10 +87,10 @@ describe("Local Overview", () => {
 
   it("does not synthesize assurance or Jira counts when authoritative sources are unavailable", () => {
     sourceState.values = {
-      jira: { state: "unavailable", payload: null, errorCode: "JIRA_SERVER_SOURCE_UNAVAILABLE" },
-      github: { state: "fresh", payload: { repository: "PixelGaps/orchy", defaultBranch: "main", headSha: "abc", openWorkflowRuns: 0, recentRuns: [] } },
-      testops: { state: "unavailable", payload: null, errorCode: "TESTOPS_EVIDENCE_UNAVAILABLE" },
-      host: { state: "fresh", payload: { hostId: "b", state: "ONLINE", lastSeenAt: "2026-10-02T20:00:00Z", controlPlaneVersion: "orchy-web-v2", sourceSha: "abc", machineControlState: "active", machineControlLastSeenAt: "2026-10-02T20:00:00Z" } },
+      jira: { source: "jira", authority: "Jira OR work state", state: "unavailable", payload: null, errorCode: "JIRA_SERVER_SOURCE_UNAVAILABLE" },
+      github: { source: "github", authority: "GitHub source and CI", state: "fresh", payload: { repository: "PixelGaps/orchy", defaultBranch: "main", headSha: "abc", openWorkflowRuns: 0, recentRuns: [] } },
+      testops: { source: "testops", authority: "TestOps retained local evidence", state: "unavailable", payload: null, errorCode: "TESTOPS_EVIDENCE_UNAVAILABLE" },
+      host: { source: "host", authority: "Madriguera local control plane", state: "fresh", payload: { hostId: "b", state: "ONLINE", lastSeenAt: "2026-10-02T20:00:00Z", controlPlaneVersion: "orchy-web-v2", sourceSha: "abc", machineControlState: "active", machineControlLastSeenAt: "2026-10-02T20:00:00Z" } },
     }
 
     render(
