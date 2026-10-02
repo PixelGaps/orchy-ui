@@ -70,6 +70,15 @@ migration:
   source_cleanup_after_verified_parity: required
 
 control_budget:
+  Firecrawl_routine_calls: 0
+  Firecrawl_use: only-when-required-web-content-cannot-be-satisfied-by-native-connectors-direct-APIs-or-non-Firecrawl-retrieval
+  Firecrawl_search: forbidden-when-a-non-Firecrawl-search-or-source-API-can-identify-target-URLs
+  Firecrawl_scrape: targeted-shortlist-only+deduplicate+reuse-within-task-or-batch
+  Firecrawl_repeat_same_URL: forbidden-unless-prior-result-failed-or-is-materially-stale
+  Firecrawl_crawl_or_map: forbidden-by-default+requires-explicit-Jira-scope+bounded-pages+bounded-depth
+  Firecrawl_interact_or_browser: forbidden-unless-dynamic-rendering-or-interaction-is-technically-required+no-idle-minutes
+  Firecrawl_quota_or_health_polling: forbidden
+  Firecrawl_live_CI_or_tests: forbidden
   objective: preserve-Madriguera-breakglass-capacity
   Desktop_Commander_routine_calls: 0
   Supabase_routine_calls: 0
