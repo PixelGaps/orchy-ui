@@ -22,7 +22,7 @@ function EventCard({ event }: Readonly<{ event: WorkbenchEvent }>) {
   }
   return (
     <details className="workbench-tool" open={event.kind === "error"}>
-      <summary><Wrench size={14} /><strong>{event.title || event.kind}</strong><Badge tone={event.kind === "error" ? "red" : "neutral"}>{event.status || "recorded"}</Badge></summary>
+      <summary><Wrench size={14} /><strong>{event.title || event.kind}</strong><Badge tone={event.kind === "error" ? "danger" : "neutral"}>{event.status || "recorded"}</Badge></summary>
       <div>{event.text}</div>
       {event.detail && <pre className={event.kind === "diff" ? "workbench-diff" : ""}>{event.detail}</pre>}
     </details>
@@ -89,7 +89,7 @@ export function AgenticWorkbenchPage() {
     <div className="workbench-page">
       <PageHeader eyebrow="Agentic coding" title="Agentic Workbench" description="Local coding sessions with explicit repository, runtime, effort and plugin boundaries." badge={<Badge tone={backendReady ? "cyan" : "neutral"}>{backendReady ? "WORKBENCH API" : "WIP ADAPTER"}</Badge>} />
       <div className="workbench-status" role="status">
-        <Badge tone={backendReady ? "green" : "yellow"}>{backendReady ? "Backend connected" : "Backend contract pending"}</Badge>
+        <Badge tone={backendReady ? "live" : "warn"}>{backendReady ? "Backend connected" : "Backend contract pending"}</Badge>
         <span>UI authority: orchy-ui · lifecycle authority: Orchy ExecutionStore / Mission Core</span>
         <Button onClick={()=>void refresh()} aria-label="Refresh workbench"><RefreshCw size={14}/> Refresh</Button>
       </div>
