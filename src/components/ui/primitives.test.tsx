@@ -262,7 +262,7 @@ describe("UI primitives", () => {
     fireEvent.change(screen.getByLabelText("Runner"), { target: { value: "host" } })
     expect(selectChange).toHaveBeenCalledWith("host")
 
-    const range = screen.getByLabelText("Max generations")
+    const range = screen.getByRole("slider", { name: "Max generations" })
     expect(screen.getByText("4 runs")).toBeInTheDocument()
     fireEvent.change(range, { target: { value: "6" } })
     expect(rangeChange).toHaveBeenCalledWith(6)
@@ -319,7 +319,7 @@ describe("UI primitives", () => {
     )
     expect(screen.getByRole("switch", { name: "Locked switch" })).toBeDisabled()
     expect(screen.getByLabelText("Locked select")).toBeDisabled()
-    expect(screen.getByLabelText("Locked range")).toBeDisabled()
+    expect(screen.getByRole("slider", { name: "Locked range" })).toBeDisabled()
     expect(document.querySelectorAll(".ui-skeleton")).toHaveLength(1)
   })
 
