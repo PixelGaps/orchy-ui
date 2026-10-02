@@ -17,7 +17,7 @@ ExecStartPre=/usr/bin/bash /opt/orchy-ui/source/scripts/local-deploy.sh
 ExecStart=/usr/bin/bash /opt/orchy-ui/source/scripts/local-run.sh
 # Narrow privileged lifecycle hook: UI wake starts the local API dependency; UI idle
 # returns that control-plane process to zero-idle. Detached Missions survive API stop.
-ExecStopPost=+/usr/bin/systemctl stop orchy-web.service
+ExecStopPost=+/usr/bin/systemctl --no-block stop orchy-web.service
 Restart=no
 TimeoutStartSec=180
 TimeoutStopSec=15
