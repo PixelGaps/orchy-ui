@@ -7,9 +7,10 @@ PanelLeftOpen,
 Search,
 X,
 } from "lucide-react"
-import { AnimatePresence,motion,useReducedMotion } from "motion/react"
 import {
+lazy,
 ReactNode,
+Suspense,
 useEffect,
 useRef,
 useState,
@@ -52,7 +53,6 @@ function AppShell({ children }: Readonly<{ children: ReactNode }>) {
   const menuButtonRef = useRef<HTMLButtonElement | null>(null)
   const sidebarRef = useRef<HTMLElement | null>(null)
   const commandInputRef = useRef<HTMLInputElement | null>(null)
-  const reduceMotion = useReducedMotion()
 
   useEffect(() => setOpen(false), [location.pathname])
 
@@ -264,22 +264,7 @@ function AppShell({ children }: Readonly<{ children: ReactNode }>) {
         </div>
       )}
 
-      <main id="orchy-main-content" className="content" tabIndex={-1}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={reduceMotion ? false : { opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduceMotion ? undefined : { opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.16 }}
-            className="page"
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
-      </main>
-
-      <nav className="mobile-bottom-nav" aria-label="Mobile primary navigation">
+      <main id="orchy-main-content" className="content" tabIndex={-1}>\n        <div className="page">{children}</div>\n      </main>\n\n      <nav className="mobile-bottom-nav" aria-label="Mobile primary navigation">
         {mobilePrimary.map((item) => {
           const Icon = item.icon
           return (
