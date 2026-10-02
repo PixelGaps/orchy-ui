@@ -19,15 +19,12 @@ export interface CloudControlEnv {
   POSTHOG_SUMMARY_URL?: string
   ORCHY_OPERATOR_SUBJECT?: string
   ORCHY_OPERATOR_EMAIL?: string
-  VERCEL_ENV?: string
-  VERCEL_URL?: string
-  ORCHY_DEPLOYMENT_PROTECTION?: string
 }
 
 export interface AccessIdentity {
   subject: string
   email: string | null
-  issuer: "vercel-deployment-protection"
+  issuer: "operator-mediator"
 }
 
 export class CloudSecurityError extends Error {
@@ -66,24 +63,16 @@ export function cloudControlEnvFromProcess(
     POSTHOG_SUMMARY_URL: source.POSTHOG_SUMMARY_URL,
     ORCHY_OPERATOR_SUBJECT: source.ORCHY_OPERATOR_SUBJECT,
     ORCHY_OPERATOR_EMAIL: source.ORCHY_OPERATOR_EMAIL,
-    VERCEL_ENV: source.VERCEL_ENV,
-    VERCEL_URL: source.VERCEL_URL,
-    ORCHY_DEPLOYMENT_PROTECTION: source.ORCHY_DEPLOYMENT_PROTECTION,
   }
 }
 
-export function vercelOperatorIdentity(
+export function operatorIdentity(
   env: CloudControlEnv,
 ): AccessIdentity {
   return {
     subject: env.ORCHY_OPERATOR_SUBJECT?.trim() || "orchy-operator",
     email: env.ORCHY_OPERATOR_EMAIL?.trim() || null,
-    issuer: "vercel-deployment-protection",
+    issuer: "operator-mediator",
   }
 }
 
-export function assertVercelDeploymentProtection(env: CloudControlEnv): void {
-  if (env.VERCEL_ENV && env.ORCHY_DEPLOYMENT_PROTECTION !== "enabled") {
-    throw new CloudSecurityError("VERCEL_DEPLOYMENT_PROTECTION_UNCONFIRMED", 503)
-  }
-}

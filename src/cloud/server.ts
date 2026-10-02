@@ -12,7 +12,7 @@ import {
 } from "./read-model"
 import {
   cloudControlEnvFromProcess,
-  vercelOperatorIdentity,
+  operatorIdentity,
   type CloudControlEnv,
 } from "./security"
 import { SupabaseCloudStore } from "./supabase-store"
@@ -21,10 +21,10 @@ import { JIRA_FALLBACK_OBSERVED_AT, JIRA_FALLBACK_SNAPSHOT, TESTOPS_FALLBACK_OBS
 const healthPayload = {
   status: "ok",
   service: "orchy-cloud-control",
-  stack: "vercel+hono+react",
+  stack: "hono+react",
   mode: "operator-read-models",
   authority: "canonical-source-projections",
-  auth: "vercel-deployment-protection",
+  auth: "external-operator-mediation",
   cache: "supabase-dashboard-local",
 } as const
 
@@ -35,7 +35,7 @@ export function createCloudApp(
 ) {
   const app = new Hono()
   const store = new SupabaseCloudStore(env, fetcher)
-  const identity = vercelOperatorIdentity(env)
+  const identity = operatorIdentity(env)
 
   app.use("/api/*", async (context, next) => {
     context.header("Cache-Control", "no-store")

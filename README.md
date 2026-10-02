@@ -1,44 +1,33 @@
 # Orchy UI
 
-Authenticated, zero-cost hosted operator dashboard for Orchy.
+Provider-neutral operator UI for Orchy.
+
+## Provider quarantine
+
+As of 2026-10-02, **Vercel and Netlify are quarantined by explicit user order**.
+
+- no Vercel deployment manifest;
+- no Netlify deployment manifest;
+- no provider-specific serverless entrypoint;
+- no Vercel-specific runtime identity or deployment-protection contract;
+- no hosted provider is authoritative or considered pending work;
+- reactivation requires a new explicit user order.
+
+The React/Vite UI and provider-neutral cloud-control code are retained so local development and future hosting decisions do not require reconstructing the product.
 
 ## Authority boundaries
 
-- **This repository** owns the browser UI and Netlify direct-deploy configuration.
+- **PixelGaps/orchy-ui** owns the operator UI.
 - **PixelGaps/orchy** owns backend/runtime APIs, Mission Core, ExecutionStore, Image Factory, LLM and ComfyUI behavior.
 - **Jira OR** owns work state and acceptance.
 - **TestOps** owns advanced assurance evidence.
-- **Notion** remains a fallback/reference projection during migration.
 
-## Repository visibility
+## Security
 
-`PixelGaps/orchy-ui` is intentionally **public**. This is a deployment constraint: the free hosting paths available to this project do not support the required private organization repository workflow without paid features.
+A future hosted deployment must provide authenticated operator mediation and keep privileged secrets server-side. Repository visibility is not an authentication boundary.
 
-Repository visibility is **not** the security boundary for the operator dashboard. Production access must still be authenticated, and secrets or authoritative state must never be exposed in browser-readable source or static assets.
+## Development
 
-## Hosting
-
-Primary host: **Netlify Free (Credit-based)** using prebuilt/manual deploys.
-
-The repository is deliberately **not** dependent on paid private-repository Git integration. Build artifacts are produced by an existing zero-cost path and deployed with the Netlify CLI/API.
-
-**Render hosting is retired and forbidden for this repository.** `npm run check:no-render` is part of the production build and rejects Render deployment files, Render service environment markers, and Render-hosted URLs.
-
-Hard rules:
-- public source repository for zero-cost deployment compatibility;
-- authenticated operator access in production;
-- zero paid spend;
-- no automatic paid overage;
-- no background polling;
-- no canonical state copy;
-- no secrets in browser-readable state.
-
-## Issue implementation action
-
-The migrated dashboard owns the native **Implement OR-xxx** action. There is no standalone Jira redirect/launcher service in this repository.
-
-## Migration
-
-The React/Vite dashboard has been migrated here from `PixelGaps/orchy/apps/web` under OR-670. The backend-repo copy remains only until standalone build/parity validation is complete, then it must be removed.
+Use `npm run dev` for local development. Provider-specific deployment configuration must not be added while the quarantine is active.
 
 Current implementation version: **2.0.0**.
