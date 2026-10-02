@@ -157,6 +157,7 @@ export function WorkbenchPage() {
   const [task, setTask] = useState("")
   const [acceptance, setAcceptance] = useState("")
   const [files, setFiles] = useState<File[]>([])
+  const [repositoryPaths, setRepositoryPaths] = useState("")
   const [session, setSession] = useState<WorkbenchSession | null>(null)
   const [events, setEvents] = useState<WorkbenchEvent[]>([])
   const [sessionLookup, setSessionLookup] = useState("")
@@ -210,7 +211,18 @@ export function WorkbenchPage() {
     setBusy("launch")
     setError("")
     try {
-      const attachments = await Promise.all(files.map(fileToWorkbenchAttachment))
+      const uploads = await Promise.all(files.map(fileToWorkbenchAttachment))
+      const repositoryAttachments = repositoryPaths
+        .split(/\r?\n/)
+        .map((value) => value.trim())
+        .filter(Boolean)
+        .map((repositoryPath) => ({
+          name: repositoryPath.split("/").at(-1) || repositoryPath,
+          media_type: "text/plain",
+          repository_path: repositoryPath,
+          source: "repository",
+        }))
+      const attachments = [...uploads, ...repositoryAttachments]
       const next = await startWorkbenchSession({
         task: task.trim(),
         repository_id: repositoryId,
@@ -225,6 +237,7 @@ export function WorkbenchPage() {
       setSessionLookup(next.session_id)
       setTask("")
       setFiles([])
+      setRepositoryPaths("")
       await refreshEvents(next.session_id)
       notifyOperator("Workbench session accepted", "success")
     } catch (value) {
@@ -420,9 +433,9 @@ export function WorkbenchPage() {
                   onChange={(event) => setRuntime(event.target.value as WorkbenchRuntime)}
                   disabled={Boolean(session)}
                 >
-                  <option value="aider">Aider</option>
-                  <option value="cline">Cline</option>
-                  <option value="opencode">OpenCode</option>
+                  <option value="aider">Aider · ready</option>
+                  <option value="cline">Cline · comparator</option>
+                  <option value="opencode" disabled>OpenCode · deferred</option>
                 </select>
               </label>
               <label>
@@ -437,7 +450,7 @@ export function WorkbenchPage() {
                   <option value="MEDIUM">MEDIUM</option>
                   <option value="HIGH">HIGH</option>
                 </select>
-                <small>Server resolves the qualified resource budget for this runtime/profile.</small>
+                <small>MEDIUM is the certified Aider readiness default. LOW/HIGH remain bounded profiles while qualification continues.</small>
               </label>
             </div>
           </Card>
@@ -559,6 +572,17 @@ export function WorkbenchPage() {
                     {files.map((file) => <span key={`${file.name}-${file.size}`}>{file.name} · {file.size} B</span>)}
                   </div>
                 )}
+                <label htmlFor="workbench-repository-paths">
+                  Repository paths <small>one tracked path per line</small>
+                </label>
+                <textarea
+                  id="workbench-repository-paths"
+                  aria-label="Repository paths"
+                  value={repositoryPaths}
+                  onChange={(event) => setRepositoryPaths(event.target.value)}
+                  rows={2}
+                  placeholder={"src/example.ts\ndocs/API.md"}
+                />
                 <Button disabled={!launchReady} onClick={() => void launch()}>
                   <Play size={14} /> {busy === "launch" ? "Starting…" : "Start session"}
                 </Button>
