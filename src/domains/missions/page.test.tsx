@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const mocks = vi.hoisted(() => ({
   cancel: vi.fn().mockResolvedValue({ ok: true, state: "cancelled" }),
@@ -18,6 +18,7 @@ const mocks = vi.hoisted(() => ({
     denseOperations: false,
     defaultFleetView: "eligible",
   }),
+  getOverview: vi.fn(),
 }))
 
 vi.mock("@/cloud/client", () => ({
@@ -97,6 +98,10 @@ vi.mock("@/cloud/client", () => ({
   },
 }))
 
+vi.mock("@/lib/api", () => ({
+  getApi: mocks.getOverview,
+}))
+
 vi.mock("@/components/ui/primitives", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/components/ui/primitives")>()
   return {
@@ -119,16 +124,98 @@ function renderPage() {
 }
 
 describe("MissionsPage", () => {
-  it("fails host-bound actions closed while preserving cloud state", async () => {
+  beforeEach(() => {
+    mocks.getOverview.mockReset()
+    mocks.getOverview.mockResolvedValue({
+      quotas: [
+        {
+          id: "circle",
+          product: "CircleCI",
+          quota: "Runner minutes",
+          unit: "min",
+          limit: 1000,
+          used: 250,
+          remaining: 750,
+          percent_used: 25,
+          exhausted: false,
+          status: "ok",
+          source: "circle-live",
+          updated_at: "2026-10-02T16:00:00Z",
+        },
+        {
+          id: "warn",
+          product: "Tool API",
+          quota: "Calls",
+          unit: "calls",
+          limit: 100,
+          used: 90,
+          remaining: 10,
+          percent_used: 90,
+          exhausted: false,
+          status: "warning",
+          source: "tool-ledger",
+          updated_at: null,
+        },
+        {
+          id: "unknown",
+          product: "Optional provider",
+          quota: "Allowance",
+          unit: "units",
+          limit: null,
+          used: null,
+          remaining: null,
+          percent_used: null,
+          exhausted: false,
+          status: "unknown",
+          source: "optional-provider",
+          updated_at: null,
+        },
+        {
+          id: "exhausted",
+          product: "Offline allowance",
+          quota: "Credits",
+          unit: "credits",
+          limit: 10,
+          used: 10,
+          remaining: 0,
+          percent_used: 100,
+          exhausted: true,
+          status: "exhausted",
+          source: "ledger",
+          updated_at: "2026-10-02T15:00:00Z",
+        },
+      ],
+    })
+  })
+
+  it("fails host-bound actions closed while preserving cloud state and authoritative quota snapshots", async () => {
     renderPage()
     expect(await screen.findByText("Execution host offline")).toBeInTheDocument()
     expect(screen.getByText("GPU capability")).toBeInTheDocument()
     expect(screen.getByText("Model runtimes")).toBeInTheDocument()
     expect(screen.getAllByText("offline").length).toBeGreaterThanOrEqual(2)
     expect(screen.getByText("blacksmith")).toBeInTheDocument()
+    expect(await screen.findByText("CircleCI")).toBeInTheDocument()
+    expect(screen.getByText("750 min remaining")).toBeInTheDocument()
+    expect(screen.getByText("10 calls remaining")).toBeInTheDocument()
+    expect(screen.getByText("unknown remaining")).toBeInTheDocument()
+    expect(screen.getAllByText("freshness unknown")).toHaveLength(2)
+    expect(screen.getByText("exhausted")).toBeInTheDocument()
     const row = screen.getByText("mission.run").closest(".data-row")
     expect(row).not.toBeNull()
     expect(within(row as HTMLElement).getByRole("button", { name: /Cancel/ })).toBeDisabled()
+  })
+
+  it("shows explicit empty and unavailable quota states without synthesizing values", async () => {
+    mocks.getOverview.mockResolvedValueOnce({ quotas: [] })
+    const first = renderPage()
+    expect(await screen.findByText("No active product quota snapshot")).toBeInTheDocument()
+    first.unmount()
+
+    mocks.getOverview.mockRejectedValueOnce(new Error("runtime offline"))
+    renderPage()
+    expect(await screen.findByText("Product quota snapshot unavailable")).toBeInTheDocument()
+    expect(screen.getByText(/No synthetic quota is shown/)).toBeInTheDocument()
   })
 
   it("applies validated slider switch and select preferences", async () => {
