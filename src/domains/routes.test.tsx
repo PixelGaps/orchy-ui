@@ -25,6 +25,7 @@ const pages = {
   Healthcheck: () => <Marker name="Health page" />,
   Logs: () => <Marker name="Logs page" />,
   GlobalSettings: () => <Marker name="Settings page" />,
+  Workbench: () => <Marker name="Workbench page" />,
 }
 
 function renderRoute(path: string) {
@@ -43,6 +44,7 @@ describe("domain routes", () => {
       "/assurance",
       "/issues",
       "/missions",
+      "/workbench",
       "/queue",
       "/image-factory",
       "/llm",
@@ -61,6 +63,7 @@ describe("domain routes", () => {
     ["/assurance", "Assurance page"],
     ["/issues", "Issues page"],
     ["/missions", "Missions page"],
+    ["/workbench", "Workbench page"],
     ["/queue", "Queue page"],
     ["/image-factory", "Image page"],
     ["/llm", "LLM page"],
