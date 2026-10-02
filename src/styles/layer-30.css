@@ -80,3 +80,10 @@ input,select,textarea{border-radius:5px!important;box-shadow:none!important}
  .console-summary,.cloud-kv,.workbench-session-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* OR-779 closeout density */
+.route-loading{padding:16px;color:var(--muted);font-size:12px}
+.workbench-layout{grid-template-columns:minmax(210px,.25fr) minmax(0,1fr) minmax(210px,.25fr)}
+.queue-filter-grid{gap:6px}.queue-job-row{min-height:38px}.queue-row-select{padding-block:4px}
+.mission-board,.mission-lanes,.mission-health-grid{gap:7px}
+.factory-command-grid,.factory-result-body,.gallery-profile-stack{gap:7px}
