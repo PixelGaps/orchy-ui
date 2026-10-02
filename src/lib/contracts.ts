@@ -1095,6 +1095,7 @@ export type RepositoryOption = {
   available: boolean
   writable: boolean
   reason: string
+  head: string
 }
 
 export type TaskRequest = {
