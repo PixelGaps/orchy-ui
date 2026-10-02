@@ -136,7 +136,7 @@ test("desktop Workbench launches canonical session and renders observable eviden
     acceptance: ["Tests pass", "No unrelated changes"],
   })
   await expect(page.getByText("Inspecting exact SHA")).toBeVisible()
-  await expect(page.getByText("src/example.ts")).toBeVisible()
+  await expect(page.locator(".workbench-changed-files code").filter({ hasText: "src/example.ts" })).toBeVisible()
   await expect(page.getByText("one-shot SSE")).toBeVisible()
   await expect(page.getByRole("button", { name: /Stop/ })).toBeEnabled()
   await expect(page.getByRole("button", { name: /Repair/ })).toBeDisabled()
