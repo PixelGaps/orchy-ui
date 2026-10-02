@@ -15,7 +15,8 @@ describe("GlobalSettingsPage operator parity register", () => {
   it("renders every required surface and explicit platform boundary", () => {
     render(<GlobalSettingsPage />)
 
-    const register = screen.getByLabelText("Operator surface parity")\n    expect(screen.getByText("12/12 surfaced")).toBeInTheDocument()
+    const register = screen.getByLabelText("Operator surface parity")
+    expect(screen.getByText("12/12 surfaced")).toBeInTheDocument()
     for (const label of [
       "Overview",
       "Test Assurance",
