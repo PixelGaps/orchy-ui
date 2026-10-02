@@ -87,3 +87,5 @@ input,select,textarea{border-radius:5px!important;box-shadow:none!important}
 .queue-filter-grid{gap:6px}.queue-job-row{min-height:38px}.queue-row-select{padding-block:4px}
 .mission-board,.mission-lanes,.mission-health-grid{gap:7px}
 .factory-command-grid,.factory-result-body,.gallery-profile-stack{gap:7px}
+
+@media(max-width:640px){.interactive-data-list{overflow:visible}.interactive-data-list .data-row{display:grid;width:auto;min-width:0;grid-template-columns:auto minmax(0,1fr)}.semantic-table{display:block;overflow:visible}.semantic-table .data-row{display:grid;width:auto;min-width:0;grid-template-columns:1fr auto}.semantic-table .data-row>*{display:block}.workbench-layout{grid-template-columns:1fr}.queue-row-select{min-width:0}}
