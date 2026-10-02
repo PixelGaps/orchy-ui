@@ -264,16 +264,6 @@ export function MissionsPage() {
                 body={runtimeOverview.error ? "The runtime API did not provide an authoritative quota snapshot. No synthetic quota is shown." : "Only authoritative active quota snapshots render here; unknown or inactive providers stay explicit rather than guessed."}
               />
             )}
-              ))}
-              {!productQuotas.length && (
-                <EmptyState
-                  title={runtimeOverview.error ? "Product quota snapshot unavailable" : "No active product quota snapshot"}
-                  body={runtimeOverview.error
-                    ? "The runtime API did not provide an authoritative quota snapshot. No synthetic quota is shown."
-                    : "Only authoritative active quota snapshots render here; unknown or inactive providers stay explicit rather than guessed."}
-                />
-              )}
-            </div>
           </Card>
 
           <Card>
