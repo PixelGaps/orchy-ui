@@ -108,7 +108,7 @@ async function configureAndLaunch(page: Page, capture: Capture) {
 
   await expect(page.getByRole("heading", { name: "Coding workspace" })).toBeVisible()
   await expect(page.getByText("WIP adapter").first()).toBeVisible()
-  await expect(page.getByRole("option", { name: "Agents Sandbox" })).toBeVisible()
+  await expect(page.getByLabel("Repository")).toHaveValue("agents-sandbox")
 
   await page.getByLabel("Exact target SHA").fill(SHA)
   await page.getByLabel("Runtime").selectOption("cline")
