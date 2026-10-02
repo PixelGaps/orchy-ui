@@ -61,4 +61,4 @@ A second request must wake the service again. Also confirm the `23236` listener 
 
 ## Publishing later
 
-`vercel.json` remains versioned and intentionally untouched. When the Vercel block is removed, the same repository can be published again as the hosted surface. Local socket activation remains the private zero-idle fallback; it does not become a second work-state or execution authority.
+Hosted-provider manifests and entrypoints remain quarantined and are intentionally absent from the active deployment path. When the provider quarantine is explicitly lifted, hosted publication must be reintroduced as a new, reviewed change against the then-current provider requirements. Local socket activation remains the private zero-idle fallback; it does not become a second work-state or execution authority.
