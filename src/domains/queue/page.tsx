@@ -346,7 +346,7 @@ export function QueuePage() {
                   <small>{job.repo} · {job.request_id} · {job.target_sha.slice(0,8)}</small>,
                   <Badge tone={tone(job.status)}>{job.status}</Badge>,
                   <Badge tone={tone(job.policy?.health || "unknown")}>{job.policy?.classification || "UNKNOWN"}</Badge>,
-                  <button type="button" className="button button-ghost button-compact" onClick={()=>setSelectedId(job.id)}>Inspect</button>,
+                  <button type="button" className="button button-ghost button-compact" aria-label={`Inspect ${job.request_id}`} onClick={()=>setSelectedId(job.id)}>Inspect</button>,
                 ],
               }))}
             />
