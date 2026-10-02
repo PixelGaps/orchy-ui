@@ -1,0 +1,16 @@
+[Unit]
+Description=Orchy UI wake-on-demand private socket
+Documentation=https://github.com/PixelGaps/orchy-ui/blob/main/docs/LOCAL_DEPLOYMENT.md
+Wants=tailscaled.service
+After=tailscaled.service network-online.target
+
+[Socket]
+ListenStream=23236
+BindToDevice=tailscale0
+NoDelay=true
+Service=orchy-ui.service
+TriggerLimitIntervalSec=60s
+TriggerLimitBurst=5
+
+[Install]
+WantedBy=sockets.target

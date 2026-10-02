@@ -1,0 +1,43 @@
+[Unit]
+Description=Orchy UI on-demand application service
+Documentation=https://github.com/PixelGaps/orchy-ui/blob/main/docs/LOCAL_DEPLOYMENT.md
+Requires=orchy-ui.socket
+After=network-online.target
+
+[Service]
+Type=simple
+User=orchy-ui
+Group=orchy-ui
+WorkingDirectory=/opt/orchy-ui/source
+Environment=HOME=/var/lib/orchy-ui
+Environment=NPM_CONFIG_CACHE=/var/lib/orchy-ui/npm-cache
+EnvironmentFile=-/etc/orchy-ui.env
+StateDirectory=orchy-ui
+ExecStartPre=/usr/bin/bash /opt/orchy-ui/source/scripts/local-deploy.sh
+ExecStart=/usr/bin/env node /var/lib/orchy-ui/current/local-socket-server.mjs
+Restart=no
+TimeoutStartSec=180
+TimeoutStopSec=15
+UMask=0027
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/orchy-ui /var/lib/orchy-ui
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+# Intentionally empty: enable orchy-ui.socket, never this application service.

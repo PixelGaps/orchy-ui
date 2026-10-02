@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "check:no-render": "node scripts/check-no-render-hosting.mjs",
-    "build": "npm run check:no-render && npm run test:hooks && npm run check:hooks && tsc --noEmit && vite build",
+    "build": "npm run check:no-render && npm run test:local-runtime && npm run test:hooks && npm run check:hooks && tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit --pretty false",
     "lint": "eslint src e2e",
     "test:e2e:routes": "playwright test e2e/routes.spec.ts",
@@ -21,7 +21,8 @@
     "test:coverage": "bash scripts/web_test_toolchain.sh coverage",
     "check:hooks": "node scripts/check-react-hook-order.mjs",
     "test:hooks": "node --test scripts/check-react-hook-order.test.mjs",
-    "test": "npm run test:hooks && npm run test:unit"
+    "test:local-runtime": "node --test scripts/local-socket-server.test.mjs",
+    "test": "npm run test:local-runtime && npm run test:hooks && npm run test:unit"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
@@ -48,5 +49,5 @@
     "typescript": "^5.9.0",
     "vite": "^7.0.0"
   },
-  "description": "Provider-neutral Orchy operator dashboard; hosted providers are quarantined until explicit reactivation"
+  "description": "Local-first socket-activated Orchy operator dashboard; hosted providers quarantined until explicit reactivation"
 }

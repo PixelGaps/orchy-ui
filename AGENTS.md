@@ -1,15 +1,15 @@
-schema: orchy-ui.agent-contract.v5
+schema: orchy-ui.agent-contract.v6
 repository:
-  state: active-hosted-operator-ui
+  state: active-local-first-operator-ui
   default_branch: main
   branches: main-only
   non_main_refs: forbidden
   temporary_branches: forbidden
   direct_main: required
-  purpose: authenticated-zero-cost-orchy-operator-dashboard
-  visibility: public-required-for-zero-cost-hosting
+  purpose: zero-cost-orchy-operator-dashboard
   standalone_dashboard: required
-  hosting: Netlify-Free-Direct-Deploy
+  current_delivery: Madriguera-Tailscale-systemd-socket-activation
+  hosted_providers: quarantined-until-explicit-reactivation
   retired_hosting: Render-forbidden
 authority:
   operator_ui: PixelGaps/orchy-ui
@@ -24,7 +24,8 @@ scope:
     - dashboard-routing+mobile-desktop-UX
     - Jira-key-validation
     - Implement-OR-xxx-actions
-    - Netlify-direct-deploy-config
+    - local-systemd-socket-activation+static-serving+API-proxy
+    - hosted-provider-neutral-UI-code
     - quota-visualization
     - source-freshness-stale-unavailable-semantics
     - authenticated-mediated-operator-actions
@@ -40,13 +41,16 @@ scope:
 rules:
   dependencies: minimize
   background_polling: forbidden
+  resident_UI_application_daemon: forbidden
+  local_activation: systemd-socket-on-demand
+  local_exposure: Tailscale-only
+  local_update: exact-origin-main-SHA-on-cold-activation
+  local_idle_shutdown_seconds_default: 300
   paid_resources: forbidden
   automatic_paid_overage: forbidden
-  unknown_host_quota: fail-closed
   canonical_state_copy: forbidden
   mobile_ui: first-class
-  public_source_repository: required-for-free-hosting
-  authenticated_operator_access: required
+  hosted_provider_reactivation_requires_explicit_user_order: true
   repository_visibility_must_not_be-treated_as-runtime-auth: true
   changes_require: Jira-traceability+deterministic-tests
   Render: forbidden+retired
