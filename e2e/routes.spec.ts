@@ -11,9 +11,9 @@ import { expect, test, type Page } from "@playwright/test"
 const ROUTES = [
   ["/", "Overview"],
   ["/assurance", "Test Assurance"],
-  ["/issues", "Issues"],
+  ["/issues", "Jira Issues"],
   ["/missions", "Missions"],
-  ["/workbench", "Agentic Workbench"],
+  ["/workbench", "Coding workspace"],
   ["/queue", "Queue"],
   ["/image-factory", "Image Factory"],
   ["/llm", "LLM"],
@@ -40,12 +40,12 @@ async function mockApi(page: Page): Promise<void> {
 
     let body: unknown = {}
     if (path === "/api/cloud-control/sources/jira") {
-      body = { source: "jira", state: "fresh", fetchedAt: new Date().toISOString(), payload: { openCount: 0, issues: [] } }
+      body = { source: "jira", authority: "Jira OR work state", state: "fresh", observedAt: new Date().toISOString(), ageSeconds: 0, payload: { openCount: 0, issues: [] }, errorCode: null }
     } else if (path === "/api/repositories") {
-      body = { repositories: [] }
+      body = []
     } else if (path === "/api/workbench/plugins") {
       body = { plugins: [] }
-    } else if (path === "/api/gateway/jobs") {
+    } else if (path === "/api/gateway/jobs" || path.startsWith("/api/gateway/jobs?")) {
       body = { items: [], total: 0, page: 1, page_size: 50 }
     } else if (path === "/api/gateway/health") {
       body = { status: "ok", components: {}, capabilities: [] }
