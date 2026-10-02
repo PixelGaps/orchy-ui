@@ -68,3 +68,15 @@ migration:
   source: PixelGaps/orchy/apps/web
   destination: PixelGaps/orchy-ui
   source_cleanup_after_verified_parity: required
+
+control_budget:
+  objective: preserve-Madriguera-breakglass-capacity
+  Desktop_Commander_routine_calls: 0
+  Supabase_routine_calls: 0
+  host_control_if_required: delegate-to-madriguera-control-God-route+batch-related-work
+  Supabase_polling: forbidden
+  redundant_host_health_probes: forbidden
+  repository_operations: GitHub-connector-direct
+  Jira_operations: Atlassian-connector-direct
+  emergency_lane: independent-GitHub-fixed-action-breakglass
+  emergency_lane_must_not_depend_on: Desktop-Commander|Supabase
