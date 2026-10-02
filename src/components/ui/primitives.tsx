@@ -207,14 +207,18 @@ export function SelectControl({
   disabled?: boolean
 }>) {
   const id = useId()
+  const labelId = `${id}-label`
+  const descriptionId = description ? `${id}-description` : undefined
   return (
     <label className="ui-control-field" htmlFor={id}>
       <span className="ui-control-copy">
-        <strong>{label}</strong>
-        {description && <small>{description}</small>}
+        <strong id={labelId}>{label}</strong>
+        {description && <small id={descriptionId}>{description}</small>}
       </span>
       <select
         id={id}
+        aria-labelledby={labelId}
+        aria-describedby={descriptionId}
         value={value}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
@@ -251,18 +255,24 @@ export function RangeControl({
   disabled?: boolean
 }>) {
   const id = useId()
+  const labelId = `${id}-label`
+  const valueId = `${id}-value`
+  const descriptionId = description ? `${id}-description` : undefined
+  const describedBy = [valueId, descriptionId].filter(Boolean).join(" ")
   return (
     <label className={cn("ui-control-field", "ui-range-field")} htmlFor={id}>
       <span className="ui-control-copy">
         <span className="ui-control-title">
-          <strong>{label}</strong>
-          <output aria-live="polite">{formatValue(value)}</output>
+          <strong id={labelId}>{label}</strong>
+          <output id={valueId} aria-live="polite">{formatValue(value)}</output>
         </span>
-        {description && <small>{description}</small>}
+        {description && <small id={descriptionId}>{description}</small>}
       </span>
       <input
         id={id}
         type="range"
+        aria-labelledby={labelId}
+        aria-describedby={describedBy}
         min={min}
         max={max}
         step={step}
