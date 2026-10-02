@@ -221,6 +221,7 @@ describe("MissionsPage", () => {
   it("applies validated slider switch and select preferences", async () => {
     renderPage()
     await screen.findByText("Cloud Control preferences")
+    await screen.findByText("browser")
 
     fireEvent.change(screen.getByRole("slider", { name: /Mission history/ }), {
       target: { value: "60" },
