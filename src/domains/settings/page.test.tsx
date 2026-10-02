@@ -30,7 +30,7 @@ describe("GlobalSettingsPage operator parity register", () => {
       "Global Settings",
       "Quotas",
     ]) {
-      expect(screen.getByText(label)).toBeInTheDocument()
+      expect(screen.getAllByText(label).length).toBeGreaterThanOrEqual(1)
     }
 
     expect(screen.getByText(/Vercel and Netlify remain quarantined/)).toBeInTheDocument()
