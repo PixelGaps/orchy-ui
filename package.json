@@ -22,7 +22,8 @@
     "check:hooks": "node scripts/check-react-hook-order.mjs",
     "test:hooks": "node --test scripts/check-react-hook-order.test.mjs",
     "test:local-runtime": "node --test scripts/local-socket-server.test.mjs",
-    "test": "npm run test:local-runtime && npm run test:hooks && npm run test:unit"
+    "test": "npm run test:local-runtime && npm run test:hooks && npm run test:unit",
+    "test:e2e:workbench": "playwright test e2e/workbench.spec.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
