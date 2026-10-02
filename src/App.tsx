@@ -21,20 +21,20 @@ useLocation,
 useNavigate,
 } from "react-router-dom"
 
-import { TestAssurancePage } from "@/domains/assurance/page"
-import { ComfyUIPage } from "@/domains/comfyui/page"
-import { ImageFactory } from "@/domains/comfyui/image-factory/page"
-import { HealthcheckPage } from "@/domains/healthcheck/page"
-import { LLMPage } from "@/domains/llm/page"
-import { IssuesPage } from "@/domains/issues/page"
-import { LogsPage } from "@/domains/logs/page"
-import { MissionsPage } from "@/domains/missions/page"
-import { Overview } from "@/domains/overview/page"
-import { QueuePage } from "@/domains/queue/page"
-import { WorkbenchPage } from "@/domains/workbench/page"
+const TestAssurancePage = lazy(() => import("@/domains/assurance/page").then((m) => ({ default: m.TestAssurancePage })))
+const ComfyUIPage = lazy(() => import("@/domains/comfyui/page").then((m) => ({ default: m.ComfyUIPage })))
+const ImageFactory = lazy(() => import("@/domains/comfyui/image-factory/page").then((m) => ({ default: m.ImageFactory })))
+const HealthcheckPage = lazy(() => import("@/domains/healthcheck/page").then((m) => ({ default: m.HealthcheckPage })))
+const LLMPage = lazy(() => import("@/domains/llm/page").then((m) => ({ default: m.LLMPage })))
+const IssuesPage = lazy(() => import("@/domains/issues/page").then((m) => ({ default: m.IssuesPage })))
+const LogsPage = lazy(() => import("@/domains/logs/page").then((m) => ({ default: m.LogsPage })))
+const MissionsPage = lazy(() => import("@/domains/missions/page").then((m) => ({ default: m.MissionsPage })))
+const Overview = lazy(() => import("@/domains/overview/page").then((m) => ({ default: m.Overview })))
+const QueuePage = lazy(() => import("@/domains/queue/page").then((m) => ({ default: m.QueuePage })))
+const WorkbenchPage = lazy(() => import("@/domains/workbench/page").then((m) => ({ default: m.WorkbenchPage })))
 
 import { DomainRoutes,domainNav as nav } from "@/domains/routes"
-import { GlobalSettingsPage } from "@/domains/settings/page"
+const GlobalSettingsPage = lazy(() => import("@/domains/settings/page").then((m) => ({ default: m.GlobalSettingsPage })))
 import {
   OperatorFeedbackViewport,
 } from "@/components/ui/primitives"
@@ -300,6 +300,7 @@ function AppShell({ children }: Readonly<{ children: ReactNode }>) {
 export default function App() {
   return (
     <AppShell>
+      <Suspense fallback={<div className="route-loading" role="status">Loading page…</div>}>
       <DomainRoutes
         pages={{
           Overview,
@@ -316,6 +317,7 @@ export default function App() {
           Workbench: WorkbenchPage,
         }}
       />
+      </Suspense>
     </AppShell>
   )
 }
