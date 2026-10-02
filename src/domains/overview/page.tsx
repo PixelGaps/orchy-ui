@@ -39,6 +39,9 @@ export function Overview() {
 
   const layers = deriveAssuranceLayers(jira.data?.payload, testOps.data?.payload)
   const assurance = assuranceTotals(layers)
+  const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
+  const testOpsAvailable = Boolean(testOps.data?.payload) && testOps.data?.state !== "unavailable"
+  const assuranceAvailable = jiraAvailable && testOpsAvailable
   const anyUnavailable = [jira.data, github.data, testOps.data, host.data].some(
     (source) => source?.state === "unavailable",
   )
@@ -46,10 +49,10 @@ export function Overview() {
   return (
     <>
       <PageHeader
-        eyebrow="Cloud Control"
+        eyebrow="Local Control"
         title="Overview"
-        description="Cloud-hosted operational state from canonical sources. The execution host may be offline without taking this UI down."
-        badge={<Badge tone={anyUnavailable ? "warn" : "live"}>Cloud control</Badge>}
+        description="Private local operational state from canonical sources. Every figure is live, retained evidence, or explicitly unavailable."
+        badge={<Badge tone={anyUnavailable ? "warn" : "live"}>Local control</Badge>}
       />
 
       <div className="cloud-toolbar">
@@ -76,7 +79,7 @@ export function Overview() {
       {anyUnavailable && (
         <StatusNotice
           title="One or more canonical sources are unavailable"
-          body="Cloud Control keeps last-known snapshots when available and never substitutes another source of truth."
+          body="Unavailable sources are shown without substituting bundled fixtures or another source of truth."
           tone="warn"
         />
       )}
@@ -90,7 +93,7 @@ export function Overview() {
             detail: host.data?.payload?.lastSeenAt
               ? new Date(host.data.payload.lastSeenAt).toLocaleString()
               : "No heartbeat",
-            tone: host.data?.payload?.state === "ONLINE_IDLE" ? "live" : "neutral",
+            tone: /^ONLINE/.test(host.data?.payload?.state ?? "") ? "live" : "neutral",
           },
           {
             label: "Open Jira",
@@ -105,15 +108,17 @@ export function Overview() {
           },
           {
             label: "Assurance",
-            value: `${assurance.completed}/12 complete`,
-            detail: `${assurance.active} active · ${assurance.blocked} blocked`,
-            tone: assurance.blocked ? "warn" : "live",
+            value: assuranceAvailable ? `${assurance.completed}/12 complete` : "Unavailable",
+            detail: assuranceAvailable
+              ? `${assurance.active} active · ${assurance.blocked} blocked`
+              : "Requires Jira + TestOps",
+            tone: assuranceAvailable ? (assurance.blocked ? "warn" : "live") : "neutral",
           },
           {
             label: "Findings",
-            value: assurance.findings,
-            detail: "TestOps latest summaries",
-            tone: assurance.findings ? "warn" : "live",
+            value: testOpsAvailable ? assurance.findings : "Unavailable",
+            detail: testOpsAvailable ? "TestOps latest summaries" : "No current TestOps projection",
+            tone: testOpsAvailable ? (assurance.findings ? "warn" : "live") : "neutral",
           },
         ]}
       />
@@ -126,10 +131,10 @@ export function Overview() {
             action={<ShieldCheck size={17} aria-hidden="true" />}
           />
           <div className="cloud-overview-list">
-            <span><strong>{assurance.completed}</strong><small>Completed</small></span>
-            <span><strong>{assurance.active}</strong><small>Active</small></span>
-            <span><strong>{assurance.blocked}</strong><small>Blocked</small></span>
-            <span><strong>{assurance.queued}</strong><small>Queued</small></span>
+            <span><strong>{assuranceAvailable ? assurance.completed : "—"}</strong><small>Completed</small></span>
+            <span><strong>{assuranceAvailable ? assurance.active : "—"}</strong><small>Active</small></span>
+            <span><strong>{assuranceAvailable ? assurance.blocked : "—"}</strong><small>Blocked</small></span>
+            <span><strong>{assuranceAvailable ? assurance.queued : "—"}</strong><small>Queued</small></span>
           </div>
           <NavLink className="cloud-panel-link" to="/assurance">
             Open Test Assurance <span aria-hidden="true">→</span>
@@ -173,14 +178,22 @@ export function Overview() {
             title="Jira OR"
             action={<Activity size={17} aria-hidden="true" />}
           />
-          <dl className="cloud-kv">
-            {Object.entries(jira.data?.payload?.byStatus ?? {})
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 6)
-              .map(([status, count]) => (
-                <div key={status}><dt>{status}</dt><dd>{count}</dd></div>
-              ))}
-          </dl>
+          {jiraAvailable ? (
+            <dl className="cloud-kv">
+              {Object.entries(jira.data?.payload?.byStatus ?? {})
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 6)
+                .map(([status, count]) => (
+                  <div key={status}><dt>{status}</dt><dd>{count}</dd></div>
+                ))}
+            </dl>
+          ) : (
+            <StatusNotice
+              title="Jira unavailable"
+              body="No server-side Jira source is configured on Madriguera. Work-state counts are intentionally hidden rather than taken from a bundled snapshot."
+              tone="warn"
+            />
+          )}
         </Card>
       </section>
 
