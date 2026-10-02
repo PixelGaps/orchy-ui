@@ -123,7 +123,7 @@ test("systemd units preserve the Madriguera zero-idle contract", async () => {
   assert.match(serviceUnit, /ExecStart=\/usr\/bin\/bash \/opt\/orchy-ui\/source\/scripts\/local-run\.sh/)
   assert.match(serviceUnit, /Requires=orchy-ui\.socket orchy-web\.service/)
   assert.match(serviceUnit, /After=network-online\.target orchy-web\.service/)
-  assert.match(serviceUnit, /ExecStopPost=\+\/usr\/bin\/systemctl stop orchy-web\.service/)
+  assert.match(serviceUnit, /ExecStopPost=\+\/usr\/bin\/systemctl --no-block stop orchy-web\.service/)
   assert.match(serviceUnit, /Restart=no/)
   assert.doesNotMatch(serviceUnit, /Restart=always/)
   assert.match(deployScript, /git -C "\$REPO_DIR" fetch .* origin "\$BRANCH"/)
