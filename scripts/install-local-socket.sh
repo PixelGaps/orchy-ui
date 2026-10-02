@@ -73,7 +73,7 @@ fi
 
 install -d -o "$SERVICE_USER" -g "$SERVICE_USER" -m 0750 /opt/orchy-ui "$STATE_DIR"
 
-NODE_RUNTIME_TMP="/opt/orchy-ui/.node-runtime.$"
+NODE_RUNTIME_TMP="/opt/orchy-ui/.node-runtime.$$"
 rm -rf "$NODE_RUNTIME_TMP"
 cp -a "$NODE_RUNTIME_SOURCE" "$NODE_RUNTIME_TMP"
 chown -R root:"$SERVICE_USER" "$NODE_RUNTIME_TMP"
