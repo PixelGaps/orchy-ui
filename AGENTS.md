@@ -2,10 +2,20 @@ schema: orchy-ui.agent-contract.v6
 repository:
   state: active-local-first-operator-ui
   default_branch: main
-  branches: main-only
-  non_main_refs: forbidden
-  temporary_branches: forbidden
-  direct_main: required
+  integration_branch: main
+  development: Jira-bound-isolated-task-branches
+  task_branch: task/OR-<id>-YYYYMMDD-<slug>
+  legacy_wip_branch: accepted-during-migration
+  start_base: exact-origin-main-SHA
+  main_advance_during_execution: preserve-active-work
+  continuous_rebase: forbidden
+  integration: fetch-main+rebase-once+scoped-validation+merge
+  cancellation_scope: same-task-revision-only
+  branch_terminal: merge-to-main+delete|discard+delete|paused-explicitly
+  paused_branch: paused/OR-<id>-YYYYMMDD-<slug>+Jira-paused
+  branch_reconciliation: required-at-task-start+task-completion
+  stale_or_dead_branch: forbidden
+  scheduled_branch_polling: forbidden
   purpose: zero-cost-orchy-operator-dashboard
   standalone_dashboard: required
   current_delivery: Madriguera-Tailscale-systemd-socket-activation
