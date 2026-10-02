@@ -1,5 +1,6 @@
 import type { ComponentType } from "react"
 import {
+Code2,
 CircleGauge,
 Cog,
 Factory,
