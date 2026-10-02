@@ -20,7 +20,7 @@ const pages = {
   Missions: () => <Marker name="Missions page" />,
   Queue: () => <Marker name="Queue page" />,
   ImageFactory: () => <Marker name="Image page" />,
-  LLM: () => <Marker name="LLM page" />,
+  LLM: () => <Marker name="LLM page" />,\n  Workbench: () => <Marker name="Workbench page" />,
   ComfyUI: () => <Marker name="Comfy page" />,
   Healthcheck: () => <Marker name="Health page" />,
   Logs: () => <Marker name="Logs page" />,
