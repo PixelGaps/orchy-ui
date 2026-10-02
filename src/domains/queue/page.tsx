@@ -323,9 +323,9 @@ export function QueuePage() {
               ))}
             </div>
           )}
-          <div className="data-list" aria-label="All retained gateway jobs">
+          <div className="data-list interactive-data-list" role="list" aria-label="All retained gateway jobs">
             {jobs.map((job)=>(
-              <div className="data-row queue-job-row" key={job.id}>
+              <div className="data-row queue-job-row" role="listitem" key={job.id}>
                 <input
                   aria-label={`Select ${job.request_id}`}
                   type="checkbox"
