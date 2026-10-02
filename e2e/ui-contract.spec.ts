@@ -118,14 +118,16 @@ test("desktop shell preserves navigation, skip target and compact control", asyn
   await expect(page.getByRole("link", { name: "Skip to main content" })).toHaveAttribute("href", "#orchy-main-content")
   await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible()
   await expect(page.getByRole("button", { name: "Compact navigation" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Control plane overview" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Overview", exact: true })).toBeVisible()
 })
 
 test("mobile shell exposes explicit navigation drawer without losing routes", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await mockApi(page)
   await page.goto("/")
-  const menu = page.getByRole("button", { name: "Toggle navigation" })
+  const mobileNav = page.getByRole("navigation", { name: "Mobile primary navigation" })
+  await expect(mobileNav).toBeVisible()
+  const menu = mobileNav.getByRole("button", { name: "More navigation" })
   await expect(menu).toBeVisible()
   await menu.click()
   const primaryNav = page.getByRole("navigation", { name: "Primary navigation" })
