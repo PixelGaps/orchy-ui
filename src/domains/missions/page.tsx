@@ -222,9 +222,8 @@ export function MissionsPage() {
               title="Runner availability and allowance"
               action={<Badge tone={sourceTone(fleet.data)}>fleet · {sourceAgeLabel(fleet.data)}</Badge>}
             />
-            <div className="data-list">
-              {visibleProviders.map((provider) => (
-                <div className="data-row" key={provider.provider}>
+            <div className="data-list semantic-table" role="table" aria-label="Runner availability and allowance">\n              {visibleProviders.map((provider) => (
+                <div className="data-row" role="row" key={provider.provider}>
                   <span>
                     <strong>{provider.provider}</strong>
                     <small>priority {provider.priority} · observed {provider.observedAt ?? "unknown"}</small>
@@ -245,9 +244,8 @@ export function MissionsPage() {
               title="Authoritative allowance snapshots"
               action={<Badge tone="cyan">runtime API</Badge>}
             />
-            <div className="data-list">
-              {productQuotas.map((quota) => (
-                <div className="data-row product-quota-row" key={quota.id}>
+            <div className="data-list semantic-table" role="table" aria-label="Service and tool quotas">\n              {productQuotas.map((quota) => (
+                <div className="data-row product-quota-row" role="row" key={quota.id}>
                   <span>
                     <strong>{quota.product}</strong>
                     <small>{quota.quota} · {quota.source}</small>
