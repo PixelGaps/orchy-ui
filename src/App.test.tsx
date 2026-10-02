@@ -40,14 +40,14 @@ describe("App shell", () => {
     motionState.reduced = true
   })
 
-  it("renders navigation, route content, and toggles mobile navigation", () => {
+  it("renders navigation, route content, and toggles mobile navigation", async () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
         <App />
       </MemoryRouter>,
     )
 
-    expect(screen.getByText("Overview stub")).toBeInTheDocument()
+    expect(await screen.findByText("Overview stub")).toBeInTheDocument()
     expect(screen.getByRole("navigation", { name: "Primary navigation" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: /Orchy/ })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Skip to main content" })).toHaveAttribute(
@@ -83,9 +83,8 @@ describe("App shell", () => {
     )
   })
 
-  it("restores compact state and covers non-reduced motion rendering", () => {
+  it("restores compact state with lazy route rendering", async () => {
     window.localStorage.setItem("orchy-sidebar-compact", "true")
-    motionState.reduced = false
 
     const { container } = render(
       <MemoryRouter initialEntries={["/llm"]}>
@@ -93,12 +92,12 @@ describe("App shell", () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByText("LLM stub")).toBeInTheDocument()
+    expect(await screen.findByText("LLM stub")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Compact navigation" })).toBeInTheDocument()
     expect(container.querySelector(".page")).toBeInTheDocument()
   })
 
-  it("closes the mobile menu when route location changes", () => {
+  it("closes the mobile menu when route location changes", async () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
         <App />
@@ -109,7 +108,7 @@ describe("App shell", () => {
     fireEvent.click(mobile)
     expect(mobile).toHaveAttribute("aria-expanded", "true")
     fireEvent.click(screen.getByRole("link", { name: "LLM" }))
-    expect(screen.getByText("LLM stub")).toBeInTheDocument()
+    expect(await screen.findByText("LLM stub")).toBeInTheDocument()
     expect(mobile).toHaveAttribute("aria-expanded", "false")
   })
 
@@ -208,7 +207,7 @@ describe("App shell", () => {
     vi.useRealTimers()
   })
 
-  it("opens, filters, navigates, and closes the command palette", () => {
+  it("opens, filters, navigates, and closes the command palette", async () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
         <App />
@@ -228,7 +227,7 @@ describe("App shell", () => {
     expect(screen.getByRole("dialog", { name: "Operator command palette" })).toBeInTheDocument()
 
     fireEvent.click(within(dialog).getByRole("button", { name: /Healthcheck/ }))
-    expect(screen.getByText("Health stub")).toBeInTheDocument()
+    expect(await screen.findByText("Health stub")).toBeInTheDocument()
     expect(screen.queryByRole("dialog", { name: "Operator command palette" })).not.toBeInTheDocument()
 
     fireEvent.keyDown(window, { key: "k", metaKey: true })
@@ -262,13 +261,13 @@ describe("App shell", () => {
     expect(screen.getByRole("navigation", { name: "Primary navigation" })).toHaveClass("sidebar-open")
   })
 
-  it("renders the Missions route through the shell", () => {
+  it("renders the Missions route through the shell", async () => {
     render(
       <MemoryRouter initialEntries={["/missions"]}>
         <App />
       </MemoryRouter>,
     )
-    expect(screen.getByText("Missions stub")).toBeInTheDocument()
+    expect(await screen.findByText("Missions stub")).toBeInTheDocument()
   })
 
 })
