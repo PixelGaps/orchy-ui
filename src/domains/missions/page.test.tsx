@@ -221,12 +221,13 @@ describe("MissionsPage", () => {
   it("applies validated slider switch and select preferences", async () => {
     renderPage()
     await screen.findByText("Cloud Control preferences")
+    await screen.findByText("browser")
 
-    fireEvent.change(screen.getByLabelText("Mission history"), {
+    fireEvent.change(screen.getByRole("slider", { name: /Mission history/ }), {
       target: { value: "60" },
     })
     fireEvent.click(screen.getByRole("switch", { name: "Dense mission rows" }))
-    fireEvent.change(screen.getByLabelText("Fleet view"), {
+    fireEvent.change(screen.getByRole("combobox", { name: /Fleet view/ }), {
       target: { value: "all" },
     })
     fireEvent.click(screen.getByRole("button", { name: "Apply preferences" }))
