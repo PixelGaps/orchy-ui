@@ -100,3 +100,10 @@ input,select,textarea{border-radius:5px!important;box-shadow:none!important}
  .data-table th,.data-table td{padding:2px 0;border:0;text-align:left}
  .data-table td:empty{display:none}
 }
+
+/* OR-779 page-specific density closeout */
+.workbench-layout{gap:7px}
+.workbench-events{gap:5px}
+.queue-filter-grid{gap:6px}
+.mission-board,.mission-lanes,.mission-health-grid{gap:7px}
+.factory-command-grid,.factory-result-body,.gallery-profile-stack{gap:7px}
