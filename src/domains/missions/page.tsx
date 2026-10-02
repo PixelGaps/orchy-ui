@@ -32,6 +32,7 @@ import {
   notifyOperator,
 } from "@/components/ui/primitives"
 import { DEFAULT_OPERATOR_PREFERENCES, type OperatorPreferences } from "@/cloud/preferences"
+import { getApi } from "@/lib/api"
 
 const TERMINAL = new Set(["completed", "failed", "cancelled", "canceled", "timed_out"])
 
@@ -61,6 +62,13 @@ export function MissionsPage() {
   const fleet = useCloudSource<FleetProjection>("fleet")
   const host = useCloudSource<HostProjection>("host")
   const refresh = useRefreshCloudSources(["operations", "fleet", "host"])
+  const runtimeOverview = useQuery({
+    queryKey: ["operator-overview-runtime"],
+    queryFn: () => getApi("/api/operator/overview"),
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  })
   const queryClient = useQueryClient()
   const preferences = useQuery({
     queryKey: ["operator-preferences"],
@@ -125,6 +133,7 @@ export function MissionsPage() {
   const active = jobs.filter((job) => !TERMINAL.has(job.state.toLowerCase()))
   const hostBoundActive = active.filter(isHostBound)
   const remainingMinutes = providers.reduce((sum, item) => sum + Math.max(0, item.remainingRunnerMinutes), 0)
+  const productQuotas = runtimeOverview.data?.quotas ?? []
 
   return (
     <>
@@ -224,6 +233,41 @@ export function MissionsPage() {
                 </div>
               ))}
               {!providers.length && <EmptyState title="No runner snapshot" body="Refresh the canonical CI fleet projection." />}
+            </div>
+          </Card>
+
+          <Card className="product-quota-card">
+            <PanelHeader
+              kicker="SERVICE / TOOL QUOTAS"
+              title="Authoritative allowance snapshots"
+              action={<Badge tone="cyan">runtime API</Badge>}
+            />
+            <div className="data-list">
+              {productQuotas.map((quota) => (
+                <div className="data-row product-quota-row" key={quota.id}>
+                  <span>
+                    <strong>{quota.product}</strong>
+                    <small>{quota.quota} · {quota.source}</small>
+                  </span>
+                  <span>
+                    <Badge tone={quota.exhausted ? "danger" : quota.status === "warning" ? "warn" : quota.status === "ok" ? "live" : "neutral"}>
+                      {quota.status}
+                    </Badge>
+                    <strong>
+                      {quota.remaining == null ? "unknown remaining" : `${quota.remaining} ${quota.unit} remaining`}
+                    </strong>
+                    <small>{quota.updated_at ? `observed ${quota.updated_at}` : "freshness unknown"}</small>
+                  </span>
+                </div>
+              ))}
+              {!productQuotas.length && (
+                <EmptyState
+                  title={runtimeOverview.error ? "Product quota snapshot unavailable" : "No active product quota snapshot"}
+                  body={runtimeOverview.error
+                    ? "The runtime API did not provide an authoritative quota snapshot. No synthetic quota is shown."
+                    : "Only authoritative active quota snapshots render here; unknown or inactive providers stay explicit rather than guessed."}
+                />
+              )}
             </div>
           </Card>
 
