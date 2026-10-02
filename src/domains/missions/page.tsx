@@ -245,23 +245,25 @@ export function MissionsPage() {
               title="Authoritative allowance snapshots"
               action={<Badge tone="cyan">runtime API</Badge>}
             />
-            <div className="data-list">
-              {productQuotas.map((quota) => (
-                <div className="data-row product-quota-row" key={quota.id}>
-                  <span>
-                    <strong>{quota.product}</strong>
-                    <small>{quota.quota} · {quota.source}</small>
-                  </span>
-                  <span>
-                    <Badge tone={quota.exhausted ? "danger" : quota.status === "warning" ? "warn" : quota.status === "ok" ? "live" : "neutral"}>
-                      {quota.status}
-                    </Badge>
-                    <strong>
-                      {quota.remaining == null ? "unknown remaining" : `${quota.remaining} ${quota.unit} remaining`}
-                    </strong>
-                    <small>{quota.updated_at ? `observed ${quota.updated_at}` : "freshness unknown"}</small>
-                  </span>
-                </div>
+            {productQuotas.length ? (
+              <DataTable
+                label="Service and tool quotas"
+                columns={["Product", "Status", "Remaining"]}
+                rows={productQuotas.map((quota) => ({
+                  key: quota.id,
+                  cells: [
+                    <span><strong>{quota.product}</strong><small>{quota.quota} · {quota.source}</small></span>,
+                    <Badge tone={quota.exhausted ? "danger" : quota.status === "warning" ? "warn" : quota.status === "ok" ? "live" : "neutral"}>{quota.status}</Badge>,
+                    <span><strong>{quota.remaining == null ? "unknown remaining" : `${quota.remaining} ${quota.unit} remaining`}</strong><small>{quota.updated_at ? `observed ${quota.updated_at}` : "freshness unknown"}</small></span>,
+                  ],
+                }))}
+              />
+            ) : (
+              <EmptyState
+                title={runtimeOverview.error ? "Product quota snapshot unavailable" : "No active product quota snapshot"}
+                body={runtimeOverview.error ? "The runtime API did not provide an authoritative quota snapshot. No synthetic quota is shown." : "Only authoritative active quota snapshots render here; unknown or inactive providers stay explicit rather than guessed."}
+              />
+            )}
               ))}
               {!productQuotas.length && (
                 <EmptyState
