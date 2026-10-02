@@ -15,8 +15,8 @@ function session(state = "running") {
     execution_id: "exec-1",
     repository_id: "agents-sandbox",
     target_sha: SHA,
-    runtime: "cline",
-    effort: "HIGH",
+    runtime: "aider",
+    effort: "MEDIUM",
     enabled_plugins: ["local-echo"],
     attachments: [],
     turn_count: 1,
@@ -111,8 +111,6 @@ async function configureAndLaunch(page: Page, capture: Capture) {
   await expect(page.getByLabel("Repository")).toHaveValue("agents-sandbox")
 
   await page.getByLabel("Exact target SHA").fill(SHA)
-  await page.getByLabel("Runtime").selectOption("cline")
-  await page.getByLabel("Effort").selectOption("HIGH")
   await page.getByRole("checkbox", { name: /local-echo/ }).check()
   await page.getByLabel("Task").fill("Implement deterministic browser contract")
   await page.getByLabel(/Acceptance criteria/).fill("Tests pass\nNo unrelated changes")
@@ -130,8 +128,8 @@ test("desktop Workbench launches canonical session and renders observable eviden
     task: "Implement deterministic browser contract",
     repository_id: "agents-sandbox",
     target_sha: SHA,
-    runtime: "cline",
-    effort: "HIGH",
+    runtime: "aider",
+    effort: "MEDIUM",
     enabled_plugins: ["local-echo"],
     acceptance: ["Tests pass", "No unrelated changes"],
   })
