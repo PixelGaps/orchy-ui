@@ -22,6 +22,7 @@ import {
   Button,
   Card,
   CompactSummary,
+  DataTable,
   EmptyState,
   PageHeader,
   PanelHeader,
@@ -222,21 +223,20 @@ export function MissionsPage() {
               title="Runner availability and allowance"
               action={<Badge tone={sourceTone(fleet.data)}>fleet · {sourceAgeLabel(fleet.data)}</Badge>}
             />
-            <div className="data-list">
-              {visibleProviders.map((provider) => (
-                <div className="data-row" key={provider.provider}>
-                  <span>
-                    <strong>{provider.provider}</strong>
-                    <small>priority {provider.priority} · observed {provider.observedAt ?? "unknown"}</small>
-                  </span>
-                  <span>
-                    <Badge tone={provider.qualified ? "live" : "warn"}>{provider.status}</Badge>
-                    <strong>{provider.remainingRunnerMinutes}/{provider.limitRunnerMinutes} min</strong>
-                  </span>
-                </div>
-              ))}
-              {!providers.length && <EmptyState title="No runner snapshot" body="Refresh the canonical CI fleet projection." />}
-            </div>
+            {visibleProviders.length ? (
+              <DataTable
+                label="Runner availability and allowance"
+                columns={["Provider", "Status", "Allowance"]}
+                rows={visibleProviders.map((provider) => ({
+                  key: provider.provider,
+                  cells: [
+                    <span><strong>{provider.provider}</strong><small>priority {provider.priority} · observed {provider.observedAt ?? "unknown"}</small></span>,
+                    <Badge tone={provider.qualified ? "live" : "warn"}>{provider.status}</Badge>,
+                    <strong>{provider.remainingRunnerMinutes}/{provider.limitRunnerMinutes} min</strong>,
+                  ],
+                }))}
+              />
+            ) : <EmptyState title="No runner snapshot" body="Refresh the canonical CI fleet projection." />}
           </Card>
 
           <Card className="product-quota-card">
