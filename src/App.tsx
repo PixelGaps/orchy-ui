@@ -24,7 +24,8 @@ import { TestAssurancePage } from "@/domains/assurance/page"
 import { ComfyUIPage } from "@/domains/comfyui/page"
 import { ImageFactory } from "@/domains/comfyui/image-factory/page"
 import { HealthcheckPage } from "@/domains/healthcheck/page"
-import { LLMPage } from "@/domains/llm/page"\nimport { AgenticWorkbenchPage } from "@/domains/llm/workbench/page"
+import { LLMPage } from "@/domains/llm/page"
+import { AgenticWorkbenchPage } from "@/domains/llm/workbench/page"
 import { IssuesPage } from "@/domains/issues/page"
 import { LogsPage } from "@/domains/logs/page"
 import { MissionsPage } from "@/domains/missions/page"
@@ -322,7 +323,8 @@ export default function App() {
           Missions: MissionsPage,
           Queue: QueuePage,
           ImageFactory,
-          LLM: LLMPage,\n          Workbench: AgenticWorkbenchPage,
+          LLM: LLMPage,
+          Workbench: AgenticWorkbenchPage,
           ComfyUI: ComfyUIPage,
           Healthcheck: HealthcheckPage,
           Logs: LogsPage,
