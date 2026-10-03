@@ -204,13 +204,19 @@ function AppShell({ children }: Readonly<{ children: ReactNode }>) {
           ))}
         </div>
 
-        <div className="sidebar-status">
-          <span className="status-dot status-info" />
+        <button
+          type="button"
+          className="sidebar-status sidebar-command"
+          onClick={() => setCommandOpen(true)}
+          aria-label="Open quick navigation"
+          title="Quick navigation (Ctrl/Cmd+K)"
+        >
+          <Search size={15} aria-hidden="true" />
           <div>
-            <strong>Web operator ready</strong>
-            <small>Backend status shown in Overview</small>
+            <strong>Quick navigation</strong>
+            <small>Ctrl/Cmd+K · jump to any surface</small>
           </div>
-        </div>
+        </button>
       </nav>
 
       {commandOpen && (
