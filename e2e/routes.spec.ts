@@ -16,6 +16,7 @@ const ROUTES = [
   ["/workbench", "Coding workspace"],
   ["/queue", "Queue"],
   ["/image-factory", "Image Factory"],
+  ["/agentic-coding", "Agentic Coding"],
   ["/llm", "LLM"],
   ["/comfyui", "ComfyUI"],
   ["/healthcheck", "Healthcheck"],
@@ -98,6 +99,8 @@ async function mockApi(page: Page): Promise<void> {
         },
         quotas: [],
       }
+    } else if (path === "/api/agentic/handbook") {
+      body = { available: true, reason: "", total_tasks: 2863, matched_tasks: 2863, offset: 0, limit: 50, summary: { not_run: 2863, partial: 0, completed: 0, failed: 0, blocked: 0, has_issues: 0 }, tasks: [] }
     } else if (path === "/api/validation") {
       body = { passed: true, output: "", elapsed_ms: 0 }
     } else if (path === "/api/runtime") {
