@@ -682,6 +682,21 @@
 .sidebar-status strong { font-size: 9px; }
 .sidebar-status small { font-size: 8px; }
 
+.sidebar-command {
+  width: 100%;
+  color: inherit;
+  text-align: left;
+}
+
+.sidebar-command:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-control);
+}
+
+.sidebar-command > svg {
+  opacity: .78;
+}
+
 .sidebar-compact .brand > span:last-child,
 .sidebar-compact .nav-label,
 .sidebar-compact .nav-link > span,
