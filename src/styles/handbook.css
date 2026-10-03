@@ -1,0 +1,250 @@
+.handbook-summary {
+  margin-bottom: 12px;
+}
+
+.handbook-card {
+  min-width: 0;
+}
+
+.handbook-toolbar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(150px, 220px) auto;
+  gap: 10px;
+  align-items: end;
+  margin: 12px 0;
+}
+
+.handbook-toolbar label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: var(--font-meta);
+  font-weight: 750;
+}
+
+.handbook-search {
+  position: relative;
+}
+
+.handbook-search svg {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  pointer-events: none;
+}
+
+.handbook-search input {
+  padding-left: 34px;
+}
+
+.handbook-toolbar input,
+.handbook-toolbar select {
+  min-width: 0;
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-raised, rgba(255,255,255,.025));
+  color: inherit;
+  padding: 8px 10px;
+}
+
+.handbook-issues-toggle {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 8px;
+}
+
+.handbook-table {
+  min-width: 0;
+  border-top: 1px solid var(--line);
+}
+
+.handbook-row {
+  display: grid;
+  grid-template-columns: 54px minmax(260px, 2fr) minmax(90px, .6fr) minmax(96px, .65fr) minmax(96px, .65fr) minmax(96px, .65fr) minmax(100px, .7fr);
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.handbook-head {
+  padding: 8px 10px;
+  color: var(--muted);
+  font-size: var(--font-meta);
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.handbook-task {
+  border-bottom: 1px solid var(--line);
+}
+
+.handbook-task > button {
+  width: 100%;
+  padding: 9px 10px;
+}
+
+.handbook-task-name {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.handbook-task-name strong,
+.handbook-task-name small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.handbook-lane {
+  display: grid;
+  gap: 3px;
+}
+
+.handbook-lane small {
+  display: none;
+}
+
+.handbook-task-detail {
+  padding: 10px 12px 14px;
+  background: rgba(255,255,255,.015);
+}
+
+.handbook-detail-grid,
+.handbook-lane-detail-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.handbook-detail-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.handbook-detail-grid > div {
+  min-width: 0;
+}
+
+.handbook-detail-grid small {
+  display: block;
+  color: var(--muted);
+}
+
+.handbook-detail-grid code,
+.handbook-detail-grid strong {
+  overflow-wrap: anywhere;
+}
+
+.handbook-lane-detail-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 10px;
+}
+
+.handbook-lane-card {
+  min-width: 0;
+}
+
+.handbook-run-facts {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.handbook-run-facts > div {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 6px;
+}
+
+.handbook-run-facts dt {
+  color: var(--muted);
+  font-size: var(--font-meta);
+}
+
+.handbook-run-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.handbook-issues {
+  display: grid;
+  gap: 5px;
+  margin: 8px 0;
+}
+
+.handbook-issues > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.handbook-history code {
+  overflow-wrap: anywhere;
+}
+
+.handbook-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-top: 12px;
+}
+
+.handbook-pagination > div {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 980px) {
+  .handbook-head {
+    display: none;
+  }
+
+  .handbook-row {
+    grid-template-columns: 46px minmax(0, 1fr) auto;
+  }
+
+  .handbook-row > :nth-child(n + 4) {
+    display: none;
+  }
+
+  .handbook-lane-detail-grid,
+  .handbook-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .handbook-lane small {
+    display: block;
+  }
+}
+
+@media (max-width: 720px) {
+  .handbook-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .handbook-toolbar input,
+  .handbook-toolbar select,
+  .handbook-issues-toggle {
+    min-height: 44px;
+  }
+
+  .handbook-task > button {
+    min-height: 44px;
+  }
+
+  .handbook-pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .handbook-pagination > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
