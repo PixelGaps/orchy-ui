@@ -24,6 +24,7 @@ ExecutionPanel,
 JsonPanel,
 SectionTabs,useDomainTab
 } from "@/domains/shared"
+import { AgenticHandbook } from "@/domains/llm/agentic/handbook"
 
 export function Tasks({ embedded = false }: Readonly<{ embedded?: boolean }>) {
   const [task, setTask] = useState("")
@@ -257,6 +258,7 @@ export function AgenticCodingPage() {
   const [tab, setTab] = useDomainTab("tasks")
   const tabs = [
     { id: "tasks", label: "Tasks" },
+    { id: "handbook", label: "Handbook" },
     { id: "validation", label: "Validation" },
     { id: "settings", label: "Settings" },
   ]
@@ -271,6 +273,9 @@ export function AgenticCodingPage() {
       <SectionTabs tabs={tabs} active={tab} setActive={setTab} />
       <SectionPanel tabId="tasks" active={tab === "tasks"}>
         <Tasks embedded />
+      </SectionPanel>
+      <SectionPanel tabId="handbook" active={tab === "handbook"}>
+        <AgenticHandbook />
       </SectionPanel>
       <SectionPanel tabId="validation" active={tab === "validation"}>
         <CollapsibleSection
