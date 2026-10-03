@@ -89,31 +89,50 @@ export const jiraAdapter: SourceAdapter<JiraProjection, CloudControlEnv> = {
     )
     const email = required(env.JIRA_EMAIL, "JIRA_EMAIL_MISSING")
     const token = required(env.JIRA_API_TOKEN, "JIRA_API_TOKEN_MISSING")
-    const url = new URL("/rest/api/3/search/jql", baseUrl)
-    url.searchParams.set(
+    const searchUrl = new URL("/rest/api/3/search/jql", baseUrl)
+    searchUrl.searchParams.set(
       "jql",
       'project = "OR" AND (statusCategory != Done OR key in (OR-590,OR-594,OR-598,OR-600,OR-601,OR-602,OR-603,OR-604,OR-605,OR-606,OR-607,OR-608)) ORDER BY key ASC',
     )
-    url.searchParams.set(
+    searchUrl.searchParams.set(
       "fields",
       "summary,status,statuscategorychangedate,priority,issuetype,parent,labels,updated",
     )
-    url.searchParams.set("maxResults", "100")
-    const raw = asObject(
-      await jsonFetch(
-        fetcher,
-        url,
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Basic ${btoa(`${email}:${token}`)}`,
-          },
-        },
-        "JIRA_REFRESH_FAILED",
-      ),
-      "JIRA_PAYLOAD_INVALID",
-    )
-    const issues = Array.isArray(raw.issues) ? raw.issues : []
+    searchUrl.searchParams.set("maxResults", "100")
+
+    const headers = {
+      Accept: "application/json",
+      Authorization: `Basic ${btoa(`${email}:${token}`)}`,
+    }
+    const issues: unknown[] = []
+    let nextPageToken: string | null = null
+    for (let page = 0; page < 100; page += 1) {
+      const url = new URL(searchUrl)
+      if (nextPageToken) url.searchParams.set("nextPageToken", nextPageToken)
+      const raw = asObject(
+        await jsonFetch(
+          fetcher,
+          url,
+          { headers },
+          "JIRA_REFRESH_FAILED",
+        ),
+        "JIRA_PAYLOAD_INVALID",
+      )
+      if (!Array.isArray(raw.issues)) {
+        throw new SourceAdapterError("JIRA_PAYLOAD_INVALID")
+      }
+      issues.push(...raw.issues)
+      if (raw.isLast === true) break
+      const continuation =
+        typeof raw.nextPageToken === "string" ? raw.nextPageToken.trim() : ""
+      if (!continuation) {
+        throw new SourceAdapterError("JIRA_PAGINATION_INVALID")
+      }
+      nextPageToken = continuation
+      if (page === 99) {
+        throw new SourceAdapterError("JIRA_PAGINATION_LIMIT_EXCEEDED")
+      }
+    }
     const projection = issues.flatMap((candidate) => {
       const issue = asObject(candidate, "JIRA_PAYLOAD_INVALID")
       const fields = asObject(issue.fields, "JIRA_PAYLOAD_INVALID")
