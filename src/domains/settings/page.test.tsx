@@ -2,7 +2,7 @@
  * Test documentation — executable specification
  * OR-647 keeps the required operator surfaces and platform limits explicit in the UI.
  */
-import { render, screen, within } from "@testing-library/react"
+import { fireEvent, render, screen, within } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
 vi.mock("@/domains/shared", () => ({
@@ -15,8 +15,9 @@ describe("GlobalSettingsPage operator parity register", () => {
   it("renders every required surface and explicit platform boundary", () => {
     render(<GlobalSettingsPage />)
 
-    const register = screen.getByLabelText("Operator surface parity")
-    expect(screen.getByText("12/12 surfaced")).toBeInTheDocument()
+    expect(screen.getByText("12 registered surfaces · authority and platform constraints")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: /Operator boundaries/i }))
+    const register = screen.getByLabelText("Registered operator surfaces")
     for (const label of [
       "Overview",
       "Test Assurance",
