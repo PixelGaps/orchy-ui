@@ -31,6 +31,7 @@ import {
 import {
   assuranceTotals,
   deriveAssuranceLayers,
+  hasCompleteTestOpsProjection,
   type AssuranceLayerState,
 } from "./model"
 
@@ -74,19 +75,28 @@ export function TestAssurancePage() {
   const testOps = useCloudSource<TestOpsProjection>("testops")
   const refresh = useRefreshCloudSources(["jira", "testops"])
 
-  const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
-  const testOpsAvailable = Boolean(testOps.data?.payload) && testOps.data?.state !== "unavailable"
-  const layers = jiraAvailable ? deriveAssuranceLayers(jira.data?.payload, testOpsAvailable ? testOps.data?.payload : undefined) : []
+  const jiraCurrent = Boolean(jira.data?.payload) && jira.data?.state === "fresh"
+  const testOpsPresent = Boolean(testOps.data?.payload)
+  const testOpsComplete = hasCompleteTestOpsProjection(testOps.data?.payload)
+  const testOpsCurrent =
+    testOpsPresent && testOpsComplete && testOps.data?.state === "fresh"
+  const layers = jiraCurrent
+    ? deriveAssuranceLayers(
+        jira.data?.payload,
+        testOpsPresent ? testOps.data?.payload : undefined,
+      )
+    : []
   const totals = assuranceTotals(layers)
-  const durationData = testOpsAvailable ? layers
-    .filter((layer) => layer.latest)
-    .map((layer) => ({
-      name: `L${String(layer.number).padStart(2, "0")}`,
-      seconds: Math.round((layer.latest!.durationMs) / 100) / 10,
-    })) : []
+  const durationData = testOpsPresent
+    ? layers
+        .filter((layer) => layer.latest)
+        .map((layer) => ({
+          name: `L${String(layer.number).padStart(2, "0")}`,
+          seconds: Math.round(layer.latest!.durationMs / 100) / 10,
+        }))
+    : []
 
-  const sourceUnavailable =
-    jira.data?.state === "unavailable" || testOps.data?.state === "unavailable"
+  const allCurrent = jiraCurrent && testOpsCurrent
 
   return (
     <>
@@ -94,7 +104,11 @@ export function TestAssurancePage() {
         eyebrow="Assurance"
         title="Test Assurance"
         description="The 12-layer campaign from canonical Jira work state and TestOps execution evidence."
-        badge={<Badge tone={sourceUnavailable ? "warn" : "live"}>Jira + TestOps</Badge>}
+        badge={
+          <Badge tone={allCurrent ? "live" : "warn"}>
+            {allCurrent ? "Jira + TestOps · current" : "Authority check required"}
+          </Badge>
+        }
       />
 
       <div className="cloud-toolbar">
@@ -125,6 +139,13 @@ export function TestAssurancePage() {
           tone="danger"
         />
       )}
+      {jira.data?.state === "stale" && (
+        <StatusNotice
+          title="Jira projection is stale"
+          body={`Current layer totals are unavailable. Last authoritative projection is ${sourceAgeLabel(jira.data)}.`}
+          tone="warn"
+        />
+      )}
       {testOps.data?.state === "unavailable" && (
         <StatusNotice
           title="TestOps unavailable"
@@ -132,15 +153,29 @@ export function TestAssurancePage() {
           tone="warn"
         />
       )}
+      {testOps.data?.state === "stale" && (
+        <StatusNotice
+          title="TestOps evidence is historical"
+          body={`Retained run evidence is ${sourceAgeLabel(testOps.data)}. It may be inspected below, but it does not drive a current findings aggregate.`}
+          tone="warn"
+        />
+      )}
+      {testOpsPresent && !testOpsComplete && (
+        <StatusNotice
+          title="TestOps projection is incomplete"
+          body={`Only ${testOps.data?.payload?.layers.length ?? 0} of 12 canonical assurance layers are represented. Current TestOps aggregates remain unavailable.`}
+          tone="danger"
+        />
+      )}
 
       <CompactSummary
         className="assurance-summary"
         items={[
-          { label: "Completed", value: jiraAvailable ? totals.completed : "Unavailable", tone: jiraAvailable ? "live" : "neutral" },
-          { label: "Active", value: jiraAvailable ? totals.active : "Unavailable", tone: jiraAvailable ? "cyan" : "neutral" },
-          { label: "Blocked", value: jiraAvailable ? totals.blocked : "Unavailable", tone: jiraAvailable ? "danger" : "neutral" },
-          { label: "Queued", value: jiraAvailable ? totals.queued : "Unavailable" },
-          { label: "Findings", value: testOpsAvailable ? totals.findings : "Unavailable", tone: testOpsAvailable ? (totals.findings ? "warn" : "live") : "neutral" },
+          { label: "Completed", value: jiraCurrent ? totals.completed : "Unavailable", tone: jiraCurrent ? "live" : "neutral" },
+          { label: "Active", value: jiraCurrent ? totals.active : "Unavailable", tone: jiraCurrent ? "cyan" : "neutral" },
+          { label: "Blocked", value: jiraCurrent ? totals.blocked : "Unavailable", tone: jiraCurrent ? "danger" : "neutral" },
+          { label: "Queued", value: jiraCurrent ? totals.queued : "Unavailable" },
+          { label: "Findings", value: testOpsCurrent ? totals.findings : "Unavailable", tone: testOpsCurrent ? (totals.findings ? "warn" : "live") : "neutral" },
         ]}
       />
 
@@ -163,16 +198,16 @@ export function TestAssurancePage() {
                 <span>
                   <small>Latest</small>
                   <Badge tone={outcomeTone(layer.latest?.outcome)}>
-                    {testOpsAvailable ? (layer.latest?.outcome ?? "NO RUN") : "UNAVAILABLE"}
+                    {testOpsPresent ? (layer.latest?.outcome ?? "NO RUN") : "UNAVAILABLE"}
                   </Badge>
                 </span>
                 <span>
                   <small>Runtime</small>
-                  <strong>{testOpsAvailable ? formatDuration(layer.latest?.durationMs) : "—"}</strong>
+                  <strong>{testOpsPresent ? formatDuration(layer.latest?.durationMs) : "—"}</strong>
                 </span>
                 <span>
-                  <small>Findings</small>
-                  <strong>{testOpsAvailable ? layer.findingCount : "—"}</strong>
+                  <small>{testOpsCurrent ? "Findings" : "Historical findings"}</small>
+                  <strong>{testOpsPresent ? layer.findingCount : "—"}</strong>
                 </span>
               </div>
 
@@ -213,7 +248,7 @@ export function TestAssurancePage() {
         <Card className="assurance-chart-panel">
           <PanelHeader
             kicker="Execution evidence"
-            title="Latest layer runtime"
+            title={testOpsCurrent ? "Latest layer runtime" : "Historical layer runtime"}
             action={<BarChart3 size={17} aria-hidden="true" />}
           />
           {durationData.length ? (
