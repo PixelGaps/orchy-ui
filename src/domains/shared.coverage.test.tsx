@@ -689,7 +689,7 @@ describe("shared domain coverage", () => {
       refetch: vi.fn(),
     }
     const empty = render(<DomainConfiguration section="llm" />)
-    expect(screen.getByText("Fields").parentElement).toHaveTextContent("0")
+    expect(screen.getByText("Fields").parentElement).toHaveTextContent("Unavailable")
     empty.unmount()
 
     queryState.value.data = {
