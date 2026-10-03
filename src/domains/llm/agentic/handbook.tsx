@@ -242,10 +242,8 @@ export function AgenticHandbook() {
             <span>#</span><span>Task</span><span>State</span><span>ChatGPT</span><span>Aider</span><span>Cline</span><span>Issues</span>
           </div>
           {(data?.tasks ?? []).map((task) => (
-            <CollapsibleSection
-              key={task.campaign_task_id}
-              className="handbook-task"
-              title={
+            <details className="handbook-task" key={task.campaign_task_id}>
+              <summary>
                 <div className="handbook-row" role="row">
                   <span>{task.ordinal}</span>
                   <span className="handbook-task-name">
@@ -260,11 +258,9 @@ export function AgenticHandbook() {
                   <LaneCell label="Cline" lane={task.lanes.cline} />
                   <span>{task.issues.length ? task.issues.join(", ") : "—"}</span>
                 </div>
-              }
-              summary=""
-            >
+              </summary>
               <TaskDetail task={task} />
-            </CollapsibleSection>
+            </details>
           ))}
         </div>
 
