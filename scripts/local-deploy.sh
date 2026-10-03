@@ -33,7 +33,7 @@ exec 9>"$STATE_DIR/deploy.lock"
 flock -x 9
 
 stable_release_available() {
-  [[ -f "$STATE_DIR/current/dist/index.html" && -f "$STATE_DIR/current/local-socket-server.mjs" ]]
+  [[ -f "$STATE_DIR/current/dist/index.html" && -f "$STATE_DIR/current/local-socket-server.mjs" && -f "$STATE_DIR/current/scripts/live-dashboard-readiness.mjs" ]]
 }
 
 serve_stable_on_failure() {
