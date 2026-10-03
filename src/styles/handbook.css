@@ -82,9 +82,15 @@
   border-bottom: 1px solid var(--line);
 }
 
-.handbook-task > button {
+.handbook-task > summary {
   width: 100%;
   padding: 9px 10px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.handbook-task > summary::-webkit-details-marker {
+  display: none;
 }
 
 .handbook-task-name {
@@ -234,7 +240,7 @@
     min-height: 44px;
   }
 
-  .handbook-task > button {
+  .handbook-task > summary {
     min-height: 44px;
   }
 
