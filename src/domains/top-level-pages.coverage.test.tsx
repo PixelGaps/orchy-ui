@@ -286,7 +286,7 @@ describe("top-level domain page coverage", () => {
     expect(screen.getByText("Checks").closest("div")).toHaveTextContent("Unavailable")
     expect(screen.getByText("Passing").closest("div")).toHaveTextContent("Unavailable")
     expect(screen.getByText("Attention").closest("div")).toHaveTextContent("Unavailable")
-    expect(screen.getByText("GPU").closest("div")).toHaveTextContent("0")
+    expect(screen.getByText("GPU").closest("div")).toHaveTextContent("Unavailable")
   })
 
   it("covers every evidence scalar renderer", () => {
