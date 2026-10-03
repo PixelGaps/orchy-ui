@@ -118,6 +118,15 @@ describe("top-level domain page coverage", () => {
         models: { vllm: ["qwen", "deepseek"], ollama: ["gemma"] },
       },
     })
+    queryState.values.set("operator-overview-runtime", {
+      data: {
+        health: {
+          components: {
+            vllm: { status: "healthy", http_status: 200 },
+          },
+        },
+      },
+    })
     queryState.values.set("capability-registry", {
       data: {
         entries: [
@@ -130,7 +139,7 @@ describe("top-level domain page coverage", () => {
 
     sharedState.tab = "runtime"
     const { rerender } = renderPage(<LLMPage />)
-    expect(screen.getByText("ready")).toBeInTheDocument()
+    expect(screen.getByText("healthy")).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: /Runtime endpoints/ }))
     expect(screen.getByText("http://localhost")).toBeInTheDocument()
 
@@ -448,6 +457,36 @@ describe("top-level domain page coverage", () => {
       },
     })
 
+    queryState.values.set("cloud-source", {
+      data: {
+        source: "github",
+        authority: "GitHub source and CI",
+        state: "fresh",
+        observedAt: "2026-10-03T19:20:00Z",
+        ageSeconds: 0,
+        errorCode: null,
+        payload: {
+          headSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          openWorkflowRuns: 1,
+          recentRuns: [
+            {
+              id: 2,
+              name: "Fallback CI",
+              status: "queued",
+              conclusion: null,
+              headSha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              htmlUrl: "https://example.test/fallback",
+            },
+          ],
+        },
+      },
+      error: null,
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      dataUpdatedAt: 1,
+      refetch: vi.fn(),
+    })
     sharedState.tab = "ci"
     rerender(<MemoryRouter><LogsPage /></MemoryRouter>)
     expect(screen.getByRole("link", { name: /Fallback CI/ })).toHaveAttribute("href", "https://example.test/fallback")
