@@ -65,8 +65,8 @@ export function LLMPage() {
           <CompactSummary
             items={[
               { label: "Model", value: String(data?.model || "—"), tone: data?.model ? "live" : "neutral" },
-              { label: "Containers", value: Array.isArray(data?.containers) ? data.containers.length : 0 },
-              { label: "Runtime", value: data?.model ? "ready" : "idle", tone: data?.model ? "live" : "neutral" },
+              { label: "Containers", value: data ? (Array.isArray(data.containers) ? data.containers.length : "Unavailable") : "Unavailable" },
+              { label: "Runtime", value: data ? (data.model ? "ready" : "idle") : "Unavailable", tone: data?.model ? "live" : "neutral" },
             ]}
           />
           <CollapsibleSection
@@ -79,7 +79,7 @@ export function LLMPage() {
                 { label: "served model", value: String(data?.model || "—") },
                 { label: "base url", value: String(data?.base_url || "—") },
                 { label: "health url", value: String(data?.health_url || "—") },
-                { label: "containers", value: Array.isArray(data?.containers) ? data.containers.length : 0 },
+                { label: "containers", value: data ? (Array.isArray(data.containers) ? data.containers.length : "Unavailable") : "Unavailable" },
               ]}
             />
           </CollapsibleSection>
@@ -118,15 +118,15 @@ export function LLMPage() {
           <PanelHeader kicker="LOCAL AI PLATFORM" title="Capability registry" />
           <CompactSummary
             items={[
-              { label: "Capabilities", value: capabilitiesQuery.data?.entries?.length ?? 0 },
+              { label: "Capabilities", value: capabilitiesQuery.data ? capabilitiesQuery.data.entries.length : "Unavailable" },
               {
                 label: "Available",
-                value: (capabilitiesQuery.data?.entries ?? []).filter((entry) => entry.status === "available").length,
+                value: capabilitiesQuery.data ? capabilitiesQuery.data.entries.filter((entry) => entry.status === "available").length : "Unavailable",
                 tone: "live",
               },
               {
                 label: "Host required",
-                value: (capabilitiesQuery.data?.entries ?? []).filter((entry) => entry.status === "host-required").length,
+                value: capabilitiesQuery.data ? capabilitiesQuery.data.entries.filter((entry) => entry.status === "host-required").length : "Unavailable",
                 tone: "cyan",
               },
             ]}
