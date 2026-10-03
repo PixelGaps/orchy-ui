@@ -95,6 +95,8 @@ rm -rf "$RELEASE_TMP"
 mkdir -p "$RELEASE_TMP"
 cp -a "$BUILD_DIR/dist" "$RELEASE_TMP/dist"
 install -m 0755 "$BUILD_DIR/scripts/local-socket-server.mjs" "$RELEASE_TMP/local-socket-server.mjs"
+mkdir -p "$RELEASE_TMP/scripts"
+install -m 0755 "$BUILD_DIR/scripts/live-dashboard-readiness.mjs" "$RELEASE_TMP/scripts/live-dashboard-readiness.mjs"
 printf '%s\n' "$TARGET_SHA" >"$RELEASE_TMP/deployed-sha"
 
 if [[ ! -d "$RELEASE_DIR" ]]; then
