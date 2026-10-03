@@ -116,6 +116,10 @@ export function listWorkbenchPlugins(): Promise<WorkbenchPlugin[]> {
   return api<WorkbenchPlugin[]>("/api/workbench/plugins")
 }
 
+export function listWorkbenchSessions(): Promise<WorkbenchSession[]> {
+  return api<WorkbenchSession[]>("/api/workbench/sessions")
+}
+
 export function startWorkbenchSession(body: WorkbenchStartRequest): Promise<WorkbenchSession> {
   return postJSON<WorkbenchSession>("/api/workbench/sessions", body)
 }
@@ -199,9 +203,11 @@ export async function streamWorkbenchEvents(
   sessionId: string,
   onEvent: (event: WorkbenchEvent) => void,
   signal?: AbortSignal,
+  follow = false,
 ): Promise<WorkbenchEvent[]> {
+  const suffix = follow ? "?follow=true" : ""
   const response = await fetch(
-    apiUrl(`/api/workbench/sessions/${encodeURIComponent(sessionId)}/events`),
+    apiUrl(`/api/workbench/sessions/${encodeURIComponent(sessionId)}/events${suffix}`),
     {
       cache: "no-store",
       headers: { Accept: "text/event-stream" },
