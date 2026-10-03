@@ -24,7 +24,8 @@
     "test:local-runtime": "node --test scripts/local-socket-server.test.mjs",
     "test": "npm run test:local-runtime && npm run test:hooks && npm run test:unit",
     "test:e2e:workbench": "playwright test e2e/workbench.spec.ts",
-    "test:live-readiness": "node scripts/live-dashboard-readiness.mjs"
+    "test:live-readiness": "node scripts/live-dashboard-readiness.mjs",
+    "test:e2e:live": "playwright test e2e/live-routes.spec.ts --config=playwright.live.config.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
