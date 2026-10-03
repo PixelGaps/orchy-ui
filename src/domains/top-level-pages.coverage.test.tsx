@@ -139,7 +139,7 @@ describe("top-level domain page coverage", () => {
 
     sharedState.tab = "runtime"
     const { rerender } = renderPage(<LLMPage />)
-    expect(screen.getByText("healthy")).toBeInTheDocument()
+    expect(screen.getAllByText("healthy").length).toBeGreaterThanOrEqual(2)
     fireEvent.click(screen.getByRole("button", { name: /Runtime endpoints/ }))
     expect(screen.getByText("http://localhost")).toBeInTheDocument()
 
