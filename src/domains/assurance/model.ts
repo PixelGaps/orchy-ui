@@ -32,11 +32,41 @@ export const ASSURANCE_LAYERS = [
   { number: 12, key: "12-chaos-soak", label: "Live Chaos / Soak / Recovery", jiraKey: "OR-608" },
 ] as const
 
+const TESTOPS_LAYER_NUMBERS: Record<string, number> = {
+  "fast-web": 1,
+  "fast-python": 2,
+  "property-state-machine": 3,
+  "security": 4,
+  "fuzz": 5,
+  "performance": 6,
+  "portability": 7,
+  "flakes": 8,
+  "coverage-static-sonar": 9,
+  "mutation": 10,
+  "browser-e2e": 11,
+  "live-chaos-soak-recovery": 12,
+}
+
 function layerNumberFromId(value: string): number | null {
+  const canonical = TESTOPS_LAYER_NUMBERS[value]
+  if (canonical) return canonical
   const match = value.match(/^(\d{1,2})/)
   if (!match) return null
   const parsed = Number(match[1])
   return parsed >= 1 && parsed <= 12 ? parsed : null
+}
+
+export function hasCompleteTestOpsProjection(
+  projection: TestOpsProjection | null | undefined,
+): boolean {
+  if (!projection || projection.layers.length !== ASSURANCE_LAYERS.length) return false
+  return ASSURANCE_LAYERS.every((layer) =>
+    projection.layers.some(
+      (candidate) =>
+        candidate.jiraMilestone === layer.jiraKey ||
+        layerNumberFromId(candidate.layerId) === layer.number,
+    ),
+  )
 }
 
 function workState(status: string, category: string): AssuranceLayerState {
