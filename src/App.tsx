@@ -26,6 +26,7 @@ const ComfyUIPage = lazy(() => import("@/domains/comfyui/page").then((module) =>
 const ImageFactory = lazy(() => import("@/domains/comfyui/image-factory/page").then((module) => ({ default: module.ImageFactory })))
 const HealthcheckPage = lazy(() => import("@/domains/healthcheck/page").then((module) => ({ default: module.HealthcheckPage })))
 const LLMPage = lazy(() => import("@/domains/llm/page").then((module) => ({ default: module.LLMPage })))
+const AgenticCodingPage = lazy(() => import("@/domains/llm/agentic/page").then((module) => ({ default: module.AgenticCodingPage })))
 const IssuesPage = lazy(() => import("@/domains/issues/page").then((module) => ({ default: module.IssuesPage })))
 const LogsPage = lazy(() => import("@/domains/logs/page").then((module) => ({ default: module.LogsPage })))
 const MissionsPage = lazy(() => import("@/domains/missions/page").then((module) => ({ default: module.MissionsPage })))
@@ -320,6 +321,7 @@ export default function App() {
           Queue: QueuePage,
           ImageFactory,
           LLM: LLMPage,
+          AgenticCoding: AgenticCodingPage,
           ComfyUI: ComfyUIPage,
           Healthcheck: HealthcheckPage,
           Logs: LogsPage,
