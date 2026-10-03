@@ -1,4 +1,21 @@
 schema: orchy-ui.agent-contract.v7
+
+# BEGIN PIXELGAPS MANAGED AGENT POLICY v2 sha256:d858f045101cfcf7
+# Source: PixelGaps/orchy:orchy/llm/agentic/shared_agent_policy.json
+# - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, and completion.
+# - GitHub source, tests, commits, and CI are authoritative for implementation reality; do not create GitHub Issues/Projects or repo TODO/DONE mirrors for tracked work.
+# - Read the applicable AGENTS.md before modifying a repository; read architecture/ADR/operations documentation when the change touches those concerns.
+# - Use the cheapest meaningful deterministic scoped validation; routine validation targets <=120 seconds and has a hard 180-second ceiling.
+# - Never weaken, delete, skip, or rewrite meaningful tests merely to obtain a green result.
+# - Repository operations use the GitHub connector/API and Jira operations use the Atlassian connector/API when available.
+# - Routine Desktop Commander calls are zero; use it only for unavoidable host-bound bootstrap/repair that no durable connector, API, controller, runner, or direct host-control route can perform.
+# - Use Supabase host control only when live Madriguera machine control is required; batch related operations and do not poll.
+# - Routine Firecrawl calls are zero; use native connectors, direct APIs, or other non-Firecrawl retrieval first.
+# - Secrets and reusable credentials must not be committed to Git; use the durable secret authority and fail closed when a required credential is unavailable.
+# - Local AGENTS.md content may add repo-specific constraints, but must not silently weaken this shared policy; any intentional exception must be explicit and Jira-traceable.
+# - Shared-policy synchronization is a Jira-bound governance mutation limited to the managed AGENTS.md block; it may use exact-SHA compare-and-swap on the default branch when the active connector cannot delete temporary branches.
+# END PIXELGAPS MANAGED AGENT POLICY
+
 repository:
   state: active-local-first-operator-ui
   default_branch: main
