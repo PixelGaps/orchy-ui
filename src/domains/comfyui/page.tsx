@@ -1,7 +1,7 @@
 import { Navigate,NavLink } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 
-import { Card,DenseKeyValueGrid,FreshnessBadge,PageHeader,PanelHeader,QueryStateNotice,SectionPanel } from "@/components/ui/primitives"
+import { Badge,Card,DenseKeyValueGrid,PageHeader,PanelHeader,QueryStateNotice,SectionPanel } from "@/components/ui/primitives"
 import { getApi } from "@/lib/api"
 import { hasActiveExecutions,runtimePollInterval } from "@/lib/polling"
 import { DomainConfiguration,SectionTabs,useDomainTab,useExecutions } from "@/domains/shared"
@@ -16,6 +16,16 @@ export function ComfyUIPage() {
     queryFn: () => getApi("/api/comfyui"),
     refetchInterval: runtimePollInterval(active),
   })
+  const healthQuery = useQuery({
+    queryKey: ["operator-overview-runtime"],
+    queryFn: () => getApi("/api/operator/overview"),
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  })
+  const runtimeHealth = healthQuery.data?.health?.components?.comfyui
+  const runtimeState = String(runtimeHealth?.status || "unavailable")
+  const runtimeHealthy = runtimeState === "healthy"
   const tabs = [
     { id: "runtime", label: "Runtime" },
     { id: "settings", label: "Settings" },
@@ -26,7 +36,16 @@ export function ComfyUIPage() {
         eyebrow="Image runtime"
         title="ComfyUI"
         description="ComfyUI runtime controls and the existing Image Factory production loop."
-        badge={<FreshnessBadge updatedAt={query.dataUpdatedAt} error={query.isError} />}
+        badge={
+          <div className="cloud-source-badges" aria-label="ComfyUI authorities">
+            <Badge tone={query.isError ? "warn" : query.data ? "live" : "neutral"}>
+              Configuration · {query.isError ? "unavailable" : query.data ? "loaded" : "loading"}
+            </Badge>
+            <Badge tone={runtimeHealthy ? "live" : runtimeState === "degraded" ? "warn" : "danger"}>
+              Runtime · {runtimeState}
+            </Badge>
+          </div>
+        }
       />
       <QueryStateNotice
         error={query.error}
@@ -42,7 +61,8 @@ export function ComfyUIPage() {
           <DenseKeyValueGrid
             items={[
               { label: "API URL", value: query.data?.url || "—" },
-              { label: "Health URL", value: query.data?.health_url || "—" },
+              { label: "Health URL", value: query.data?.health_url || "—", hint: "configured endpoint" },
+              { label: "Observed health", value: healthQuery.isError ? "Unavailable" : runtimeState, hint: runtimeHealth?.http_status ? `HTTP ${runtimeHealth.http_status}` : "host-observed" },
               { label: "Output directory", value: query.data?.output_dir || "—" },
               { label: "Default workflow", value: query.data?.workflow_path || "—" },
             ]}
