@@ -103,6 +103,82 @@ async function mockApi(page: Page): Promise<void> {
       body = { entries: [] }
     } else if (path === "/api/deep-research/runtime") {
       body = { ready: false, model: "deep-research", model_present: true, capabilities: [] }
+    } else if (path === "/api/agentic/handbook") {
+      body = {
+        available: true,
+        reason: "",
+        total_tasks: 2863,
+        matched_tasks: 2863,
+        ranking_state: "available",
+        issue_source: { state: "fresh", observedAt: "2026-10-03T08:00:00Z", errorCode: null },
+        current_task: {
+          campaign_task_id: "multi-swe-bench-final:facebook__zstd-1008",
+          task_id: "facebook__zstd-1008",
+          ordinal: 1,
+          execution_rank: 1,
+          state: "blocked",
+          issues: ["OR-986", "OR-988"],
+        },
+        summary: { not_run: 2862, partial: 0, completed: 0, failed: 0, blocked: 1, has_issues: 1 },
+        tasks: [{
+          ordinal: 1,
+          execution_rank: 1,
+          information_value: 0.82,
+          execution_score: 0.21,
+          campaign_task_id: "multi-swe-bench-final:facebook__zstd-1008",
+          suite_id: "multi-swe-bench-final",
+          suite_version: "hf-2a28fe1c8d1d",
+          task_id: "facebook__zstd-1008",
+          task_version: "sha256:task",
+          title: "Fix hashLog3 size when copying cdict tables",
+          summary: "Fix hashLog3 size when copying cdict tables",
+          repository: "facebook/zstd",
+          capability_tags: ["code-editing", "issue-resolution", "c"],
+          state: "blocked",
+          issues: ["OR-986", "OR-988"],
+          lanes: {
+            chatgpt: null,
+            aider: {
+              lane: "aider",
+              run_id: "run-aider-2",
+              captured_at: "2026-10-03T08:00:00Z",
+              outcome: "INVALID",
+              failure_kind: "BENCHMARK_RUNTIME",
+              agent: "aider",
+              agent_version: "1.0",
+              model: "local",
+              profile: "bounded",
+              release_id: "runner@abc",
+              config_digest: "sha256:config",
+              jira_key: "OR-988",
+              supersedes_run_id: "run-aider-1",
+              improvement: "Bound context",
+              improvement_version: "runner@abc",
+              diagnosis: "context exhaustion",
+              recommendation: "retain bounded slice",
+              residual_limitation: "not yet rerun",
+              changed_files: [],
+              patch_digest: "",
+              diff_digest: "",
+              oracle_result: "",
+              oracle_version: "oracle-v1",
+              validation_outcome: "INVALID",
+              implementation_summary: "",
+              evidence_ref: "/evidence/run-aider-2.json",
+              before_after_delta: {
+                from_run_id: "run-aider-1",
+                from_outcome: "FAIL",
+                to_outcome: "INVALID",
+                from_validation: "FAIL",
+                to_validation: "INVALID",
+                outcome_changed: true,
+              },
+            },
+            cline: null,
+          },
+          history: [],
+        }],
+      }
     } else if (path === "/api/validation") {
       body = { passed: true, output: "PASS", elapsed_ms: 1 }
     }
@@ -161,4 +237,38 @@ test("compact Image Factory keeps launch surface primary and advanced detail opt
   await expect(page.getByRole("heading", { name: "Image Factory", exact: true })).toBeVisible()
   await expect(page.getByRole("button", { name: /Profile & advanced controls/ })).toHaveAttribute("aria-expanded", "false")
   await expect(page.getByRole("button", { name: /Start production/i })).toBeVisible()
+})
+
+
+test("Agentic Handbook exposes bounded 2,863-task authority, filters and drill-down evidence", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 })
+  await mockApi(page)
+  await page.goto("/agentic-coding?tab=handbook")
+
+  await expect(page.getByRole("heading", { name: "Agentic Coding", exact: true })).toBeVisible()
+  await expect(page.getByText("2,863-TASK CAPABILITY BOOK")).toBeVisible()
+  await expect(page.getByText("2863", { exact: true }).first()).toBeVisible()
+  await expect(page.getByText("facebook__zstd-1008", { exact: true }).first()).toBeVisible()
+  await expect(page.getByText("r1", { exact: true })).toBeVisible()
+  await expect(page.getByText("OR-986", { exact: true }).first()).toBeVisible()
+  await expect(page.getByText("UNKNOWN", { exact: true }).first()).toBeVisible()
+
+  await page.locator("details.handbook-task").first().locator("summary").click()
+  await expect(page.getByText("sha256:config", { exact: true })).toBeVisible()
+  await expect(page.getByText("FAIL → INVALID", { exact: true })).toBeVisible()
+  await expect(page.getByText("not yet rerun", { exact: true })).toBeVisible()
+
+  await page.getByLabel("Search handbook tasks").fill("zstd")
+  await expect(page.getByLabel("Filter handbook state")).toBeVisible()
+  await expect(page.getByText("1–50 of 2863", { exact: true })).toBeVisible()
+})
+
+test("Agentic Handbook remains usable at mobile width without rendering hidden lane columns", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await mockApi(page)
+  await page.goto("/agentic-coding?tab=handbook")
+  await expect(page.getByLabel("Search handbook tasks")).toBeVisible()
+  await expect(page.getByLabel("Filter handbook state")).toBeVisible()
+  await expect(page.getByText("Has Jira issues", { exact: true })).toBeVisible()
+  await expect(page.locator("details.handbook-task").first()).toBeVisible()
 })
