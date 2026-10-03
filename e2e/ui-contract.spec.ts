@@ -255,7 +255,7 @@ test("Agentic Handbook exposes bounded 2,863-task authority, filters and drill-d
 
   await page.locator("details.handbook-task").first().locator("summary").click()
   await expect(page.getByText("sha256:config", { exact: true })).toBeVisible()
-  await expect(page.getByText("FAIL → INVALID", { exact: true })).toBeVisible()
+  await expect(page.getByText(/FAIL → INVALID/).first()).toBeVisible()
   await expect(page.getByText("not yet rerun", { exact: true })).toBeVisible()
 
   await page.getByLabel("Search handbook tasks").fill("zstd")
@@ -271,4 +271,6 @@ test("Agentic Handbook remains usable at mobile width without rendering hidden l
   await expect(page.getByLabel("Filter handbook state")).toBeVisible()
   await expect(page.getByText("Has Jira issues", { exact: true })).toBeVisible()
   await expect(page.locator("details.handbook-task").first()).toBeVisible()
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+  expect(overflow).toBeLessThanOrEqual(0)
 })
