@@ -541,9 +541,9 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
           { label: "Lineage", value: candidates.length, detail: "tracked candidates" },
           {
             label: "Publish ready",
-            value: gallery.data?.publish_ready?.length ?? 0,
+            value: gallery.data ? gallery.data.publish_ready.length : "Unavailable",
             detail: "retained packages",
-            tone: (gallery.data?.publish_ready?.length ?? 0) > 0 ? "live" : "neutral",
+            tone: gallery.data?.publish_ready?.length ? "live" : "neutral",
           },
         ]}
       />
@@ -825,7 +825,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
             </div>
             <div className="config-item">
               <span>family attempts</span>
-              <strong>{pbrResult.family_history?.length ?? 0}</strong>
+              <strong>{pbrResult.family_history ? pbrResult.family_history.length : "Unavailable"}</strong>
             </div>
             <div className="config-item">
               <span>package</span>
@@ -890,7 +890,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
             </div>
             <div className="config-item">
               <span>pack attempts</span>
-              <strong>{objectResult.pack_history?.length ?? 0}</strong>
+              <strong>{objectResult.pack_history ? objectResult.pack_history.length : "Unavailable"}</strong>
             </div>
             <div className="config-item">
               <span>package</span>
