@@ -599,7 +599,7 @@ export function WorkbenchPage() {
             <PanelHeader
               kicker="PLUGINS"
               title="Session tools"
-              action={<Badge tone={plugins.error ? "warn" : "live"}>{plugins.data?.length ?? 0}</Badge>}
+              action={<Badge tone={plugins.error ? "warn" : plugins.data ? "live" : "neutral"}>{plugins.data ? plugins.data.length : "Unavailable"}</Badge>}
             />
             <QueryStateNotice
               error={plugins.error}
