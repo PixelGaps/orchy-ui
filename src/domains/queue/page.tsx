@@ -198,7 +198,7 @@ export function QueuePage() {
   const jobs = useMemo(() => {
     const rows=[...(jobsQuery.data?.jobs ?? [])]
     if (sort === "oldest") rows.reverse()
-    if (sort === "age") rows.sort((a,b)=>(b.policy?.age_seconds ?? 0)-(a.policy?.age_seconds ?? 0))
+    if (sort === "age") rows.sort((a,b)=>(b.policy?.age_seconds ?? -1)-(a.policy?.age_seconds ?? -1))
     if (sort === "state") rows.sort((a,b)=>a.status.localeCompare(b.status)||b.created_at.localeCompare(a.created_at))
     return rows
   },[jobsQuery.data?.jobs,sort])
@@ -266,7 +266,7 @@ export function QueuePage() {
               {label:"Visible",value:queueHealth.metrics?.queue_visible_length ?? "Unavailable"},
               {label:"Stale",value:queueHealth.stale_count ?? "Unavailable",tone:queueHealth.stale_count ? "danger" : "neutral"},
               {label:"Mismatches",value:queueHealth.ledger_queue_mismatches ?? "Unavailable",tone:queueHealth.ledger_queue_mismatches ? "warn" : "neutral"},
-              {label:"Worker",value:worker?.fresh ? "fresh" : "stale",tone:worker?.fresh ? "live" : "warn"},
+              {label:"Worker",value:worker ? (worker.fresh ? "fresh" : "stale") : "Unavailable",tone:worker ? (worker.fresh ? "live" : "warn") : "neutral"},
               {label:"Oldest pending",value:ageLabel(queueHealth.oldest_pending_age_seconds)},
             ]} />
             <small>
