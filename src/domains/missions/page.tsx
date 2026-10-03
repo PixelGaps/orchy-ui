@@ -125,6 +125,9 @@ export function MissionsPage() {
     onError: (error) => notifyOperator(error instanceof Error ? error.message : "Cancellation failed", "error"),
   })
 
+  const operationsAvailable = Boolean(operations.data?.payload) && operations.data?.state !== "unavailable"
+  const fleetAvailable = Boolean(fleet.data?.payload) && fleet.data?.state !== "unavailable"
+  const hostAvailable = Boolean(host.data?.payload) && host.data?.state !== "unavailable"
   const jobs = operations.data?.payload?.operations ?? []
   const providers = fleet.data?.payload?.providers ?? []
   const visibleJobs = jobs.slice(0, draft.historyLimit)
@@ -133,7 +136,7 @@ export function MissionsPage() {
       ? providers.filter((provider) => provider.qualified)
       : providers
   const hostPayload = host.data?.payload
-  const online = hostOnline(hostPayload)
+  const online = hostAvailable ? hostOnline(hostPayload) : null
   const active = jobs.filter((job) => !TERMINAL.has(job.state.toLowerCase()))
   const hostBoundActive = active.filter(isHostBound)
   const remainingMinutes = providers.reduce((sum, item) => sum + Math.max(0, item.remainingRunnerMinutes), 0)
@@ -145,7 +148,7 @@ export function MissionsPage() {
         eyebrow="Cloud Control"
         title="Missions"
         description="ExecutionStore missions, zero-spend runner allowance and physical-host capability state. No background polling."
-        badge={<Badge tone={online ? "live" : "warn"}>Execution host · {online ? "online" : "offline"}</Badge>}
+        badge={<Badge tone={online === true ? "live" : online === false ? "warn" : "neutral"}>Execution host · {online === true ? "online" : online === false ? "offline" : "unavailable"}</Badge>}
       />
 
       <div className="page-actions">
@@ -160,14 +163,14 @@ export function MissionsPage() {
 
       <CompactSummary
         items={[
-          { label: "Active missions", value: active.length, tone: active.length ? "cyan" : "neutral" },
-          { label: "Host-bound", value: hostBoundActive.length, tone: hostBoundActive.length && !online ? "warn" : "neutral" },
-          { label: "Qualified runners", value: providers.filter((item) => item.qualified).length, tone: "live" },
-          { label: "Free minutes", value: remainingMinutes, detail: "reported provider allowance" },
+          { label: "Active missions", value: operationsAvailable ? active.length : "Unavailable", tone: operationsAvailable && active.length ? "cyan" : "neutral" },
+          { label: "Host-bound", value: operationsAvailable ? hostBoundActive.length : "Unavailable", tone: operationsAvailable && hostBoundActive.length && online === false ? "warn" : "neutral" },
+          { label: "Qualified runners", value: fleetAvailable ? providers.filter((item) => item.qualified).length : "Unavailable", tone: fleetAvailable ? "live" : "neutral" },
+          { label: "Free minutes", value: fleetAvailable ? remainingMinutes : "Unavailable", detail: "reported provider allowance" },
         ]}
       />
 
-      {!online && (
+      {online === false && (
         <StatusNotice
           title="Execution host offline"
           body="Host-bound actions stay disabled. Cloud Control, Jira, CI fleet and retained mission history remain available."
@@ -188,7 +191,7 @@ export function MissionsPage() {
               const terminal = TERMINAL.has(job.state.toLowerCase())
               let disabledReason: string | null = null
               if (terminal) disabledReason = "Mission is terminal"
-              else if (hostBound && !online) disabledReason = "Execution host is offline"
+              else if (hostBound && online !== true) disabledReason = hostAvailable ? "Execution host is offline" : "Execution host state is unavailable"
               return (
                 <div className="data-row" key={job.id}>
                   <span>
@@ -279,11 +282,11 @@ export function MissionsPage() {
               <div><small>Source SHA</small><strong>{hostPayload?.sourceSha?.slice(0, 12) ?? "unknown"}</strong></div>
               <div>
                 <small>GPU capability</small>
-                <strong>{online ? "host-bound · detail not projected" : "offline"}</strong>
+                <strong>{online === true ? "host-bound · detail not projected" : online === false ? "offline" : "unavailable"}</strong>
               </div>
               <div>
                 <small>Model runtimes</small>
-                <strong>{online ? "host-bound · detail not projected" : "offline"}</strong>
+                <strong>{online === true ? "host-bound · detail not projected" : online === false ? "offline" : "unavailable"}</strong>
               </div>
             </div>
             <p className="form-help"><Cpu size={13} /> GPU/model/runtime actions remain host-bound and fail closed while this authority is offline.</p>
