@@ -24,6 +24,7 @@ useNavigate,
 const TestAssurancePage = lazy(() => import("@/domains/assurance/page").then((module) => ({ default: module.TestAssurancePage })))
 const ComfyUIPage = lazy(() => import("@/domains/comfyui/page").then((module) => ({ default: module.ComfyUIPage })))
 const ImageFactory = lazy(() => import("@/domains/comfyui/image-factory/page").then((module) => ({ default: module.ImageFactory })))
+const DataPlatformPage = lazy(() => import("@/domains/data-platform/page").then((module) => ({ default: module.DataPlatformPage })))
 const HealthcheckPage = lazy(() => import("@/domains/healthcheck/page").then((module) => ({ default: module.HealthcheckPage })))
 const LLMPage = lazy(() => import("@/domains/llm/page").then((module) => ({ default: module.LLMPage })))
 const AgenticCodingPage = lazy(() => import("@/domains/llm/agentic/page").then((module) => ({ default: module.AgenticCodingPage })))
@@ -320,6 +321,7 @@ export default function App() {
           Missions: MissionsPage,
           Queue: QueuePage,
           ImageFactory,
+          DataPlatform: DataPlatformPage,
           LLM: LLMPage,
           AgenticCoding: AgenticCodingPage,
           ComfyUI: ComfyUIPage,

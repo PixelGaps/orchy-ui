@@ -16,6 +16,7 @@ const ROUTES = [
   ["/workbench", "Coding workspace"],
   ["/queue", "Queue"],
   ["/image-factory", "Image Factory"],
+  ["/data-platform", "Data Platform"],
   ["/agentic-coding", "Agentic Coding"],
   ["/llm", "LLM"],
   ["/comfyui", "ComfyUI"],

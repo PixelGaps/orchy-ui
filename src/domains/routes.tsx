@@ -9,6 +9,7 @@ ShieldCheck,
 TerminalSquare,
 ListChecks,
 Code2,
+Database,
 } from "lucide-react"
 import { Navigate,Route,Routes } from "react-router-dom"
 
@@ -22,6 +23,7 @@ const allDomainNav = [
   { to: "/workbench", label: "Workbench", icon: TerminalSquare, group: "Command" },
   { to: "/queue", label: "Queue", icon: ListChecks, group: "Command" },
   { to: "/image-factory", label: "Image Factory", icon: Factory, group: "Workflows" },
+  { to: "/data-platform", label: "Data Platform", icon: Database, group: "Workflows" },
   { to: "/agentic-coding", label: "Agentic Coding", icon: Code2, group: "Workflows" },
   { to: "/llm", label: "LLM", icon: Server, group: "Runtimes" },
   { to: "/comfyui", label: "ComfyUI", icon: Factory, group: "Runtimes" },
@@ -40,6 +42,7 @@ type DomainPages = {
   Missions: ComponentType
   Queue: ComponentType
   ImageFactory: ComponentType
+  DataPlatform: ComponentType
   LLM: ComponentType
   AgenticCoding: ComponentType
   ComfyUI: ComponentType
@@ -58,6 +61,7 @@ export function DomainRoutes({ pages }: Readonly<{ pages: DomainPages }>) {
       <Route path="/missions" element={<pages.Missions />} />
       <Route path="/workbench" element={hosted ? <Navigate to="/missions" replace /> : <pages.Workbench />} />
       <Route path="/queue" element={hosted ? <Navigate to="/missions" replace /> : <pages.Queue />} />
+      <Route path="/data-platform" element={hosted ? <Navigate to="/missions" replace /> : <pages.DataPlatform />} />
       <Route path="/image-factory" element={hosted ? <Navigate to="/missions" replace /> : <pages.ImageFactory />} />
       <Route path="/agentic-coding" element={hosted ? <Navigate to="/missions" replace /> : <pages.AgenticCoding />} />
       <Route path="/llm" element={hosted ? <Navigate to="/missions" replace /> : <pages.LLM />} />

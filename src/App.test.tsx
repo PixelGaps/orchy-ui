@@ -25,6 +25,7 @@ vi.mock("@/domains/queue/page", () => ({ QueuePage: () => <div>Queue stub</div> 
 vi.mock("@/domains/workbench/page", () => ({ WorkbenchPage: () => <div>Workbench stub</div> }))
 vi.mock("@/domains/llm/agentic/page", () => ({ AgenticCodingPage: () => <div>Agentic stub</div> }))
 vi.mock("@/domains/comfyui/image-factory/page", () => ({ ImageFactory: () => <div>Image stub</div> }))
+vi.mock("@/domains/data-platform/page", () => ({ DataPlatformPage: () => <div>Data Platform stub</div> }))
 vi.mock("@/domains/llm/deep-research/page", () => ({ DeepResearchPage: () => <div>Research stub</div> }))
 vi.mock("@/domains/llm/page", () => ({ LLMPage: () => <div>LLM stub</div> }))
 vi.mock("@/domains/comfyui/page", () => ({ ComfyUIPage: () => <div>Comfy stub</div> }))

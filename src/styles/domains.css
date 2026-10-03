@@ -1351,3 +1351,16 @@ textarea {
 }
 
 
+
+
+/* OR-1027 — read-only Data Platform observability. */
+.data-platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.data-platform-stack,.data-platform-capabilities{display:grid;gap:6px}
+.data-platform-row,.data-platform-capability{display:grid;grid-template-columns:minmax(150px,.45fr) minmax(0,1fr);gap:10px;align-items:start;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.02)}
+.data-platform-row strong,.data-platform-row small{display:block}.data-platform-row small{margin-top:2px;color:var(--muted);font-size:var(--font-small)}
+.data-platform-row p,.data-platform-capability p{margin:0;color:var(--muted);font-size:var(--font-small);line-height:1.45}
+.data-platform-capability>div{display:grid;gap:5px;justify-items:start}
+.data-platform-lineage{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.data-platform-lineage span{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:rgba(80,227,255,.035);font-size:var(--font-small);font-weight:800}
+.data-platform-lineage b{color:var(--cyan)}
+@media(max-width:800px){.data-platform-grid,.data-platform-row,.data-platform-capability{grid-template-columns:1fr}.data-platform-lineage b{transform:rotate(90deg)}}
