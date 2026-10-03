@@ -107,8 +107,9 @@ async function configureAndLaunch(page: Page, capture: Capture) {
   await page.goto("/workbench")
 
   await expect(page.getByRole("heading", { name: "Coding workspace" })).toBeVisible()
-  await expect(page.getByText("WIP adapter").first()).toBeVisible()
-  await expect(page.getByLabel("Repository")).toHaveValue("agents-sandbox")
+  await expect(page.getByText("Canonical boundary")).toBeVisible()
+  await expect(page.getByText("Exact revision")).toBeVisible()
+  await expect(page.getByLabel("Repository", { exact: true })).toHaveValue("agents-sandbox")
 
   await page.getByLabel("Exact target SHA").fill(SHA)
   await page.getByRole("checkbox", { name: /local-echo/ }).check()
