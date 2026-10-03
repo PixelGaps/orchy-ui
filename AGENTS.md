@@ -1,9 +1,13 @@
 schema: orchy-ui.agent-contract.v7
 
-# BEGIN PIXELGAPS MANAGED AGENT POLICY v2 sha256:d858f045101cfcf7
+# BEGIN PIXELGAPS MANAGED AGENT POLICY v3 sha256:53ba42e72352783f
 # Source: PixelGaps/orchy:orchy/llm/agentic/shared_agent_policy.json
-# - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, and completion.
+# - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, completion, and all non-code documentation, research, procedures, plans, and archives.
+# - Confluence is retired for PixelGaps project documentation: do not create, update, mirror, or treat Confluence content as current authority; historical Confluence references are provenance only and must route to their migrated Jira record.
+# - Repository documentation is limited to coding-critical durable technical truth such as AGENTS.md, README, architecture, ADRs, operations, contracts, and developer reference material; Jira must not duplicate or override repository technical truth.
 # - GitHub source, tests, commits, and CI are authoritative for implementation reality; do not create GitHub Issues/Projects or repo TODO/DONE mirrors for tracked work.
+# - Every newly observed defect, failure, or regression must have a concrete Jira issue, or an existing Jira issue whose explicit scope and acceptance cover that exact defect, before unrelated work proceeds; search Jira first to prevent duplicates.
+# - A defect record must retain discovery context, exact failure, acceptance criteria, validation path, and relevant run or SHA identifiers; chat, logs, comments, milestones, and health matrices are evidence only, never the defect owner.
 # - Read the applicable AGENTS.md before modifying a repository; read architecture/ADR/operations documentation when the change touches those concerns.
 # - Use the cheapest meaningful deterministic scoped validation; routine validation targets <=120 seconds and has a hard 180-second ceiling.
 # - Never weaken, delete, skip, or rewrite meaningful tests merely to obtain a green result.
