@@ -16,7 +16,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npx vitest run src/domains/workbench/page.test.tsx
+      - run: npm run test:unit -- src/domains/workbench/page.test.tsx
       - run: npm run typecheck
       - run: npm run build
       - run: npx playwright install chromium
