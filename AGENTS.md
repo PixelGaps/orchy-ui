@@ -12,6 +12,8 @@ repository:
   human_approval_gate: none
   development_concurrency: parallel-isolated-task-branches-allowed
   integration_writer: serialized-single-writer
+  integration_serialization: optimistic-CAS-via-non-force-main-push
+  integration_helper: bash scripts/integrate_task_branch.sh -- <scoped-validation-command>
   main_advance_during_execution: preserve-active-work
   continuous_rebase: forbidden
   integration: fetch-main+rebase-once+resolve-conflicts+scoped-validation+fast-forward-main
