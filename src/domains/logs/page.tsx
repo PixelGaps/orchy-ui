@@ -339,7 +339,7 @@ function HostedRunsPage() {
       <CompactSummary
         items={[
           { label: "Recent runs", value: runs.length },
-          { label: "Active", value: github.data?.payload?.openWorkflowRuns ?? 0, tone: github.data?.payload?.openWorkflowRuns ? "cyan" : "neutral" },
+          { label: "Active", value: github.data?.payload ? github.data.payload.openWorkflowRuns : "Unavailable", tone: github.data?.payload?.openWorkflowRuns ? "cyan" : "neutral" },
           { label: "Head", value: github.data?.payload?.headSha?.slice(0, 10) ?? "—" },
           { label: "Source", value: github.data?.state ?? "loading", tone: sourceTone(github.data) },
         ]}
