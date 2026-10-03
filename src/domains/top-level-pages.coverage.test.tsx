@@ -283,9 +283,9 @@ describe("top-level domain page coverage", () => {
 
     renderPage(<HealthcheckPage />)
 
-    expect(screen.getByText("Checks").closest("div")).toHaveTextContent("0")
-    expect(screen.getByText("Passing").closest("div")).toHaveTextContent("0")
-    expect(screen.getByText("Attention").closest("div")).toHaveTextContent("0")
+    expect(screen.getByText("Checks").closest("div")).toHaveTextContent("Unavailable")
+    expect(screen.getByText("Passing").closest("div")).toHaveTextContent("Unavailable")
+    expect(screen.getByText("Attention").closest("div")).toHaveTextContent("Unavailable")
     expect(screen.getByText("GPU").closest("div")).toHaveTextContent("0")
   })
 
@@ -688,10 +688,10 @@ describe("top-level domain page coverage", () => {
       refetch: vi.fn(),
     })
     renderPage(<HealthcheckPage />)
-    expect(screen.getByText("Checks").parentElement).toHaveTextContent("0")
-    expect(screen.getByText("Passing").parentElement).toHaveTextContent("0")
-    expect(screen.getByText("Attention").parentElement).toHaveTextContent("0")
-    expect(screen.getByText("GPU").parentElement).toHaveTextContent("0")
+    expect(screen.getByText("Checks").parentElement).toHaveTextContent("Unavailable")
+    expect(screen.getByText("Passing").parentElement).toHaveTextContent("Unavailable")
+    expect(screen.getByText("Attention").parentElement).toHaveTextContent("Unavailable")
+    expect(screen.getByText("GPU").parentElement).toHaveTextContent("Unavailable")
   })
 
   it("covers Deep Research pending labels and runtime error precedence", () => {
