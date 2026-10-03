@@ -74,14 +74,16 @@ export function TestAssurancePage() {
   const testOps = useCloudSource<TestOpsProjection>("testops")
   const refresh = useRefreshCloudSources(["jira", "testops"])
 
-  const layers = deriveAssuranceLayers(jira.data?.payload, testOps.data?.payload)
+  const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
+  const testOpsAvailable = Boolean(testOps.data?.payload) && testOps.data?.state !== "unavailable"
+  const layers = jiraAvailable ? deriveAssuranceLayers(jira.data?.payload, testOpsAvailable ? testOps.data?.payload : undefined) : []
   const totals = assuranceTotals(layers)
-  const durationData = layers
+  const durationData = testOpsAvailable ? layers
     .filter((layer) => layer.latest)
     .map((layer) => ({
       name: `L${String(layer.number).padStart(2, "0")}`,
-      seconds: Math.round((layer.latest?.durationMs ?? 0) / 100) / 10,
-    }))
+      seconds: Math.round((layer.latest!.durationMs) / 100) / 10,
+    })) : []
 
   const sourceUnavailable =
     jira.data?.state === "unavailable" || testOps.data?.state === "unavailable"
@@ -134,11 +136,11 @@ export function TestAssurancePage() {
       <CompactSummary
         className="assurance-summary"
         items={[
-          { label: "Completed", value: totals.completed, tone: "live" },
-          { label: "Active", value: totals.active, tone: "cyan" },
-          { label: "Blocked", value: totals.blocked, tone: "danger" },
-          { label: "Queued", value: totals.queued },
-          { label: "Findings", value: totals.findings, tone: totals.findings ? "warn" : "live" },
+          { label: "Completed", value: jiraAvailable ? totals.completed : "Unavailable", tone: jiraAvailable ? "live" : "neutral" },
+          { label: "Active", value: jiraAvailable ? totals.active : "Unavailable", tone: jiraAvailable ? "cyan" : "neutral" },
+          { label: "Blocked", value: jiraAvailable ? totals.blocked : "Unavailable", tone: jiraAvailable ? "danger" : "neutral" },
+          { label: "Queued", value: jiraAvailable ? totals.queued : "Unavailable" },
+          { label: "Findings", value: testOpsAvailable ? totals.findings : "Unavailable", tone: testOpsAvailable ? (totals.findings ? "warn" : "live") : "neutral" },
         ]}
       />
 
@@ -161,16 +163,16 @@ export function TestAssurancePage() {
                 <span>
                   <small>Latest</small>
                   <Badge tone={outcomeTone(layer.latest?.outcome)}>
-                    {layer.latest?.outcome ?? "NO RUN"}
+                    {testOpsAvailable ? (layer.latest?.outcome ?? "NO RUN") : "UNAVAILABLE"}
                   </Badge>
                 </span>
                 <span>
                   <small>Runtime</small>
-                  <strong>{formatDuration(layer.latest?.durationMs)}</strong>
+                  <strong>{testOpsAvailable ? formatDuration(layer.latest?.durationMs) : "—"}</strong>
                 </span>
                 <span>
                   <small>Findings</small>
-                  <strong>{layer.findingCount}</strong>
+                  <strong>{testOpsAvailable ? layer.findingCount : "—"}</strong>
                 </span>
               </div>
 
