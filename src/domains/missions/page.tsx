@@ -58,6 +58,30 @@ function hostOnline(host: HostProjection | null | undefined) {
   return state.startsWith("online") || ["ready", "available", "idle"].includes(state)
 }
 
+function validTimestamp(value: string | null | undefined): number | null {
+  if (!value) return null
+  const parsed = Date.parse(value)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
+function providerAllowanceCurrent(
+  provider: FleetProjection["providers"][number],
+  now = Date.now(),
+) {
+  const observed = validTimestamp(provider.observedAt)
+  if (observed == null || now - observed > provider.maxAgeSeconds * 1000) return false
+  const reset = validTimestamp(provider.resetAt)
+  return reset == null || reset > now
+}
+
+function quotaSnapshotCurrent(quota: any, now = Date.now()) {
+  if (quota?.remaining == null) return true
+  const observed = validTimestamp(quota.updated_at)
+  const reset = validTimestamp(quota.reset_at)
+  if (reset != null && reset <= now) return false
+  return observed != null && now - observed <= 86_400_000
+}
+
 export function MissionsPage() {
   const operations = useCloudSource<OperationProjection>("operations")
   const fleet = useCloudSource<FleetProjection>("fleet")
@@ -125,11 +149,13 @@ export function MissionsPage() {
     onError: (error) => notifyOperator(error instanceof Error ? error.message : "Cancellation failed", "error"),
   })
 
-  const operationsAvailable = Boolean(operations.data?.payload) && operations.data?.state !== "unavailable"
-  const fleetAvailable = Boolean(fleet.data?.payload) && fleet.data?.state !== "unavailable"
-  const hostAvailable = Boolean(host.data?.payload) && host.data?.state !== "unavailable"
+  const operationsAvailable = Boolean(operations.data?.payload) && operations.data?.state === "fresh"
+  const hostAvailable = Boolean(host.data?.payload) && host.data?.state === "fresh"
   const jobs = operations.data?.payload?.operations ?? []
   const providers = fleet.data?.payload?.providers ?? []
+  const fleetRowsCurrent = providers.every((provider) => providerAllowanceCurrent(provider))
+  const fleetAvailable =
+    Boolean(fleet.data?.payload) && fleet.data?.state === "fresh" && fleetRowsCurrent
   const visibleJobs = jobs.slice(0, draft.historyLimit)
   const visibleProviders =
     draft.defaultFleetView === "eligible"
@@ -137,9 +163,13 @@ export function MissionsPage() {
       : providers
   const hostPayload = host.data?.payload
   const online = hostAvailable ? hostOnline(hostPayload) : null
-  const active = jobs.filter((job) => !TERMINAL.has(job.state.toLowerCase()))
+  const active = operationsAvailable
+    ? jobs.filter((job) => !TERMINAL.has(job.state.toLowerCase()))
+    : []
   const hostBoundActive = active.filter(isHostBound)
-  const remainingMinutes = providers.reduce((sum, item) => sum + Math.max(0, item.remainingRunnerMinutes), 0)
+  const remainingMinutes = fleetAvailable
+    ? providers.reduce((sum, item) => sum + Math.max(0, item.remainingRunnerMinutes), 0)
+    : null
   const productQuotas = runtimeOverview.data?.quotas ?? []
 
   return (
@@ -166,7 +196,7 @@ export function MissionsPage() {
           { label: "Active missions", value: operationsAvailable ? active.length : "Unavailable", tone: operationsAvailable && active.length ? "cyan" : "neutral" },
           { label: "Host-bound", value: operationsAvailable ? hostBoundActive.length : "Unavailable", tone: operationsAvailable && hostBoundActive.length && online === false ? "warn" : "neutral" },
           { label: "Qualified runners", value: fleetAvailable ? providers.filter((item) => item.qualified).length : "Unavailable", tone: fleetAvailable ? "live" : "neutral" },
-          { label: "Free minutes", value: fleetAvailable ? remainingMinutes : "Unavailable", detail: "reported provider allowance" },
+          { label: "Free minutes", value: fleetAvailable && remainingMinutes != null ? remainingMinutes : "Unavailable", detail: fleetRowsCurrent ? "current reported provider allowance" : "provider snapshot expired" },
         ]}
       />
 
@@ -234,8 +264,14 @@ export function MissionsPage() {
                   key: provider.provider,
                   cells: [
                     <span><strong>{provider.provider}</strong><small>priority {provider.priority} · observed {provider.observedAt ?? "unknown"}</small></span>,
-                    <Badge tone={provider.qualified ? "live" : "warn"}>{provider.status}</Badge>,
-                    <strong>{provider.remainingRunnerMinutes}/{provider.limitRunnerMinutes} min</strong>,
+                    <Badge tone={providerAllowanceCurrent(provider) ? (provider.qualified ? "live" : "warn") : "neutral"}>
+                      {providerAllowanceCurrent(provider) ? provider.status : "historical"}
+                    </Badge>,
+                    <strong>
+                      {providerAllowanceCurrent(provider)
+                        ? `${provider.remainingRunnerMinutes}/${provider.limitRunnerMinutes} min`
+                        : "Unavailable"}
+                    </strong>,
                   ],
                 }))}
               />
@@ -256,8 +292,19 @@ export function MissionsPage() {
                   key: quota.id,
                   cells: [
                     <span><strong>{quota.product}</strong><small>{quota.quota} · {quota.source}</small></span>,
-                    <Badge tone={quota.exhausted ? "danger" : quota.status === "warning" ? "warn" : quota.status === "ok" ? "live" : "neutral"}>{quota.status}</Badge>,
-                    <span><strong>{quota.remaining == null ? "unknown remaining" : `${quota.remaining} ${quota.unit} remaining`}</strong><small>{quota.updated_at ? `observed ${quota.updated_at}` : "freshness unknown"}</small></span>,
+                    <Badge tone={!quotaSnapshotCurrent(quota) ? "neutral" : quota.exhausted ? "danger" : quota.status === "warning" ? "warn" : quota.status === "ok" ? "live" : "neutral"}>
+                      {quotaSnapshotCurrent(quota) ? quota.status : "historical"}
+                    </Badge>,
+                    <span>
+                      <strong>
+                        {!quotaSnapshotCurrent(quota)
+                          ? "Unavailable"
+                          : quota.remaining == null
+                            ? "unknown remaining"
+                            : `${quota.remaining} ${quota.unit} remaining`}
+                      </strong>
+                      <small>{quota.updated_at ? `observed ${quota.updated_at}` : "freshness unknown"}</small>
+                    </span>,
                   ],
                 }))}
               />
