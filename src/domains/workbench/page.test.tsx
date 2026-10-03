@@ -32,6 +32,7 @@ const failedSession = {
 const mocks = vi.hoisted(() => ({
   listRepositories: vi.fn(),
   listPlugins: vi.fn(),
+  listSessions: vi.fn(),
   start: vi.fn(),
   getSession: vi.fn(),
   sendMessage: vi.fn(),
@@ -45,6 +46,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock("@/domains/workbench/api", () => ({
   listWorkbenchRepositories: mocks.listRepositories,
   listWorkbenchPlugins: mocks.listPlugins,
+  listWorkbenchSessions: mocks.listSessions,
   startWorkbenchSession: mocks.start,
   getWorkbenchSession: mocks.getSession,
   sendWorkbenchMessage: mocks.sendMessage,
@@ -92,6 +94,7 @@ describe("WorkbenchPage", () => {
         available: true,
         writable: true,
         reason: "",
+        head: SHA,
       },
     ])
     mocks.listPlugins.mockResolvedValue([
@@ -103,6 +106,7 @@ describe("WorkbenchPage", () => {
         tools: [{ name: "echo", description: "Echo", input_schema: {}, capabilities: [] }],
       },
     ])
+    mocks.listSessions.mockResolvedValue([{ ...runningSession, execution: { execution_id: "exec-old", state: "completed" } }])
     mocks.start.mockResolvedValue(runningSession)
     mocks.getSession.mockResolvedValue(runningSession)
     mocks.cancel.mockResolvedValue({ session_id: "session-1", status: "cancellation_requested" })
@@ -126,9 +130,10 @@ describe("WorkbenchPage", () => {
   it("starts a real-contract session with runtime, effort, plugin, SHA and acceptance", async () => {
     renderPage()
 
-    expect(screen.getByText(/Session enumeration is not exposed/)).toBeInTheDocument()
-    expect(screen.getByText(/Automatic repository HEAD resolution/)).toBeInTheDocument()
     expect(await screen.findByRole("option", { name: "Agents Sandbox" })).toBeInTheDocument()
+    expect(await screen.findByRole("option", { name: /session-1 · completed/ })).toBeInTheDocument()
+    expect(screen.getByLabelText("Exact target SHA")).toHaveValue(SHA)
+    expect(screen.queryByText("WIP adapter")).not.toBeInTheDocument()
 
     const start = screen.getByRole("button", { name: /Start session/ })
     expect(start).toBeDisabled()
@@ -160,7 +165,7 @@ describe("WorkbenchPage", () => {
     })))
     expect(await screen.findByText("Inspecting repository")).toBeInTheDocument()
     expect(screen.getByText("src/app.ts")).toBeInTheDocument()
-    expect(screen.getByText("one-shot SSE")).toBeInTheDocument()
+    expect(screen.getByText("live SSE")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /Stop/ })).toBeEnabled()
     expect(screen.getByRole("button", { name: /Repair/ })).toBeDisabled()
   })
