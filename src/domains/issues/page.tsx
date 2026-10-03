@@ -83,6 +83,7 @@ export function IssuesPage() {
   const [type, setType] = useState("all")
   const [parent, setParent] = useState("all")
 
+  const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
   const allIssues = jira.data?.payload?.issues ?? []
   const openIssues = allIssues.filter((issue) => issue.statusCategory !== "Done")
 
@@ -195,11 +196,11 @@ export function IssuesPage() {
       )}
 
       <div className="issue-summary" aria-label="Issue queue summary">
-        <span><strong>{openIssues.length}</strong><small>Open</small></span>
-        <span><strong>{milestoneCount}</strong><small>Milestones</small></span>
-        <span><strong>{subtaskCount}</strong><small>Subtasks</small></span>
-        <span><strong>{guardedCount}</strong><small>Guarded</small></span>
-        <span><strong>{filtered.length}</strong><small>Shown</small></span>
+        <span><strong>{jiraAvailable ? openIssues.length : "Unavailable"}</strong><small>Open</small></span>
+        <span><strong>{jiraAvailable ? milestoneCount : "Unavailable"}</strong><small>Milestones</small></span>
+        <span><strong>{jiraAvailable ? subtaskCount : "Unavailable"}</strong><small>Subtasks</small></span>
+        <span><strong>{jiraAvailable ? guardedCount : "Unavailable"}</strong><small>Guarded</small></span>
+        <span><strong>{jiraAvailable ? filtered.length : "Unavailable"}</strong><small>Shown</small></span>
       </div>
 
       <Card className="issue-filters">
@@ -238,12 +239,12 @@ export function IssuesPage() {
         </label>
       </Card>
 
-      {filtered.length === 0 && !jira.isLoading ? (
+      {jiraAvailable && filtered.length === 0 && !jira.isLoading ? (
         <EmptyState
           title="No matching open issues"
           body="Change the filters or refresh Jira. Done issues stay out of the execution queue."
         />
-      ) : (
+      ) : jiraAvailable ? (
         <section className="issue-list" aria-label="Open Jira issues">
           {filtered.map((issue) => {
             const mode = issueLaunchMode(issue)
@@ -310,7 +311,7 @@ export function IssuesPage() {
             )
           })}
         </section>
-      )}
+      ) : null}
     </>
   )
 }
