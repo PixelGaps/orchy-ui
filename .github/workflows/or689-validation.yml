@@ -1,0 +1,23 @@
+name: OR-689 Validation
+on:
+  push:
+    branches:
+      - task/OR-689-20261003-reconcile
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx vitest run src/domains/workbench/page.test.tsx
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npx playwright install chromium
+      - run: npx playwright test e2e/workbench.spec.ts
