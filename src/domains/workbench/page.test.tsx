@@ -126,8 +126,8 @@ describe("WorkbenchPage", () => {
   it("starts a real-contract session with runtime, effort, plugin, SHA and acceptance", async () => {
     renderPage()
 
-    expect(screen.getByText(/Session enumeration is not exposed/)).toBeInTheDocument()
-    expect(screen.getByText(/Automatic repository HEAD resolution/)).toBeInTheDocument()
+    expect(screen.getByText(/Retained sessions reopen by authoritative session ID/)).toBeInTheDocument()
+    expect(screen.getByText(/operator-explicit exact SHA/)).toBeInTheDocument()
     expect(await screen.findByRole("option", { name: "Agents Sandbox" })).toBeInTheDocument()
 
     const start = screen.getByRole("button", { name: /Start session/ })
