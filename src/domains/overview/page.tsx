@@ -57,10 +57,10 @@ export function Overview() {
 
       <div className="cloud-toolbar">
         <div className="cloud-source-badges" aria-label="Overview data sources">
-          <Badge tone={sourceTone(jira.data)}>Jira · {sourceAgeLabel(jira.data)}</Badge>
-          <Badge tone={sourceTone(github.data)}>GitHub · {sourceAgeLabel(github.data)}</Badge>
-          <Badge tone={sourceTone(testOps.data)}>TestOps · {sourceAgeLabel(testOps.data)}</Badge>
-          <Badge tone={sourceTone(host.data)}>Host · {sourceAgeLabel(host.data)}</Badge>
+          <Badge tone={sourceTone(jira.data)}>Jira · {jira.data?.state ?? "loading"} · {sourceAgeLabel(jira.data)}</Badge>
+          <Badge tone={sourceTone(github.data)}>GitHub · {github.data?.state ?? "loading"} · {sourceAgeLabel(github.data)}</Badge>
+          <Badge tone={sourceTone(testOps.data)}>TestOps · {testOps.data?.state ?? "loading"} · {sourceAgeLabel(testOps.data)}</Badge>
+          <Badge tone={sourceTone(host.data)}>Host · {host.data?.state ?? "loading"} · {sourceAgeLabel(host.data)}</Badge>
         </div>
         <Button
           className="button-secondary"
