@@ -6,6 +6,7 @@ import {
   Badge,
   Button,
   Card,
+  CollapsibleSection,
   CompactSummary,
   DataTable,
   EmptyState,
@@ -278,8 +279,11 @@ export function QueuePage() {
         )}
       </Card>
 
-      <Card>
-        <PanelHeader kicker="FILTERS" title="Retained jobs" />
+      <CollapsibleSection
+        className="queue-filter-section"
+        title="Filters and sort"
+        summary="State, health, repository, host, date range and ordering"
+      >
         <div className="queue-filter-grid">
           <label>State<select aria-label="State filter" value={status} onChange={(e)=>{setStatus(e.target.value);resetPaging()}}>
             {STATUS_OPTIONS.map((value)=><option key={value} value={value}>{value || "All states"}</option>)}
@@ -298,7 +302,7 @@ export function QueuePage() {
             <option value="newest">Newest</option><option value="oldest">Oldest page</option><option value="age">Age</option><option value="state">Lifecycle state</option>
           </select></label>
         </div>
-      </Card>
+      </CollapsibleSection>
 
       {jobsQuery.isPending && !jobsQuery.data ? <EmptyState title="Loading queue" body="Reading the authoritative Supabase ledger and PGMQ reconciliation state." /> : null}
       {jobsQuery.isError && !jobsQuery.data ? <QueryStateNotice error={jobsQuery.error} onRetry={() => void jobsQuery.refetch()} /> : null}
