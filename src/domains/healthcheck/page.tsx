@@ -80,22 +80,22 @@ export function HealthcheckPage() {
       <CompactSummary
         className="healthcheck-summary"
         items={[
-          { label: "Checks", value: (query.data ?? []).length },
+          { label: "Checks", value: query.data ? query.data.length : "Unavailable" },
           {
             label: "Passing",
-            value: (query.data ?? []).filter((item) => item.latest?.state === "completed").length,
+            value: query.data ? query.data.filter((item) => item.latest?.state === "completed").length : "Unavailable",
             tone: "live",
           },
           {
             label: "Attention",
-            value: (query.data ?? []).filter((item) =>
+            value: query.data ? query.data.filter((item) =>
               ["failed", "timed_out", "resource_blocked"].includes(String(item.latest?.state || ""))
-            ).length,
+            ).length : "Unavailable",
             tone: "warn",
           },
           {
             label: "GPU",
-            value: (query.data ?? []).filter((item) => item.gpu_required).length,
+            value: query.data ? query.data.filter((item) => item.gpu_required).length : "Unavailable",
             detail: "host-bound certifications",
             tone: "cyan",
           },
