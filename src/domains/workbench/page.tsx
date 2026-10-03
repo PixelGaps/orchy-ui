@@ -380,8 +380,8 @@ export function WorkbenchPage() {
               <p className="workbench-panel-note">No session selected.</p>
             )}
             <div className="workbench-wip">
-              <Badge tone="warn">WIP adapter</Badge>
-              <p>Session enumeration is not exposed by the backend yet. Open a retained session by ID; the browser does not invent a second session index.</p>
+              <Badge tone="neutral">Canonical boundary</Badge>
+              <p>Retained sessions reopen by authoritative session ID. The browser deliberately does not invent a second session index.</p>
             </div>
           </Card>
 
@@ -422,8 +422,8 @@ export function WorkbenchPage() {
                 {targetSha && !validSha && <small className="error-text">Exact 40-character SHA required.</small>}
               </label>
               <div className="workbench-wip">
-                <Badge tone="warn">WIP adapter</Badge>
-                <p>Automatic repository HEAD resolution is not yet exposed by Workbench API. Exact SHA stays operator-explicit and fail-closed.</p>
+                <Badge tone="neutral">Exact revision</Badge>
+                <p>Workbench requires an operator-explicit exact SHA and fails closed rather than silently resolving a moving repository HEAD.</p>
               </div>
               <label>
                 <span>Runtime</span>
