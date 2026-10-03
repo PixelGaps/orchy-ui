@@ -7,7 +7,7 @@ import {
   Search,
   ShieldAlert,
 } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import type { JiraProjection } from "@/cloud/projections"
 import {
@@ -82,8 +82,9 @@ export function IssuesPage() {
   const [priority, setPriority] = useState("all")
   const [type, setType] = useState("all")
   const [parent, setParent] = useState("all")
+  const [visibleLimit, setVisibleLimit] = useState(30)
 
-  const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
+  const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state === "fresh"
   const allIssues = jira.data?.payload?.issues ?? []
   const openIssues = allIssues.filter((issue) => issue.statusCategory !== "Done")
 
@@ -146,6 +147,11 @@ export function IssuesPage() {
       return priorityDelta || a.key.localeCompare(b.key, undefined, { numeric: true })
     })
 
+  useEffect(() => {
+    setVisibleLimit(30)
+  }, [query, status, priority, type, parent])
+
+  const rendered = filtered.slice(0, visibleLimit)
   const milestoneCount = openIssues.filter((issue) => issue.type === "Epic").length
   const subtaskCount = openIssues.filter((issue) => issue.type === "Subtask").length
   const guardedCount = openIssues.filter(
@@ -194,13 +200,20 @@ export function IssuesPage() {
           tone="danger"
         />
       )}
+      {jira.data?.state === "stale" && (
+        <StatusNotice
+          title="Jira projection is stale"
+          body={`Current issue counts are unavailable. The retained projection is ${sourceAgeLabel(jira.data)}.`}
+          tone="warn"
+        />
+      )}
 
       <div className="issue-summary" aria-label="Issue queue summary">
         <span><strong>{jiraAvailable ? openIssues.length : "Unavailable"}</strong><small>Open</small></span>
         <span><strong>{jiraAvailable ? milestoneCount : "Unavailable"}</strong><small>Milestones</small></span>
         <span><strong>{jiraAvailable ? subtaskCount : "Unavailable"}</strong><small>Subtasks</small></span>
         <span><strong>{jiraAvailable ? guardedCount : "Unavailable"}</strong><small>Guarded</small></span>
-        <span><strong>{jiraAvailable ? filtered.length : "Unavailable"}</strong><small>Shown</small></span>
+        <span><strong>{jiraAvailable ? filtered.length : "Unavailable"}</strong><small>Matches</small></span>
       </div>
 
       <Card className="issue-filters">
@@ -246,7 +259,7 @@ export function IssuesPage() {
         />
       ) : jiraAvailable ? (
         <section className="issue-list" aria-label="Open Jira issues">
-          {filtered.map((issue) => {
+          {rendered.map((issue) => {
             const mode = issueLaunchMode(issue)
             const prompt = buildIssueExecutionPrompt(issue)
             return (
@@ -310,6 +323,16 @@ export function IssuesPage() {
               </Card>
             )
           })}
+          {rendered.length < filtered.length && (
+            <div className="issue-load-more">
+              <Button
+                className="button-secondary"
+                onClick={() => setVisibleLimit((value) => value + 30)}
+              >
+                Show 30 more · {filtered.length - rendered.length} remaining
+              </Button>
+            </div>
+          )}
         </section>
       ) : null}
     </>
