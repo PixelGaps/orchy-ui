@@ -50,6 +50,7 @@ async function mockWorkbench(page: Page, capture: Capture) {
           available: true,
           writable: true,
           reason: "",
+          head: SHA,
         }]),
       })
       return
@@ -66,6 +67,15 @@ async function mockWorkbench(page: Page, capture: Capture) {
           capabilities: [],
           tools: [{ name: "echo", description: "Echo", input_schema: {}, capabilities: [] }],
         }]),
+      })
+      return
+    }
+
+    if (path === "/api/workbench/sessions" && request.method() === "GET") {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify([session("completed")]),
       })
       return
     }
@@ -107,8 +117,10 @@ async function configureAndLaunch(page: Page, capture: Capture) {
   await page.goto("/workbench")
 
   await expect(page.getByRole("heading", { name: "Coding workspace" })).toBeVisible()
-  await expect(page.getByText("WIP adapter").first()).toBeVisible()
   await expect(page.getByLabel("Repository")).toHaveValue("agents-sandbox")
+  await expect(page.getByLabel("Exact target SHA")).toHaveValue(SHA)
+  await expect(page.getByRole("option", { name: /session-1 · completed/ })).toBeVisible()
+  await expect(page.getByText("WIP adapter")).toHaveCount(0)
 
   await page.getByLabel("Exact target SHA").fill(SHA)
   await page.getByRole("checkbox", { name: /local-echo/ }).check()
@@ -135,7 +147,7 @@ test("desktop Workbench launches canonical session and renders observable eviden
   })
   await expect(page.getByText("Inspecting exact SHA")).toBeVisible()
   await expect(page.locator(".workbench-changed-files code").filter({ hasText: "src/example.ts" })).toBeVisible()
-  await expect(page.getByText("one-shot SSE")).toBeVisible()
+  await expect(page.getByText("live SSE")).toBeVisible()
   await expect(page.getByRole("button", { name: /Stop/ })).toBeEnabled()
   await expect(page.getByRole("button", { name: /Repair/ })).toBeDisabled()
 })
