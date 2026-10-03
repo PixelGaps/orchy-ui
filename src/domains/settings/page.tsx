@@ -1,5 +1,5 @@
 import {
-Badge,Card,PageHeader,PanelHeader
+Badge,CollapsibleSection,PageHeader
 } from "@/components/ui/primitives"
 import {
 DomainConfiguration
@@ -37,38 +37,35 @@ export function GlobalSettingsPage() {
         badge={<Badge tone="warn">HOST PATHS</Badge>}
       />
 
-      <Card className="operator-parity-register">
-        <PanelHeader
-          kicker="OR-647 PARITY"
-          title="Operator surface register"
-          action={<Badge tone="live">12/12 surfaced</Badge>}
-        />
-        <div className="operator-parity-grid" aria-label="Operator surface parity">
+      <CollapsibleSection
+        className="operator-boundaries"
+        title="Operator boundaries"
+        summary={`${OPERATOR_SURFACES.length} registered surfaces · authority and platform constraints`}
+      >
+        <div className="operator-parity-grid" aria-label="Registered operator surfaces">
           {OPERATOR_SURFACES.map(([label, route, authority, limitation]) => (
             <article className="operator-parity-item" key={label}>
               <div>
                 <strong>{label}</strong>
                 <code>{route}</code>
               </div>
-              <Badge tone="live">native</Badge>
+              <Badge>registered</Badge>
               <span>{authority}</span>
               <small>{limitation}</small>
             </article>
           ))}
         </div>
-      </Card>
-
-      <Card className="operator-limit-register">
-        <PanelHeader kicker="PLATFORM LIMITS" title="Explicit non-parity constraints" />
-        <dl>
-          {PLATFORM_LIMITS.map(([term, detail]) => (
-            <div key={term}>
-              <dt>{term}</dt>
-              <dd>{detail}</dd>
-            </div>
-          ))}
-        </dl>
-      </Card>
+        <div className="operator-limit-register">
+          <dl>
+            {PLATFORM_LIMITS.map(([term, detail]) => (
+              <div key={term}>
+                <dt>{term}</dt>
+                <dd>{detail}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </CollapsibleSection>
 
       <DomainConfiguration section="global" />
     </>
