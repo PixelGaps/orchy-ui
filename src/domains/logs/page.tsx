@@ -121,9 +121,9 @@ function PrivateLogsPage() {
       <CompactSummary
         className="logs-summary"
         items={[
-          { label: "Executions", value: query.data ? query.data.executions.length : "Unavailable" },
-          { label: "Healthchecks", value: query.data ? query.data.healthchecks.length : "Unavailable" },
-          { label: "CI runs", value: query.data ? query.data.ci_runs.length : "Unavailable" },
+          { label: "Executions", value: Array.isArray(query.data?.executions) ? query.data.executions.length : "Unavailable" },
+          { label: "Healthchecks", value: Array.isArray(query.data?.healthchecks) ? query.data.healthchecks.length : "Unavailable" },
+          { label: "CI runs", value: Array.isArray(query.data?.ci_runs) ? query.data.ci_runs.length : "Unavailable" },
           { label: "View", value: tab.replaceAll("_", " "), tone: "cyan" },
         ]}
       />
