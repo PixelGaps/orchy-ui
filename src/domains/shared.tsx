@@ -545,7 +545,7 @@ export function DomainConfiguration({
         <CompactSummary
           className="settings-summary"
           items={[
-            { label: "Fields", value: query.data?.fields.length ?? 0 },
+            { label: "Fields", value: query.data ? query.data.fields.length : "Unavailable" },
             { label: "Groups", value: fieldGroups.length },
             {
               label: "Selected",
