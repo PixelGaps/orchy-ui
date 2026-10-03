@@ -29,6 +29,7 @@ import {
   getWorkbenchSession,
   listWorkbenchPlugins,
   listWorkbenchRepositories,
+  listWorkbenchSessions,
   repairWorkbenchSession,
   resumeWorkbenchSession,
   sendWorkbenchMessage,
@@ -148,6 +149,13 @@ export function WorkbenchPage() {
     refetchOnWindowFocus: false,
     retry: false,
   })
+  const retainedSessions = useQuery({
+    queryKey: ["workbench-sessions"],
+    queryFn: listWorkbenchSessions,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  })
 
   const [repositoryId, setRepositoryId] = useState("")
   const [targetSha, setTargetSha] = useState("")
@@ -168,7 +176,10 @@ export function WorkbenchPage() {
   useEffect(() => {
     if (repositoryId || !repositories.data?.length) return
     const first = repositories.data.find((item) => item.available)
-    if (first) setRepositoryId(first.id)
+    if (first) {
+      setRepositoryId(first.id)
+      if (first.head) setTargetSha(first.head)
+    }
   }, [repositories.data, repositoryId])
 
   const selectedRepository = repositories.data?.find((item) => item.id === repositoryId)
@@ -182,14 +193,14 @@ export function WorkbenchPage() {
     [plugins.data],
   )
 
-  const refreshEvents = async (sessionId: string) => {
+  const refreshEvents = async (sessionId: string, follow = false) => {
     setEvents([])
     const seen = new Set<number>()
     await streamWorkbenchEvents(sessionId, (event) => {
       if (seen.has(event.sequence)) return
       seen.add(event.sequence)
       setEvents((current) => [...current, event])
-    })
+    }, undefined, follow)
   }
 
   const syncSession = async (sessionId: string) => {
@@ -238,7 +249,9 @@ export function WorkbenchPage() {
       setTask("")
       setFiles([])
       setRepositoryPaths("")
-      await refreshEvents(next.session_id)
+      setBusy("")
+      await refreshEvents(next.session_id, true)
+      await retainedSessions.refetch()
       notifyOperator("Workbench session accepted", "success")
     } catch (value) {
       handleFailure(value)
@@ -291,7 +304,9 @@ export function WorkbenchPage() {
       )
       setSession(next)
       setFollowUp("")
-      await refreshEvents(next.session_id)
+      setBusy("")
+      await refreshEvents(next.session_id, true)
+      await retainedSessions.refetch()
       notifyOperator("Follow-up execution accepted", "success")
     } catch (value) {
       handleFailure(value)
@@ -379,10 +394,28 @@ export function WorkbenchPage() {
             ) : (
               <p className="workbench-panel-note">No session selected.</p>
             )}
-            <div className="workbench-wip">
-              <Badge tone="warn">WIP adapter</Badge>
-              <p>Session enumeration is not exposed by the backend yet. Open a retained session by ID; the browser does not invent a second session index.</p>
-            </div>
+            <label htmlFor="workbench-recent-session">
+              Recent retained sessions
+            </label>
+            <select
+              id="workbench-recent-session"
+              aria-label="Recent retained sessions"
+              value=""
+              disabled={Boolean(busy)}
+              onChange={(event) => setSessionLookup(event.target.value)}
+            >
+              <option value="">Select retained session</option>
+              {(retainedSessions.data ?? []).map((item) => (
+                <option key={item.session_id} value={item.session_id}>
+                  {item.session_id} · {stateOf(item)}
+                </option>
+              ))}
+            </select>
+            <QueryStateNotice
+              error={retainedSessions.error}
+              updatedAt={retainedSessions.dataUpdatedAt}
+              onRetry={() => void retainedSessions.refetch()}
+            />
           </Card>
 
           <Card>
@@ -393,7 +426,12 @@ export function WorkbenchPage() {
                 <select
                   aria-label="Repository"
                   value={repositoryId}
-                  onChange={(event) => setRepositoryId(event.target.value)}
+                  onChange={(event) => {
+                    const nextId = event.target.value
+                    setRepositoryId(nextId)
+                    const nextRepository = repositories.data?.find((item) => item.id === nextId)
+                    setTargetSha(nextRepository?.head ?? "")
+                  }}
                   disabled={Boolean(session)}
                 >
                   <option value="">Select repository</option>
@@ -421,10 +459,7 @@ export function WorkbenchPage() {
                 />
                 {targetSha && !validSha && <small className="error-text">Exact 40-character SHA required.</small>}
               </label>
-              <div className="workbench-wip">
-                <Badge tone="warn">WIP adapter</Badge>
-                <p>Automatic repository HEAD resolution is not yet exposed by Workbench API. Exact SHA stays operator-explicit and fail-closed.</p>
-              </div>
+              <small>Current registered HEAD is prefilled. Exact-SHA execution remains explicit, editable and fail-closed.</small>
               <label>
                 <span>Runtime</span>
                 <select
@@ -474,8 +509,8 @@ export function WorkbenchPage() {
 
             {session && (
               <div className="workbench-stream-contract">
-                <Badge tone="cyan">one-shot SSE</Badge>
-                <span>Events stream progressively per request. The current backend closes after the retained snapshot, so refresh is explicit—no reconnect loop or background polling.</span>
+                <Badge tone="cyan">live SSE</Badge>
+                <span>User-initiated streams follow ExecutionStore until a terminal state or the bounded server window. Refresh stays explicit; there is no reconnect loop or background polling.</span>
               </div>
             )}
 
