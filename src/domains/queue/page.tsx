@@ -262,10 +262,10 @@ export function QueuePage() {
         ) : (
           <>
             <CompactSummary items={[
-              {label:"Depth",value:queueHealth.metrics?.queue_length ?? 0},
-              {label:"Visible",value:queueHealth.metrics?.queue_visible_length ?? 0},
-              {label:"Stale",value:queueHealth.stale_count ?? 0,tone:(queueHealth.stale_count ?? 0) ? "danger" : "neutral"},
-              {label:"Mismatches",value:queueHealth.ledger_queue_mismatches ?? 0,tone:(queueHealth.ledger_queue_mismatches ?? 0) ? "warn" : "neutral"},
+              {label:"Depth",value:queueHealth.metrics?.queue_length ?? "Unavailable"},
+              {label:"Visible",value:queueHealth.metrics?.queue_visible_length ?? "Unavailable"},
+              {label:"Stale",value:queueHealth.stale_count ?? "Unavailable",tone:queueHealth.stale_count ? "danger" : "neutral"},
+              {label:"Mismatches",value:queueHealth.ledger_queue_mismatches ?? "Unavailable",tone:queueHealth.ledger_queue_mismatches ? "warn" : "neutral"},
               {label:"Worker",value:worker?.fresh ? "fresh" : "stale",tone:worker?.fresh ? "live" : "warn"},
               {label:"Oldest pending",value:ageLabel(queueHealth.oldest_pending_age_seconds)},
             ]} />
@@ -308,7 +308,7 @@ export function QueuePage() {
 
       <section className="two-column compact-detail-grid">
         <Card>
-          <PanelHeader kicker="FULL QUEUE" title={`${jobsQuery.data?.total_count ?? 0} matching jobs`} />
+          <PanelHeader kicker="FULL QUEUE" title={jobsQuery.data ? `${jobsQuery.data.total_count} matching jobs` : "Matching jobs unavailable"} />
           {selectedJobs.length > 0 && (
             <div className="page-actions" aria-label="Bulk queue actions">
               <Badge tone="cyan">{selectedJobs.length} selected</Badge>
