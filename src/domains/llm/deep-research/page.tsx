@@ -337,7 +337,7 @@ export function DeepResearchPage() {
             items={[
               { label: "Provider", value: runtimeData?.provider || "—" },
               { label: "Runtime", value: ready ? "ready" : runtimeData?.detail || "offline", tone: ready ? "live" : "neutral" },
-              { label: "Capabilities", value: runtimeData ? runtimeData.capabilities.length : "Unavailable" },
+              { label: "Capabilities", value: Array.isArray(runtimeData?.capabilities) ? runtimeData.capabilities.length : "Unavailable" },
             ]}
           />
           <CollapsibleSection
