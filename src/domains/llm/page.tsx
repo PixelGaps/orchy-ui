@@ -10,7 +10,7 @@ import {
 Badge,Card,
 CollapsibleSection,
 CompactSummary,
-DenseKeyValueGrid,FreshnessBadge,PageHeader,
+DenseKeyValueGrid,PageHeader,
 PanelHeader,
 QueryStateNotice,
 SectionPanel
@@ -32,6 +32,13 @@ export function LLMPage() {
     queryFn: () => getApi("/api/llm"),
     refetchInterval: runtimePollInterval(active),
   })
+  const healthQuery = useQuery({
+    queryKey: ["operator-overview-runtime"],
+    queryFn: () => getApi("/api/operator/overview"),
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  })
   const capabilitiesQuery = useQuery({
     queryKey: ["capability-registry"],
     queryFn: () => getApi("/api/capabilities"),
@@ -44,13 +51,25 @@ export function LLMPage() {
     { id: "settings", label: "Settings" },
   ]
   const data = query.data
+  const runtimeHealth = healthQuery.data?.health?.components?.vllm
+  const runtimeState = String(runtimeHealth?.status || "unavailable")
+  const runtimeHealthy = runtimeState === "healthy"
   return (
     <>
       <PageHeader
         eyebrow="Local inference"
         title="LLM"
         description="vLLM runtime, served models, context controls and inference configuration."
-        badge={<FreshnessBadge updatedAt={query.dataUpdatedAt} error={query.isError} />}
+        badge={
+          <div className="cloud-source-badges" aria-label="LLM authorities">
+            <Badge tone={query.isError ? "warn" : query.data ? "live" : "neutral"}>
+              Configuration · {query.isError ? "unavailable" : query.data ? "loaded" : "loading"}
+            </Badge>
+            <Badge tone={runtimeHealthy ? "live" : runtimeState === "degraded" ? "warn" : "danger"}>
+              Runtime · {runtimeState}
+            </Badge>
+          </div>
+        }
       />
       <QueryStateNotice
         error={query.error}
@@ -66,7 +85,7 @@ export function LLMPage() {
             items={[
               { label: "Model", value: String(data?.model || "—"), tone: data?.model ? "live" : "neutral" },
               { label: "Containers", value: data ? (Array.isArray(data.containers) ? data.containers.length : "Unavailable") : "Unavailable" },
-              { label: "Runtime", value: data ? (data.model ? "ready" : "idle") : "Unavailable", tone: data?.model ? "live" : "neutral" },
+              { label: "Runtime", value: healthQuery.isError ? "Unavailable" : runtimeState, tone: runtimeHealthy ? "live" : runtimeState === "degraded" ? "warn" : "neutral" },
             ]}
           />
           <CollapsibleSection
@@ -78,7 +97,8 @@ export function LLMPage() {
               items={[
                 { label: "served model", value: String(data?.model || "—") },
                 { label: "base url", value: String(data?.base_url || "—") },
-                { label: "health url", value: String(data?.health_url || "—") },
+                { label: "health url", value: String(data?.health_url || "—"), hint: "configured endpoint" },
+                { label: "observed health", value: healthQuery.isError ? "Unavailable" : runtimeState, hint: runtimeHealth?.http_status ? `HTTP ${runtimeHealth.http_status}` : "host-observed" },
                 { label: "containers", value: data ? (Array.isArray(data.containers) ? data.containers.length : "Unavailable") : "Unavailable" },
               ]}
             />
