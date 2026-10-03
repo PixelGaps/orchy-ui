@@ -1,4 +1,4 @@
-schema: orchy-ui.agent-contract.v6
+schema: orchy-ui.agent-contract.v7
 repository:
   state: active-local-first-operator-ui
   default_branch: main
@@ -7,11 +7,18 @@ repository:
   task_branch: task/OR-<id>-YYYYMMDD-<slug>
   legacy_wip_branch: accepted-during-migration
   start_base: exact-origin-main-SHA
+  routine_direct_main: forbidden
+  pull_requests: forbidden
+  human_approval_gate: none
+  development_concurrency: parallel-isolated-task-branches-allowed
+  integration_writer: serialized-single-writer
   main_advance_during_execution: preserve-active-work
   continuous_rebase: forbidden
-  integration: fetch-main+rebase-once+scoped-validation+merge
+  integration: fetch-main+rebase-once+resolve-conflicts+scoped-validation+fast-forward-main
+  main_moved_during_integration: bounded-resync-once+revalidate-touched-scope;then-Jira-checkpoint+requeue
   cancellation_scope: same-task-revision-only
   branch_terminal: merge-to-main+delete|discard+delete|paused-explicitly
+  branch_cleanup: immediate-after-merge-or-discard-or-supersede
   paused_branch: paused/OR-<id>-YYYYMMDD-<slug>+Jira-paused
   branch_reconciliation: required-at-task-start+task-completion
   stale_or_dead_branch: forbidden
