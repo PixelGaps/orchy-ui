@@ -462,14 +462,12 @@ describe("top-level domain page coverage", () => {
       ageSeconds: 1,
       payload: {
         recentRuns: [{
-          databaseId: 2,
-          url: "https://example.test/fallback",
-          displayTitle: "",
+          id: 2,
           name: "Fallback CI",
-          headBranch: "dev",
-          event: "workflow_dispatch",
-          conclusion: "",
           status: "queued",
+          conclusion: null,
+          headSha: "0123456789abcdef0123456789abcdef01234567",
+          htmlUrl: "https://example.test/fallback",
         }],
       },
       errorCode: null,
