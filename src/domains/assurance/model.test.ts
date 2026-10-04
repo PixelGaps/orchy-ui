@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest"
 
 import type { JiraProjection, TestOpsProjection } from "@/cloud/adapters"
 
-import { assuranceTotals, deriveAssuranceLayers } from "./model"
+import { assuranceSourcesComplete, assuranceTotals, deriveAssuranceLayers } from "./model"
 
 function jira(status = "In Progress", category = "In Progress"): JiraProjection {
   return {
@@ -33,7 +33,7 @@ const testOps: TestOpsProjection = {
   target: "PixelGaps/orchy",
   layers: [
     {
-      layerId: "06-performance",
+      layerId: "performance",
       runId: "run-6",
       revision: "a".repeat(40),
       outcome: "FAIL",
@@ -44,7 +44,7 @@ const testOps: TestOpsProjection = {
   ],
   findings: [
     {
-      layerId: "06-performance",
+      layerId: "performance",
       category: "performance",
       disposition: "NEW",
       findings: 2,
@@ -85,4 +85,42 @@ describe("assurance model", () => {
       findings: 2,
     })
   })
+  it("maps canonical TestOps layer ids and refuses totals when either authority is incomplete", () => {
+    const layers = deriveAssuranceLayers(jira(), testOps)
+    expect(layers[5].latest?.runId).toBe("run-6")
+    expect(layers[5].findingCount).toBe(2)
+    expect(assuranceSourcesComplete(jira(), testOps)).toBe(false)
+
+    const completeJira: JiraProjection = {
+      openCount: 0,
+      byStatus: { Done: 12 },
+      issues: Array.from({ length: 12 }, (_, index) => ({
+        key: ["OR-590","OR-594","OR-598","OR-600","OR-601","OR-602","OR-603","OR-604","OR-605","OR-606","OR-607","OR-608"][index],
+        summary: `Layer ${index + 1}`,
+        status: "Done",
+        statusCategory: "Done",
+        priority: "High",
+        type: "Task",
+        parentKey: "OR-620",
+        labels: [],
+        browseUrl: "https://example.invalid",
+        updated: "2026-10-03T00:00:00Z",
+      })),
+    }
+    const ids = ["fast-web","fast-python","property-state-machine","security","fuzz","performance","portability","flakes","coverage-static-sonar","mutation","browser-e2e","live-chaos-soak-recovery"]
+    const completeTestOps: TestOpsProjection = {
+      ...testOps,
+      layers: ids.map((layerId, index) => ({
+        layerId,
+        runId: `run-${index + 1}`,
+        revision: "a".repeat(40),
+        outcome: "PASS",
+        finishedAt: "2026-10-03T00:00:00Z",
+        durationMs: 100,
+        jiraMilestone: completeJira.issues[index].key,
+      })),
+    }
+    expect(assuranceSourcesComplete(completeJira, completeTestOps)).toBe(true)
+  })
+
 })
