@@ -5,7 +5,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: or992-ui-${{ github.ref }}
+  group: or992-ui-${{ github.sha }}
   cancel-in-progress: true
 jobs:
   validate:
