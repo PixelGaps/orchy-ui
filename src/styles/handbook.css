@@ -254,3 +254,21 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+
+.handbook-rank {
+  display: grid;
+  gap: 1px;
+  line-height: 1.1;
+}
+
+.handbook-rank small {
+  color: var(--muted);
+  font-size: var(--font-meta);
+}
+
+.handbook-run-facts dd small,
+.handbook-history small {
+  display: block;
+  color: var(--muted);
+}
