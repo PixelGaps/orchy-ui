@@ -70,6 +70,9 @@ function PrivateLogsPage() {
     refetchInterval: (query) =>
       logsPollInterval(query.state.data),
   })
+  const github = useCloudSource<GitHubProjection>("github")
+  const githubCurrent = Boolean(github.data?.payload) && github.data?.state === "fresh"
+  const ciRuns = github.data?.payload?.recentRuns ?? []
   const tabs = [
     { id: "executions", label: "Executions" },
     { id: "jobs", label: "Jobs" },
@@ -109,7 +112,14 @@ function PrivateLogsPage() {
         eyebrow="Operational history"
         title="Logs"
         description="Executions, jobs, host certifications, CI runs, evidence and detailed output."
-        badge={<FreshnessBadge updatedAt={query.dataUpdatedAt} error={query.isError} />}
+        badge={
+          <div className="cloud-source-badges" aria-label="Log authorities">
+            <FreshnessBadge updatedAt={query.dataUpdatedAt} error={query.isError} />
+            <Badge tone={sourceTone(github.data)}>
+              GitHub · {github.data?.state ?? "loading"} · {sourceAgeLabel(github.data)}
+            </Badge>
+          </div>
+        }
       />
       <QueryStateNotice
         error={query.error}
@@ -121,9 +131,9 @@ function PrivateLogsPage() {
       <CompactSummary
         className="logs-summary"
         items={[
-          { label: "Executions", value: Array.isArray(query.data?.executions) ? query.data.executions.length : "Unavailable" },
-          { label: "Healthchecks", value: Array.isArray(query.data?.healthchecks) ? query.data.healthchecks.length : "Unavailable" },
-          { label: "CI runs", value: Array.isArray(query.data?.ci_runs) ? query.data.ci_runs.length : "Unavailable" },
+          { label: "Retained executions", value: Array.isArray(query.data?.executions) ? query.data.executions.length : "Unavailable", detail: "active + latest 40 terminal" },
+          { label: "Retained healthchecks", value: Array.isArray(query.data?.healthchecks) ? query.data.healthchecks.length : "Unavailable", detail: "within retained execution window" },
+          { label: "Recent CI runs", value: githubCurrent ? ciRuns.length : "Unavailable", detail: githubCurrent ? "GitHub latest page" : "GitHub authority not current" },
           { label: "View", value: tab.replaceAll("_", " "), tone: "cyan" },
         ]}
       />
@@ -279,13 +289,19 @@ function PrivateLogsPage() {
         <Card>
           <PanelHeader kicker="GITHUB ACTIONS" title="Recent CI runs" />
           <div className="data-list">
-            {(query.data?.ci_runs ?? []).map((run) => (
-              <a className="data-row" href={run.url} target="_blank" rel="noreferrer" key={run.databaseId}>
+            {ciRuns.map((run) => (
+              <a className="data-row" href={run.htmlUrl} target="_blank" rel="noreferrer" key={run.id}>
                 <span className="row-icon"><Play size={15} /></span>
-                <div><strong>{run.displayTitle || run.name}</strong><small>{run.headBranch} · {run.event}</small></div>
+                <div><strong>{run.name}</strong><small>{run.headSha.slice(0, 10)} · {run.status}</small></div>
                 <Badge tone={statusTone(run.conclusion || run.status)}>{run.conclusion || run.status}</Badge>
               </a>
             ))}
+            {!githubCurrent && (
+              <EmptyState
+                title="Current GitHub runs unavailable"
+                body="The backend did not substitute an empty CI list. Refresh the GitHub authority to restore current run data."
+              />
+            )}
           </div>
         </Card>
       </SectionPanel>
@@ -338,9 +354,9 @@ function HostedRunsPage() {
       </div>
       <CompactSummary
         items={[
-          { label: "Recent runs", value: runs.length },
-          { label: "Active", value: github.data?.payload ? github.data.payload.openWorkflowRuns : "Unavailable", tone: github.data?.payload?.openWorkflowRuns ? "cyan" : "neutral" },
-          { label: "Head", value: github.data?.payload?.headSha?.slice(0, 10) ?? "—" },
+          { label: "Recent runs", value: github.data?.state === "fresh" ? runs.length : "Unavailable" },
+          { label: "Active", value: github.data?.state === "fresh" && github.data?.payload ? github.data.payload.openWorkflowRuns : "Unavailable", tone: github.data?.state === "fresh" && github.data?.payload?.openWorkflowRuns ? "cyan" : "neutral" },
+          { label: "Head", value: github.data?.state === "fresh" ? (github.data?.payload?.headSha?.slice(0, 10) ?? "—") : "Unavailable" },
           { label: "Source", value: github.data?.state ?? "loading", tone: sourceTone(github.data) },
         ]}
       />
