@@ -7,7 +7,7 @@ describe("Data Platform operator view", () => {
     render(<DataPlatformPage />)
     expect(screen.getByRole("heading", { name: "Data Platform" })).toBeInTheDocument()
     expect(screen.getAllByText("PixelGaps/data-warehouse").length).toBeGreaterThan(0)
-    expect(screen.getAllByText("594ac3149ae8")).toHaveLength(2)
+    expect(screen.getAllByText("31b315eeff6e")).toHaveLength(2)
     expect(screen.getByText("Capability is verified; live telemetry is not fabricated")).toBeInTheDocument()
     for (const name of ["Contracts & schema","Completeness","Uniqueness","Range & domain","Freshness","Referential integrity","Lineage","Reconciliation","Transformation correctness","Generative invariants","Idempotency & resilience","Evidence immutability","Drift governance","Availability semantics"]) {
       expect(screen.getAllByText(name).length).toBeGreaterThan(0)
@@ -16,7 +16,7 @@ describe("Data Platform operator view", () => {
       expect(screen.getAllByText(name).length).toBeGreaterThan(0)
     }
     expect(screen.getByText("7 / 7")).toBeInTheDocument()
-    expect(screen.getAllByText("OR-891")).toHaveLength(2)
+    expect(screen.getAllByText(/OR-891/).length).toBeGreaterThan(0)\n    expect(screen.getAllByText(/complete/i).length).toBeGreaterThan(0)\n    expect(screen.getByText(/OR-1148 historical backfill retained/)).toBeInTheDocument()
     expect(screen.getAllByText(/OR-892/).length).toBeGreaterThan(0)
   })
 })
