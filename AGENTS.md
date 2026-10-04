@@ -1,6 +1,6 @@
 schema: orchy-ui.agent-contract.v7
 
-# BEGIN PIXELGAPS MANAGED AGENT POLICY v5 sha256:04f500f849185f17
+# BEGIN PIXELGAPS MANAGED AGENT POLICY v6 sha256:c8795f295c30c879
 # Source: PixelGaps/orchy:orchy/llm/agentic/shared_agent_policy.json
 # - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, completion, and all non-code documentation, research, procedures, plans, and archives.
 # - Confluence is retired for PixelGaps project documentation: do not create, update, mirror, or treat Confluence content as current authority; historical Confluence references are provenance only and must route to their migrated Jira record.
@@ -8,6 +8,9 @@ schema: orchy-ui.agent-contract.v7
 # - GitHub source, tests, commits, and CI are authoritative for implementation reality; do not create GitHub Issues/Projects or repo TODO/DONE mirrors for tracked work.
 # - Every newly observed defect, failure, or regression must have a concrete Jira issue, or an existing Jira issue whose explicit scope and acceptance cover that exact defect, immediately when discovered; search Jira first to prevent duplicates.
 # - Defect handling is blocking and debt-intolerant: pause the interrupted task, fix the discovered defect immediately, run the cheapest meaningful deterministic validation for the defect, then retry the interrupted task from the failed or affected validation step until its full acceptance criteria pass. Do not defer, bypass, downgrade, or leave a known actionable defect behind merely to continue the queue.
+# - An actionable execution failure must never be returned merely as blocked: reconcile or create its Jira defect, enter repair-first handling, validate the repair against the failing reproduction, and resume the interrupted task automatically.
+# - A user instruction to stop after a task or list item means stop only after that requested unit reaches a valid terminal state. An actionable defect discovered en route is part of completing that unit and is not a stop condition.
+# - Stop early only for a genuine external or manual blocker that cannot be repaired with the currently available tools; record the blocker, evidence, owner, and next action in Jira and keep the affected task non-Done.
 # - A task that exposed a defect cannot be marked complete while that defect is unresolved or while the task has not been retried successfully after the fix. The only exception is a genuine external blocker that makes immediate repair technically impossible; record that blocker, evidence, owner, and next action in Jira and keep the affected task non-Done.
 # - A defect record must retain discovery context, exact failure, acceptance criteria, validation path, and relevant run or SHA identifiers; chat, logs, comments, milestones, and health matrices are evidence only, never the defect owner.
 # - Read the applicable AGENTS.md before modifying a repository; read architecture/ADR/operations documentation when the change touches those concerns.
