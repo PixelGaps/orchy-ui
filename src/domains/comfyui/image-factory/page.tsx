@@ -266,11 +266,11 @@ function GalleryStatusSection({
 
 function GallerySummary({ summary }: Readonly<{ summary: GalleryPayload["summary"] }>) {
   const counters = [
-    ["Packs ready", summary.publish_ready_packs, "gallery-count-packs"],
-    ["Passed artifacts", summary.passed_artifacts, "gallery-count-passed"],
-    ["Failed artifacts", summary.failed_artifacts, "gallery-count-failed"],
-    ["Layers passed", summary.passed_layers, "gallery-count-layers-passed"],
-    ["Layers failed", summary.failed_layers, "gallery-count-layers-failed"],
+    ["Latest window: packs ready", summary.publish_ready_packs, "gallery-count-packs"],
+    ["Latest window: passed artifacts", summary.passed_artifacts, "gallery-count-passed"],
+    ["Latest window: failed artifacts", summary.failed_artifacts, "gallery-count-failed"],
+    ["Latest window: layers passed", summary.passed_layers, "gallery-count-layers-passed"],
+    ["Latest window: layers failed", summary.failed_layers, "gallery-count-layers-failed"],
   ] as const
 
   return (
@@ -279,6 +279,9 @@ function GallerySummary({ summary }: Readonly<{ summary: GalleryPayload["summary
         kicker="E2E EVIDENCE"
         title="Production gallery counters"
       />
+      <p className="gallery-section-copy">
+        Bounded latest-gallery window returned by the API (currently up to 200 artifacts); these are not lifetime totals.
+      </p>
       <div className="config-grid">
         {counters.map(([label, value, testId]) => (
           <div className="config-item" key={testId}>
