@@ -1,0 +1,19 @@
+name: OR-992 Handbook UI Contract
+on:
+  push:
+    branches: ['task/OR-992-20261004-handbook-closeout-v2']
+permissions:
+  contents: read
+jobs:
+  handbook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - run: npx playwright test e2e/ui-contract.spec.ts --grep 'Agentic Handbook'
