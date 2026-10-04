@@ -16,7 +16,7 @@ describe("Data Platform operator view", () => {
       expect(screen.getAllByText(name).length).toBeGreaterThan(0)
     }
     expect(screen.getByText("7 / 7")).toBeInTheDocument()
-    expect(screen.getByText("OR-891")).toBeInTheDocument()
-    expect(screen.getByText(/OR-892/)).toBeInTheDocument()
+    expect(screen.getAllByText("OR-891")).toHaveLength(2)
+    expect(screen.getAllByText(/OR-892/).length).toBeGreaterThan(0)
   })
 })
