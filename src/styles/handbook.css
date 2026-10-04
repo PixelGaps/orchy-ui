@@ -212,10 +212,12 @@
   }
 
   .handbook-row {
-    grid-template-columns: 46px minmax(0, 1fr) auto;
+    grid-template-columns: 46px minmax(0, 1fr) auto minmax(70px, auto);
   }
 
-  .handbook-row > :nth-child(n + 4) {
+  .handbook-row > :nth-child(4),
+  .handbook-row > :nth-child(5),
+  .handbook-row > :nth-child(6) {
     display: none;
   }
 
