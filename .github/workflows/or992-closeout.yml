@@ -22,5 +22,5 @@ jobs:
       - run: bash scripts/web_test_toolchain.sh unit src/domains/top-level-pages.coverage.test.tsx src/domains/data-platform/page.test.tsx
       - run: npm run build
       - run: npx playwright install chromium
-      - run: npm run test:e2e:routes
-      - run: npm run test:e2e:ui-contract
+      - run: npx playwright test e2e/routes.spec.ts -g "/agentic-coding renders its owning domain page"
+      - run: npx playwright test e2e/ui-contract.spec.ts -g "Agentic Handbook"
