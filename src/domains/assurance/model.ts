@@ -32,11 +32,42 @@ export const ASSURANCE_LAYERS = [
   { number: 12, key: "12-chaos-soak", label: "Live Chaos / Soak / Recovery", jiraKey: "OR-608" },
 ] as const
 
+const CANONICAL_LAYER_NUMBERS: Record<string, number> = {
+  "fast-web": 1,
+  "fast-python": 2,
+  "property-state-machine": 3,
+  security: 4,
+  fuzz: 5,
+  performance: 6,
+  portability: 7,
+  flakes: 8,
+  "coverage-static-sonar": 9,
+  mutation: 10,
+  "browser-e2e": 11,
+  "live-chaos-soak-recovery": 12,
+}
+
 function layerNumberFromId(value: string): number | null {
+  if (CANONICAL_LAYER_NUMBERS[value]) return CANONICAL_LAYER_NUMBERS[value]
   const match = value.match(/^(\d{1,2})/)
   if (!match) return null
   const parsed = Number(match[1])
   return parsed >= 1 && parsed <= 12 ? parsed : null
+}
+
+export function assuranceSourcesComplete(
+  jira: JiraProjection | null | undefined,
+  testOps: TestOpsProjection | null | undefined,
+): boolean {
+  if (!jira || !testOps) return false
+  const jiraKeys = new Set(jira.issues.map((issue) => issue.key))
+  if (!ASSURANCE_LAYERS.every((layer) => jiraKeys.has(layer.jiraKey))) return false
+  const evidenceNumbers = new Set(
+    testOps.layers
+      .map((layer) => layerNumberFromId(layer.layerId))
+      .filter((value): value is number => value != null),
+  )
+  return ASSURANCE_LAYERS.every((layer) => evidenceNumbers.has(layer.number))
 }
 
 function workState(status: string, category: string): AssuranceLayerState {
