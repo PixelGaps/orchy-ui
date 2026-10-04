@@ -1,6 +1,6 @@
 schema: orchy-ui.agent-contract.v7
 
-# BEGIN PIXELGAPS MANAGED AGENT POLICY v9
+# BEGIN PIXELGAPS MANAGED AGENT POLICY v11
 # Source: PixelGaps/orchy:orchy/llm/agentic/shared_agent_policy.json
 # - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, completion, and all non-code documentation, research, procedures, plans, and archives.
 # - Confluence is retired for PixelGaps project documentation: do not create, update, mirror, or treat Confluence content as current authority; historical Confluence references are provenance only and must route to their migrated Jira record.
@@ -25,12 +25,17 @@ schema: orchy-ui.agent-contract.v7
 # - Repository integration is branch-only: Jira-bound isolated task branch -> exact-candidate Fast Static Gate -> bounded resync onto current main when required -> revalidate exact resulting candidate -> non-force compare-and-swap/fast-forward advance of main -> immediate task-branch deletion. A moved or divergent main MUST NOT change the integration mechanism to a pull request.
 # - Before any integration mutation, agents must re-check the repository AGENTS.md integration invariants and fail closed if pull_requests is not forbidden or if the requested integration path conflicts with the managed policy.
 # - Host-bound work must prefer typed/bounded Madriguera control, reviewed detached operations, Missions, or equivalent durable job routes with retained evidence over interactive host sessions.
+# - Operations-first host execution is mandatory: before any Desktop Commander action, search the canonical 14K+ Operations discovery/index for a suitable typed Operation and use it whenever it is technically capable; do not use Desktop Commander for convenience or context recovery.
+# - If no existing Operation can perform a required host action, Desktop Commander is permitted only as minimum-scope break-glass after documenting why the Operations catalog is insufficient; immediately create or reconcile a Jira capability-gap record and implement the missing typed Operation/adapter with regression and live proof so the same Desktop Commander action is unnecessary next time.
 # - Desktop Commander is last-place break-glass only: before every Desktop Commander use, establish that higher-ranked unmetered, generous-free-tier, connector/API, controller, runner, typed host-control, and detached-job routes are unavailable or incapable; record the reason when work is Jira-tracked, batch the minimum unavoidable interaction, and never use Desktop Commander for routine polling, file reads, process watching, Git operations, or test execution that a higher-ranked route can perform.
 # - Use Supabase host control only when live Madriguera machine control is required; batch related operations and do not poll.
 # - Routine Firecrawl calls are zero; use native connectors, direct APIs, or other non-Firecrawl retrieval first.
 # - Secrets and reusable credentials must not be committed to Git; use the durable secret authority and fail closed when a required credential is unavailable.
 # - Local AGENTS.md content may add repo-specific constraints, but must not silently weaken this shared policy; any intentional exception must be explicit and Jira-traceable.
 # - Shared-policy synchronization is a Jira-bound governance mutation limited to the managed AGENTS.md block; it may use exact-SHA compare-and-swap on the default branch when the active connector cannot delete temporary branches.
+# - Every certified recovery/control transport MUST expose the same implemented canonical capability set, including typed multiline-content operations and capability-scoped privileged execution; transport parity failures are defects and must fail closed.
+# - Heredoc use-cases MUST be represented as typed multiline payloads (for example bounded file/config/template writes or stdin content) rather than shell syntax. Multiline content is permitted data; interpolating or executing that content as unrestricted shell is forbidden.
+# - Administrative/root work MUST be expressible through capability-scoped privilege metadata and bounded privileged handlers. Generic sudo shell, root.exec, bash -c, eval, and arbitrary privileged argv remain forbidden; privilege changes who executes an approved capability, never what unregistered command may execute.
 # END PIXELGAPS MANAGED AGENT POLICY
 
 repository:
