@@ -1,6 +1,6 @@
 schema: orchy-ui.agent-contract.v7
 
-# BEGIN PIXELGAPS MANAGED AGENT POLICY v6 sha256:c8795f295c30c879
+# BEGIN PIXELGAPS MANAGED AGENT POLICY v7 sha256:8ef7b11374fac00a
 # Source: PixelGaps/orchy:orchy/llm/agentic/shared_agent_policy.json
 # - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, completion, and all non-code documentation, research, procedures, plans, and archives.
 # - Confluence is retired for PixelGaps project documentation: do not create, update, mirror, or treat Confluence content as current authority; historical Confluence references are provenance only and must route to their migrated Jira record.
@@ -18,7 +18,9 @@ schema: orchy-ui.agent-contract.v7
 # - Never weaken, delete, skip, or rewrite meaningful tests merely to obtain a green result.
 # - Repository operations use the GitHub connector/API and Jira operations use the Atlassian connector/API when available.
 # - For GitHub connector file mutations, prefer the low-level Git object workflow by default: re-read branch HEAD and base tree, create blobs, create a tree from that exact base, create a commit with that exact HEAD as parent, then advance the task ref with a non-force update. Never force a moved ref; reconcile and retry under the bounded-resync policy. Contents API update_file is a secondary convenience path, not the default.
-# - Routine Desktop Commander calls are zero; use it only for unavoidable host-bound bootstrap/repair that no durable connector, API, controller, runner, or direct host-control route can perform.
+# - Execution-route ranking is mandatory: first use unmetered/no-usage-cap durable connectors, direct APIs, local control planes, or equivalent zero-marginal-cost routes; next use permanent zero-cost providers with the most generous available free allowance and preserve scarcer quotas; then use more constrained free-tier routes only when higher-ranked routes cannot satisfy the task; paid fallback is forbidden.
+# - Host-bound work must prefer typed/bounded Madriguera control, reviewed detached operations, Missions, or equivalent durable job routes with retained evidence over interactive host sessions.
+# - Desktop Commander is last-place break-glass only: before every Desktop Commander use, establish that higher-ranked unmetered, generous-free-tier, connector/API, controller, runner, typed host-control, and detached-job routes are unavailable or incapable; record the reason when work is Jira-tracked, batch the minimum unavoidable interaction, and never use Desktop Commander for routine polling, file reads, process watching, Git operations, or test execution that a higher-ranked route can perform.
 # - Use Supabase host control only when live Madriguera machine control is required; batch related operations and do not poll.
 # - Routine Firecrawl calls are zero; use native connectors, direct APIs, or other non-Firecrawl retrieval first.
 # - Secrets and reusable credentials must not be committed to Git; use the durable secret authority and fail closed when a required credential is unavailable.
