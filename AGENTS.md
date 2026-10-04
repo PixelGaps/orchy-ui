@@ -1,12 +1,14 @@
 schema: orchy-ui.agent-contract.v7
 
-# BEGIN PIXELGAPS MANAGED AGENT POLICY v4 sha256:f543ac94c74575b6
+# BEGIN PIXELGAPS MANAGED AGENT POLICY v5 sha256:04f500f849185f17
 # Source: PixelGaps/orchy:orchy/llm/agentic/shared_agent_policy.json
 # - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, completion, and all non-code documentation, research, procedures, plans, and archives.
 # - Confluence is retired for PixelGaps project documentation: do not create, update, mirror, or treat Confluence content as current authority; historical Confluence references are provenance only and must route to their migrated Jira record.
 # - Repository documentation is limited to coding-critical durable technical truth such as AGENTS.md, README, architecture, ADRs, operations, contracts, and developer reference material; Jira must not duplicate or override repository technical truth.
 # - GitHub source, tests, commits, and CI are authoritative for implementation reality; do not create GitHub Issues/Projects or repo TODO/DONE mirrors for tracked work.
-# - Every newly observed defect, failure, or regression must have a concrete Jira issue, or an existing Jira issue whose explicit scope and acceptance cover that exact defect, before unrelated work proceeds; search Jira first to prevent duplicates.
+# - Every newly observed defect, failure, or regression must have a concrete Jira issue, or an existing Jira issue whose explicit scope and acceptance cover that exact defect, immediately when discovered; search Jira first to prevent duplicates.
+# - Defect handling is blocking and debt-intolerant: pause the interrupted task, fix the discovered defect immediately, run the cheapest meaningful deterministic validation for the defect, then retry the interrupted task from the failed or affected validation step until its full acceptance criteria pass. Do not defer, bypass, downgrade, or leave a known actionable defect behind merely to continue the queue.
+# - A task that exposed a defect cannot be marked complete while that defect is unresolved or while the task has not been retried successfully after the fix. The only exception is a genuine external blocker that makes immediate repair technically impossible; record that blocker, evidence, owner, and next action in Jira and keep the affected task non-Done.
 # - A defect record must retain discovery context, exact failure, acceptance criteria, validation path, and relevant run or SHA identifiers; chat, logs, comments, milestones, and health matrices are evidence only, never the defect owner.
 # - Read the applicable AGENTS.md before modifying a repository; read architecture/ADR/operations documentation when the change touches those concerns.
 # - Use the cheapest meaningful deterministic scoped validation; routine validation targets <=120 seconds and has a hard 180-second ceiling.
