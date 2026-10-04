@@ -1,6 +1,6 @@
 schema: orchy-ui.agent-contract.v7
 
-# BEGIN PIXELGAPS MANAGED AGENT POLICY v8 sha256:b650ed9d55c25051
+# BEGIN PIXELGAPS MANAGED AGENT POLICY v9
 # Source: PixelGaps/orchy:orchy/llm/agentic/shared_agent_policy.json
 # - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, completion, and all non-code documentation, research, procedures, plans, and archives.
 # - Confluence is retired for PixelGaps project documentation: do not create, update, mirror, or treat Confluence content as current authority; historical Confluence references are provenance only and must route to their migrated Jira record.
@@ -21,6 +21,9 @@ schema: orchy-ui.agent-contract.v7
 # - Repository operations use the GitHub connector/API and Jira operations use the Atlassian connector/API when available.
 # - For GitHub connector file mutations, prefer the low-level Git object workflow by default: re-read branch HEAD and base tree, create blobs, create a tree from that exact base, create a commit with that exact HEAD as parent, then advance the task ref with a non-force update. Never force a moved ref; reconcile and retry under the bounded-resync policy. Contents API update_file is a secondary convenience path, not the default.
 # - Execution-route ranking is mandatory: first use unmetered/no-usage-cap durable connectors, direct APIs, local control planes, or equivalent zero-marginal-cost routes; next use permanent zero-cost providers with the most generous available free allowance and preserve scarcer quotas; then use more constrained free-tier routes only when higher-ranked routes cannot satisfy the task; paid fallback is forbidden.
+# - Pull requests are forbidden for PixelGaps repository integration. Agents MUST NOT create, open, update, reopen, approve, auto-merge, or merge a pull request, and MUST NOT use any GitHub PR API/tool as an integration fallback; this prohibition remains in force during conflicts, divergence, moved-main reconciliation, connector limitations, and recovery from failed integration.
+# - Repository integration is branch-only: Jira-bound isolated task branch -> exact-candidate Fast Static Gate -> bounded resync onto current main when required -> revalidate exact resulting candidate -> non-force compare-and-swap/fast-forward advance of main -> immediate task-branch deletion. A moved or divergent main MUST NOT change the integration mechanism to a pull request.
+# - Before any integration mutation, agents must re-check the repository AGENTS.md integration invariants and fail closed if pull_requests is not forbidden or if the requested integration path conflicts with the managed policy.
 # - Host-bound work must prefer typed/bounded Madriguera control, reviewed detached operations, Missions, or equivalent durable job routes with retained evidence over interactive host sessions.
 # - Desktop Commander is last-place break-glass only: before every Desktop Commander use, establish that higher-ranked unmetered, generous-free-tier, connector/API, controller, runner, typed host-control, and detached-job routes are unavailable or incapable; record the reason when work is Jira-tracked, batch the minimum unavoidable interaction, and never use Desktop Commander for routine polling, file reads, process watching, Git operations, or test execution that a higher-ranked route can perform.
 # - Use Supabase host control only when live Madriguera machine control is required; batch related operations and do not poll.
