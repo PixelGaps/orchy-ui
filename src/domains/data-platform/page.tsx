@@ -3,7 +3,7 @@ import { BarChart3, Database, GitBranch, Layers3, Network, ShieldCheck } from "l
 import { Badge, Card, CompactSummary, PageHeader, PanelHeader, StatusNotice } from "@/components/ui/primitives"
 
 const REPOSITORY = "PixelGaps/data-warehouse"
-const HEAD = "594ac3149ae800ccbfd8ec51e94ef2f84d2b4e11"
+const HEAD = "31b315eeff6e0ec23ac8322dfa8e1b8d5b6439d6"
 
 const layers = [
   { name: "Raw", purpose: "Immutable producer-native bytes + provenance sidecars", authority: "Retained source evidence" },
@@ -49,11 +49,11 @@ export function DataPlatformPage() {
         { label: "Main", value: HEAD.slice(0, 12), detail: "Forward-ingestion audit integrated", tone: "live" },
         { label: "QA dimensions", value: qaDimensions.length, detail: "Layer 13 advanced assurance", tone: "live" },
         { label: "Producer audit", value: "7 / 7", detail: "All current PixelGaps repos classified", tone: "live" },
-        { label: "Cutover", value: "OR-891", detail: "Consumer migration still pending", tone: "warn" },
+        { label: "Cutover", value: "Complete", detail: "OR-891 · data-warehouse canonical", tone: "live" },
       ]} />
 
       <StatusNotice title="Capability is verified; live telemetry is not fabricated"
-        body="Data QA, reconciliation, Evidence Lake and analytical projections are implemented and qualified. Until OR-891 exposes the canonical runtime projection, this page deliberately shows contracts and availability rather than invented asset counts, trends or health scores."
+        body="Data QA, reconciliation, Evidence Lake and analytical projections are implemented and qualified. Until a canonical runtime telemetry projection is wired, this page deliberately shows contracts and availability rather than invented asset counts, trends or health scores."
         tone="info" />
 
       <section className="data-platform-grid">
@@ -61,7 +61,7 @@ export function DataPlatformPage() {
           <div className="data-platform-stack">{layers.map((layer) => <article key={layer.name} className="data-platform-row"><div><strong>{layer.name}</strong><small>{layer.authority}</small></div><p>{layer.purpose}</p></article>)}</div>
         </Card>
         <Card><PanelHeader kicker="Implementation" title="Repository health" action={<GitBranch size={17} aria-hidden="true" />} />
-          <dl className="cloud-kv"><div><dt>Repository</dt><dd>{REPOSITORY}</dd></div><div><dt>Branch</dt><dd>main</dd></div><div><dt>Verified SHA</dt><dd>{HEAD.slice(0,12)}</dd></div><div><dt>Normal CI</dt><dd><Badge tone="live">PASS</Badge></dd></div><div><dt>TestOps Layer 13</dt><dd><Badge tone="live">PASS</Badge></dd></div><div><dt>Ingestion policy</dt><dd>Forward only · no historical backfill</dd></div></dl>
+          <dl className="cloud-kv"><div><dt>Repository</dt><dd>{REPOSITORY}</dd></div><div><dt>Branch</dt><dd>main</dd></div><div><dt>Verified SHA</dt><dd>{HEAD.slice(0,12)}</dd></div><div><dt>Normal CI</dt><dd><Badge tone="live">PASS</Badge></dd></div><div><dt>TestOps Layer 13</dt><dd><Badge tone="live">PASS</Badge></dd></div><div><dt>Ingestion policy</dt><dd>Forward ingestion · OR-1148 historical backfill retained</dd></div></dl>
         </Card>
       </section>
 
@@ -79,7 +79,7 @@ export function DataPlatformPage() {
           <p className="cloud-panel-note">Canonical/derived assets carry parent IDs, source SHA, content digest and provenance digest.</p>
         </Card>
         <Card><PanelHeader kicker="Authority" title="Ownership & remaining gates" action={<Database size={17} aria-hidden="true" />} />
-          <dl className="cloud-kv"><div><dt>Data platform</dt><dd>PixelGaps/data-warehouse</dd></div><div><dt>Advanced QA</dt><dd>TestOps · Layer 13</dd></div><div><dt>Operator projection</dt><dd>PixelGaps/orchy-ui</dd></div><div><dt>Consumer cutover</dt><dd>OR-891</dd></div><div><dt>Scale gate</dt><dd>OR-892 · evidence-triggered only</dd></div></dl>
+          <dl className="cloud-kv"><div><dt>Data platform</dt><dd>PixelGaps/data-warehouse</dd></div><div><dt>Advanced QA</dt><dd>TestOps · Layer 13</dd></div><div><dt>Operator projection</dt><dd>PixelGaps/orchy-ui</dd></div><div><dt>Consumer cutover</dt><dd>OR-891 · complete</dd></div><div><dt>Scale gate</dt><dd>OR-892 · evidence-triggered only</dd></div></dl>
         </Card>
       </section>
     </>
