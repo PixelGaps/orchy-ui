@@ -38,7 +38,7 @@ function unavailableModel<T>(
   }
 }
 
-async function fetchSourceModel<T>(
+export async function fetchSourceModel<T>(
   source: CloudSource,
   init?: RequestInit,
 ): Promise<SourceReadModel<T>> {
