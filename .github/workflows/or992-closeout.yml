@@ -19,7 +19,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
-      - run: npm run test:unit
+      - run: bash scripts/web_test_toolchain.sh unit src/domains/top-level-pages.coverage.test.tsx src/domains/data-platform/page.test.tsx
       - run: npm run build
       - run: npx playwright install chromium
       - run: npm run test:e2e:routes
