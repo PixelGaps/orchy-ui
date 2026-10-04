@@ -132,3 +132,8 @@ control_budget:
   Jira_operations: Atlassian-connector-direct
   emergency_lane: independent-GitHub-fixed-action-breakglass
   emergency_lane_must_not_depend_on: Desktop-Commander|Supabase
+
+
+## GitHub workflow boundary
+
+GitHub Actions YAML is a thin event/runner ingress, not an operation catalogue. Shared operational semantics belong to the canonical typed PixelGaps capability/operation plane; do not add one-purpose workflows when an existing bounded operation can express the work. Keep workflows only for GitHub-specific ingress, identity/status integration, runner allocation, or a documented independent recovery boundary. Ticket-specific one-shots must be removed after completion. Pull-request triggers are forbidden; branch-only exact-candidate validation remains authoritative even when GitHub Actions or GitHub-hosted compute is unavailable.
