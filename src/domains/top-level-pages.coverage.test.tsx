@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 const sharedState = vi.hoisted(() => ({
   tab: "runtime",
   executions: [] as any[],
+  cloudSources: new Map<string, any>(),
 }))
 const queryState = vi.hoisted(() => ({
   values: new Map<string, any>(),
@@ -21,6 +22,20 @@ const apiMocks = vi.hoisted(() => ({
 }))
 
 vi.mock("@/lib/api", () => apiMocks)
+
+vi.mock("@/cloud/client", () => ({
+  useCloudSource: (source: string) => ({
+    data: sharedState.cloudSources.get(source),
+    isLoading: false,
+    isFetching: false,
+    isError: false,
+    dataUpdatedAt: 1,
+    refetch: vi.fn(),
+  }),
+  useRefreshCloudSources: () => ({ mutate: vi.fn(), isPending: false }),
+  sourceAgeLabel: (model: any) => model?.ageSeconds == null ? "no snapshot" : `${model.ageSeconds}s old`,
+  sourceTone: (model: any) => model?.state === "fresh" ? "live" : model?.state === "stale" ? "warn" : model ? "danger" : "neutral",
+}))
 
 vi.mock("@/domains/shared", () => ({
   useDomainTab: () => [sharedState.tab, vi.fn()] as const,
@@ -102,6 +117,7 @@ describe("top-level domain page coverage", () => {
   beforeEach(() => {
     sharedState.tab = "runtime"
     sharedState.executions = []
+    sharedState.cloudSources.clear()
     queryState.values.clear()
     mutationState.values.clear()
     mutationState.deepResearchOrdinal = 0
@@ -434,18 +450,27 @@ describe("top-level domain page coverage", () => {
         executions: [],
         healthchecks: [],
         jobs: [],
-        ci_runs: [{
-          databaseId: 2,
-          url: "https://example.test/fallback",
-          displayTitle: "",
-          name: "Fallback CI",
-          headBranch: "dev",
-          event: "workflow_dispatch",
-          conclusion: "",
-          status: "queued",
-        }],
+        ci_runs: [],
         evidence: {},
       },
+    })
+    sharedState.cloudSources.set("github", {
+      source: "github",
+      authority: "GitHub source and CI",
+      state: "fresh",
+      observedAt: "2026-10-04T03:00:00Z",
+      ageSeconds: 1,
+      payload: {
+        recentRuns: [{
+          id: 2,
+          name: "Fallback CI",
+          status: "queued",
+          conclusion: null,
+          headSha: "0123456789abcdef0123456789abcdef01234567",
+          htmlUrl: "https://example.test/fallback",
+        }],
+      },
+      errorCode: null,
     })
 
     sharedState.tab = "ci"
