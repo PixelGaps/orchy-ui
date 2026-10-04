@@ -8,7 +8,7 @@
     "check:no-render": "node scripts/check-no-render-hosting.mjs",
     "build": "npm run check:no-render && npm run test:local-runtime && npm run test:hooks && npm run check:hooks && tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit --pretty false",
-    "lint": "eslint src e2e",
+    "lint": "npm run typecheck && npm run lint:syntax",
     "test:e2e:routes": "playwright test e2e/routes.spec.ts",
     "test:e2e:ui-contract": "playwright test e2e/ui-contract.spec.ts",
     "test:e2e:image-factory": "playwright test e2e/image-factory.spec.ts e2e/image-factory-backend.spec.ts",
@@ -16,7 +16,6 @@
     "test:e2e:healthchecks": "playwright test e2e/healthchecks.spec.ts",
     "test:e2e:healthchecks:list": "playwright test e2e/healthchecks.spec.ts --list",
     "test:e2e:new-task": "playwright test e2e/new-task.spec.ts",
-    "eslint": "eslint src e2e",
     "test:unit": "bash scripts/web_test_toolchain.sh unit",
     "test:coverage": "bash scripts/web_test_toolchain.sh coverage",
     "check:hooks": "node scripts/check-react-hook-order.mjs",
@@ -25,7 +24,8 @@
     "test": "npm run test:local-runtime && npm run test:hooks && npm run test:unit",
     "test:e2e:workbench": "playwright test e2e/workbench.spec.ts",
     "test:live-readiness": "node scripts/live-dashboard-readiness.mjs",
-    "test:e2e:live": "playwright test e2e/live-routes.spec.ts --config=playwright.live.config.ts"
+    "test:e2e:live": "playwright test e2e/live-routes.spec.ts --config=playwright.live.config.ts",
+    "lint:syntax": "find scripts -type f \\( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' \\) -print0 | xargs -0 -r -n1 node --check"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
