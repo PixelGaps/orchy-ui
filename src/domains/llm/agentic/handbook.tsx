@@ -332,7 +332,21 @@ export function AgenticHandbook() {
                   <LaneCell label="ChatGPT" lane={task.lanes.chatgpt} />
                   <LaneCell label="Aider" lane={task.lanes.aider} />
                   <LaneCell label="Cline" lane={task.lanes.cline} />
-                  <span>{task.issues.length ? task.issues.join(", ") : "—"}</span>
+                  <span className="handbook-row-issues">
+                    {task.issues.length
+                      ? task.issues.map((key) => (
+                          <a
+                            href={"https://espalwebs.atlassian.net/browse/" + encodeURIComponent(key)}
+                            target="_blank"
+                            rel="noreferrer"
+                            key={key}
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            {key}
+                          </a>
+                        ))
+                      : "—"}
+                  </span>
                 </div>
               </summary>
               <TaskDetail task={task} />
