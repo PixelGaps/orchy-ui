@@ -11,6 +11,7 @@ import {
 
 import type { JiraProjection, TestOpsProjection } from "@/cloud/projections"
 import {
+  currentSourcePayload,
   sourceAgeLabel,
   sourceTone,
   useCloudSource,
@@ -74,9 +75,11 @@ export function TestAssurancePage() {
   const testOps = useCloudSource<TestOpsProjection>("testops")
   const refresh = useRefreshCloudSources(["jira", "testops"])
 
-  const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
-  const testOpsAvailable = Boolean(testOps.data?.payload) && testOps.data?.state !== "unavailable"
-  const layers = jiraAvailable ? deriveAssuranceLayers(jira.data?.payload, testOpsAvailable ? testOps.data?.payload : undefined) : []
+  const jiraPayload = currentSourcePayload(jira.data)
+  const testOpsPayload = currentSourcePayload(testOps.data)
+  const jiraAvailable = jiraPayload != null
+  const testOpsAvailable = testOpsPayload != null
+  const layers = jiraAvailable ? deriveAssuranceLayers(jiraPayload, testOpsPayload ?? undefined) : []
   const totals = assuranceTotals(layers)
   const durationData = testOpsAvailable ? layers
     .filter((layer) => layer.latest)
@@ -86,7 +89,7 @@ export function TestAssurancePage() {
     })) : []
 
   const sourceUnavailable =
-    jira.data?.state === "unavailable" || testOps.data?.state === "unavailable"
+    jira.data?.state !== "fresh" || testOps.data?.state !== "fresh"
 
   return (
     <>
@@ -118,17 +121,17 @@ export function TestAssurancePage() {
 
       {(jira.isLoading || testOps.isLoading) && <Skeleton lines={3} />}
 
-      {jira.data?.state === "unavailable" && (
+      {jira.data?.state !== "fresh" && (
         <StatusNotice
-          title="Jira unavailable"
-          body="Layer work state cannot be confirmed. No alternate work-state source is used."
+          title="Jira not current"
+          body="Layer work-state figures are hidden until Jira authority is fresh; stale snapshots remain historical source evidence only."
           tone="danger"
         />
       )}
-      {testOps.data?.state === "unavailable" && (
+      {testOps.data?.state !== "fresh" && (
         <StatusNotice
-          title="TestOps unavailable"
-          body="Execution evidence is unavailable. Jira state remains visible without fabricating run results."
+          title="TestOps not current"
+          body="Execution figures are hidden until TestOps authority is fresh; stale snapshots are not treated as current run results."
           tone="warn"
         />
       )}
