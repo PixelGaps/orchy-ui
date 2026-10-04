@@ -8,6 +8,7 @@ import type {
   TestOpsProjection,
 } from "@/cloud/projections"
 import {
+  currentSourcePayload,
   sourceAgeLabel,
   sourceTone,
   useCloudSource,
@@ -37,13 +38,17 @@ export function Overview() {
   const host = useCloudSource<HostProjection>("host")
   const refresh = useRefreshCloudSources(["jira", "github", "testops", "host"])
 
-  const layers = deriveAssuranceLayers(jira.data?.payload, testOps.data?.payload)
+  const jiraPayload = currentSourcePayload(jira.data)
+  const githubPayload = currentSourcePayload(github.data)
+  const testOpsPayload = currentSourcePayload(testOps.data)
+  const hostPayload = currentSourcePayload(host.data)
+  const layers = deriveAssuranceLayers(jiraPayload ?? undefined, testOpsPayload ?? undefined)
   const assurance = assuranceTotals(layers)
-  const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
-  const testOpsAvailable = Boolean(testOps.data?.payload) && testOps.data?.state !== "unavailable"
+  const jiraAvailable = jiraPayload != null
+  const testOpsAvailable = testOpsPayload != null
   const assuranceAvailable = jiraAvailable && testOpsAvailable
-  const anyUnavailable = [jira.data, github.data, testOps.data, host.data].some(
-    (source) => source?.state === "unavailable",
+  const anyNonCurrent = [jira.data, github.data, testOps.data, host.data].some(
+    (source) => source?.state !== "fresh",
   )
 
   return (
@@ -52,7 +57,7 @@ export function Overview() {
         eyebrow="Local Control"
         title="Overview"
         description="Private local operational state from canonical sources. Every figure is live, retained evidence, or explicitly unavailable."
-        badge={<Badge tone={anyUnavailable ? "warn" : "live"}>Local control</Badge>}
+        badge={<Badge tone={anyNonCurrent ? "warn" : "live"}>Local control</Badge>}
       />
 
       <div className="cloud-toolbar">
@@ -76,10 +81,10 @@ export function Overview() {
         <Skeleton lines={3} />
       )}
 
-      {anyUnavailable && (
+      {anyNonCurrent && (
         <StatusNotice
-          title="One or more canonical sources are unavailable"
-          body="Unavailable sources are shown without substituting bundled fixtures or another source of truth."
+          title="One or more canonical sources are not current"
+          body="Stale, unavailable, and loading sources are excluded from current-state figures. Their source badges retain historical freshness context."
           tone="warn"
         />
       )}
@@ -89,22 +94,22 @@ export function Overview() {
         items={[
           {
             label: "Host",
-            value: hostLabel(host.data?.payload),
-            detail: host.data?.payload?.lastSeenAt
-              ? new Date(host.data.payload.lastSeenAt).toLocaleString()
+            value: hostLabel(hostPayload),
+            detail: hostPayload?.lastSeenAt
+              ? new Date(hostPayload!.lastSeenAt).toLocaleString()
               : "No heartbeat",
-            tone: /^ONLINE/.test(host.data?.payload?.state ?? "") ? "live" : "neutral",
+            tone: /^ONLINE/.test(hostPayload?.state ?? "") ? "live" : "neutral",
           },
           {
             label: "Open Jira",
-            value: jira.data?.payload?.openCount ?? "—",
+            value: jiraPayload?.openCount ?? "—",
             detail: "Jira OR authority",
             tone: "cyan",
           },
           {
             label: "CI running",
-            value: github.data?.payload?.openWorkflowRuns ?? "—",
-            detail: github.data?.payload?.headSha?.slice(0, 10) ?? "No CI snapshot",
+            value: githubPayload?.openWorkflowRuns ?? "—",
+            detail: githubPayload?.headSha?.slice(0, 10) ?? "No CI snapshot",
           },
           {
             label: "Assurance",
@@ -148,10 +153,10 @@ export function Overview() {
             action={<Server size={17} aria-hidden="true" />}
           />
           <dl className="cloud-kv">
-            <div><dt>State</dt><dd>{hostLabel(host.data?.payload)}</dd></div>
-            <div><dt>Machine control</dt><dd>{host.data?.payload?.machineControlState ?? "—"}</dd></div>
-            <div><dt>Control plane</dt><dd>{host.data?.payload?.controlPlaneVersion ?? "—"}</dd></div>
-            <div><dt>Source SHA</dt><dd>{host.data?.payload?.sourceSha?.slice(0, 12) ?? "—"}</dd></div>
+            <div><dt>State</dt><dd>{hostLabel(hostPayload)}</dd></div>
+            <div><dt>Machine control</dt><dd>{hostPayload?.machineControlState ?? "—"}</dd></div>
+            <div><dt>Control plane</dt><dd>{hostPayload?.controlPlaneVersion ?? "—"}</dd></div>
+            <div><dt>Source SHA</dt><dd>{hostPayload?.sourceSha?.slice(0, 12) ?? "—"}</dd></div>
           </dl>
           <p className="cloud-panel-note">
             Host availability controls GPU/hardware actions only; it is not a web-serving dependency.
@@ -165,10 +170,10 @@ export function Overview() {
             action={<GitBranch size={17} aria-hidden="true" />}
           />
           <dl className="cloud-kv">
-            <div><dt>Repository</dt><dd>{github.data?.payload?.repository ?? "—"}</dd></div>
-            <div><dt>Branch</dt><dd>{github.data?.payload?.defaultBranch ?? "—"}</dd></div>
-            <div><dt>Head</dt><dd>{github.data?.payload?.headSha?.slice(0, 12) ?? "—"}</dd></div>
-            <div><dt>Active runs</dt><dd>{github.data?.payload?.openWorkflowRuns ?? "—"}</dd></div>
+            <div><dt>Repository</dt><dd>{githubPayload?.repository ?? "—"}</dd></div>
+            <div><dt>Branch</dt><dd>{githubPayload?.defaultBranch ?? "—"}</dd></div>
+            <div><dt>Head</dt><dd>{githubPayload?.headSha?.slice(0, 12) ?? "—"}</dd></div>
+            <div><dt>Active runs</dt><dd>{githubPayload?.openWorkflowRuns ?? "—"}</dd></div>
           </dl>
         </Card>
 
@@ -180,7 +185,7 @@ export function Overview() {
           />
           {jiraAvailable ? (
             <dl className="cloud-kv">
-              {Object.entries(jira.data?.payload?.byStatus ?? {})
+              {Object.entries(jiraPayload?.byStatus ?? {})
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 6)
                 .map(([status, count]) => (
