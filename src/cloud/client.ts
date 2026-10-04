@@ -137,6 +137,12 @@ export function useRefreshCloudSources(sources: readonly CloudSource[]) {
   })
 }
 
+export function currentSourcePayload<T>(
+  model: SourceReadModel<T> | undefined,
+): T | null {
+  return model?.state === "fresh" ? model.payload : null
+}
+
 export function sourceAgeLabel(model: SourceReadModel<unknown> | undefined) {
   if (model?.ageSeconds == null) return "no snapshot"
   if (model.ageSeconds < 60) return `${model.ageSeconds}s old`
