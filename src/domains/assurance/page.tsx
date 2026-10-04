@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/primitives"
 
 import {
+  assuranceSourcesComplete,
   assuranceTotals,
   deriveAssuranceLayers,
   type AssuranceLayerState,
@@ -79,9 +80,10 @@ export function TestAssurancePage() {
   const testOpsPayload = currentSourcePayload(testOps.data)
   const jiraAvailable = jiraPayload != null
   const testOpsAvailable = testOpsPayload != null
+  const complete = assuranceSourcesComplete(jiraPayload, testOpsPayload)
   const layers = jiraAvailable ? deriveAssuranceLayers(jiraPayload, testOpsPayload ?? undefined) : []
   const totals = assuranceTotals(layers)
-  const durationData = testOpsAvailable ? layers
+  const durationData = complete ? layers
     .filter((layer) => layer.latest)
     .map((layer) => ({
       name: `L${String(layer.number).padStart(2, "0")}`,
@@ -136,14 +138,22 @@ export function TestAssurancePage() {
         />
       )}
 
+      {!complete && jira.data?.state === "fresh" && testOps.data?.state === "fresh" && (
+        <StatusNotice
+          title="Assurance authority incomplete"
+          body="Current totals stay unavailable until Jira work state and canonical TestOps evidence reconcile across all 12 layers."
+          tone="danger"
+        />
+      )}
+
       <CompactSummary
         className="assurance-summary"
         items={[
-          { label: "Completed", value: jiraAvailable ? totals.completed : "Unavailable", tone: jiraAvailable ? "live" : "neutral" },
-          { label: "Active", value: jiraAvailable ? totals.active : "Unavailable", tone: jiraAvailable ? "cyan" : "neutral" },
-          { label: "Blocked", value: jiraAvailable ? totals.blocked : "Unavailable", tone: jiraAvailable ? "danger" : "neutral" },
-          { label: "Queued", value: jiraAvailable ? totals.queued : "Unavailable" },
-          { label: "Findings", value: testOpsAvailable ? totals.findings : "Unavailable", tone: testOpsAvailable ? (totals.findings ? "warn" : "live") : "neutral" },
+          { label: "Completed", value: complete ? totals.completed : "Unavailable", tone: complete ? "live" : "neutral" },
+          { label: "Active", value: complete ? totals.active : "Unavailable", tone: complete ? "cyan" : "neutral" },
+          { label: "Blocked", value: complete ? totals.blocked : "Unavailable", tone: complete ? "danger" : "neutral" },
+          { label: "Queued", value: complete ? totals.queued : "Unavailable" },
+          { label: "Findings", value: complete ? totals.findings : "Unavailable", tone: complete ? (totals.findings ? "warn" : "live") : "neutral" },
         ]}
       />
 
