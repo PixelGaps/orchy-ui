@@ -1,0 +1,26 @@
+name: OR-992 Closeout Validation
+on:
+  push:
+    branches: ['task/OR-992-20261004-handbook-closeout-v2']
+permissions:
+  contents: read
+concurrency:
+  group: or992-ui-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run test:unit
+      - run: npm run build
+      - run: npx playwright install chromium
+      - run: npm run test:e2e:routes
+      - run: npm run test:e2e:ui-contract
