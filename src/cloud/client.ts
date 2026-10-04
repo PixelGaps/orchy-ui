@@ -38,7 +38,7 @@ function unavailableModel<T>(
   }
 }
 
-async function fetchSourceModel<T>(
+export async function fetchSourceModel<T>(
   source: CloudSource,
   init?: RequestInit,
 ): Promise<SourceReadModel<T>> {
@@ -135,6 +135,12 @@ export function useRefreshCloudSources(sources: readonly CloudSource[]) {
       )
     },
   })
+}
+
+export function currentSourcePayload<T>(
+  model: SourceReadModel<T> | undefined,
+): T | null {
+  return model?.state === "fresh" ? model.payload : null
 }
 
 export function sourceAgeLabel(model: SourceReadModel<unknown> | undefined) {
