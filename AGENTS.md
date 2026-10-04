@@ -1,6 +1,6 @@
 schema: orchy-ui.agent-contract.v7
 
-# BEGIN PIXELGAPS MANAGED AGENT POLICY v7 sha256:8ef7b11374fac00a
+# BEGIN PIXELGAPS MANAGED AGENT POLICY v8 sha256:b650ed9d55c25051
 # Source: PixelGaps/orchy:orchy/llm/agentic/shared_agent_policy.json
 # - Jira is authoritative for work state, scope, acceptance criteria, priority, blockers, progress, deferrals, completion, and all non-code documentation, research, procedures, plans, and archives.
 # - Confluence is retired for PixelGaps project documentation: do not create, update, mirror, or treat Confluence content as current authority; historical Confluence references are provenance only and must route to their migrated Jira record.
@@ -15,6 +15,8 @@ schema: orchy-ui.agent-contract.v7
 # - A defect record must retain discovery context, exact failure, acceptance criteria, validation path, and relevant run or SHA identifiers; chat, logs, comments, milestones, and health matrices are evidence only, never the defect owner.
 # - Read the applicable AGENTS.md before modifying a repository; read architecture/ADR/operations documentation when the change touches those concerns.
 # - Use the cheapest meaningful deterministic scoped validation; routine validation targets <=120 seconds and has a hard 180-second ceiling.
+# - Main is fail-closed for syntax/static defects: before any mutation advances a repository's main branch, the exact candidate commit that will become main must pass that repository's canonical Fast Static Gate (the commands encoded by .github/workflows/static-gate.yml) outside GitHub Actions when Actions is disabled or unavailable; workflow presence, prior-commit results, partial validation, or post-merge validation never substitutes for exact-candidate pre-main validation.
+# - If main moves after Fast Static Gate validation, reconcile onto the new main head and rerun the full Fast Static Gate on the resulting exact candidate before attempting a non-force main advance; a candidate whose gate has not passed must never become main.
 # - Never weaken, delete, skip, or rewrite meaningful tests merely to obtain a green result.
 # - Repository operations use the GitHub connector/API and Jira operations use the Atlassian connector/API when available.
 # - For GitHub connector file mutations, prefer the low-level Git object workflow by default: re-read branch HEAD and base tree, create blobs, create a tree from that exact base, create a commit with that exact HEAD as parent, then advance the task ref with a non-force update. Never force a moved ref; reconcile and retry under the bounded-resync policy. Contents API update_file is a secondary convenience path, not the default.
