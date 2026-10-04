@@ -474,8 +474,12 @@ describe("top-level domain page coverage", () => {
     })
 
     sharedState.tab = "ci"
-    rerender(<MemoryRouter><LogsPage /></MemoryRouter>)
+    // Mount a fresh view so the mocked cloud-source authority is observed after
+    // the source state changes; rerendering the original tree can retain the
+    // previous mocked hook result and makes this coverage assertion order-dependent.
+    const ciView = renderPage(<LogsPage />)
     expect(screen.getByRole("link", { name: /Fallback CI/ })).toHaveAttribute("href", "https://example.test/fallback")
+    ciView.unmount()
 
     queryState.values.set("operator-logs", {
       data: {
