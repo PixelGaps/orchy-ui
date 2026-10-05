@@ -42,6 +42,9 @@ export function GlobalSettingsPage() {
         title="Operator boundaries"
         summary={`${OPERATOR_SURFACES.length} registered surfaces · authority and platform constraints`}
       >
+        <p className="operator-registry-note">
+          <strong>Declared surface registry.</strong> Registered means the route is part of the operator contract; it does not assert live readiness. Live readiness is shown only by each surface&apos;s current source badges and status notices.
+        </p>
         <div className="operator-parity-grid" aria-label="Registered operator surfaces">
           {OPERATOR_SURFACES.map(([label, route, authority, limitation]) => (
             <article className="operator-parity-item" key={label}>
@@ -49,7 +52,7 @@ export function GlobalSettingsPage() {
                 <strong>{label}</strong>
                 <code>{route}</code>
               </div>
-              <Badge>registered</Badge>
+              <Badge>declared</Badge>
               <span>{authority}</span>
               <small>{limitation}</small>
             </article>

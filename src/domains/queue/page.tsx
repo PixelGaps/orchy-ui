@@ -127,6 +127,7 @@ export function QueuePage() {
   const [cursorHistory,setCursorHistory] = useState<string[]>([])
   const [selectedId,setSelectedId] = useState("")
   const [selected,setSelected] = useState<Set<string>>(new Set())
+  const [visibleCount,setVisibleCount] = useState(12)
   const inFlight = useRef(new Map<string,string>())
   const cursor = cursorHistory.at(-1) ?? ""
 
@@ -203,10 +204,12 @@ export function QueuePage() {
     if (sort === "state") rows.sort((a,b)=>a.status.localeCompare(b.status)||b.created_at.localeCompare(a.created_at))
     return rows
   },[jobsQuery.data?.jobs,sort])
+  const visibleJobs = jobs.slice(0,visibleCount)
 
   const resetPaging = () => {
     setCursorHistory([])
     setSelected(new Set())
+    setVisibleCount(12)
   }
 
   const runAction = (job: GatewayJob, action: ActionName) => {
@@ -311,7 +314,7 @@ export function QueuePage() {
       ) : null}
 
       <section className="two-column compact-detail-grid">
-        <Card>
+        <Card className="queue-master-card">
           <PanelHeader kicker="FULL QUEUE" title={jobsQuery.data ? `${jobsQuery.data.total_count} matching jobs` : "Matching jobs unavailable"} />
           {selectedJobs.length > 0 && (
             <div className="page-actions" aria-label="Bulk queue actions">
@@ -332,7 +335,7 @@ export function QueuePage() {
             <DataTable
               label="All retained gateway jobs"
               columns={["Select", "Job", "Repository / request / SHA", "State", "Health", "Open"]}
-              rows={jobs.map((job) => ({
+              rows={visibleJobs.map((job) => ({
                 key: job.id,
                 cells: [
                   <input
@@ -354,6 +357,13 @@ export function QueuePage() {
                 ],
               }))}
             />
+            {visibleJobs.length < jobs.length && (
+              <div className="page-actions queue-show-more">
+                <Button className="button-secondary" onClick={() => setVisibleCount((count) => count + 12)}>
+                  Show 12 more · {jobs.length - visibleJobs.length} remaining
+                </Button>
+              </div>
+            )}
           ) : !jobsQuery.isPending ? (
             <EmptyState title={jobsQuery.data?.status === "empty" ? "No matching jobs" : "Queue history is empty"} body="Adjust filters or inspect the native Supabase transport surface." />
           ) : null}
@@ -363,7 +373,7 @@ export function QueuePage() {
           </div>
         </Card>
 
-        <Card>
+        <Card className="queue-detail-card">
           <PanelHeader
             kicker="JOB DETAIL"
             title={detail?.job || "Select a job"}

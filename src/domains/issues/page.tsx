@@ -7,7 +7,7 @@ import {
   Search,
   ShieldAlert,
 } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import type { JiraProjection } from "@/cloud/projections"
 import {
@@ -83,6 +83,7 @@ export function IssuesPage() {
   const [type, setType] = useState("all")
   const [parent, setParent] = useState("all")
   const [visibleCount, setVisibleCount] = useState(40)
+  useEffect(() => setVisibleCount(40), [query, status, priority, type, parent])
 
   const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
   const allIssues = jira.data?.payload?.issues ?? []

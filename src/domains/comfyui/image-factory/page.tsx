@@ -602,6 +602,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
 
             <CollapsibleSection
               className="factory-policy-details"
+              deferContent
               title="Profile & advanced controls"
               summary="Expert profiles, raw specs, QA budgets and workflow overrides"
             >
@@ -1005,6 +1006,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
           )}
           <CollapsibleSection
             className="gallery-section factory-gallery-disclosure"
+            deferContent
             title="Passed artifacts"
             summary="QA-cleared individual outputs by profile and production layer"
           >
@@ -1018,6 +1020,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
           </CollapsibleSection>
           <CollapsibleSection
             className="gallery-section factory-gallery-disclosure"
+            deferContent
             title="Failed artifacts"
             summary="Rejected attempts retained for diagnosis and repair lineage"
           >

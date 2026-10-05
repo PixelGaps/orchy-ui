@@ -179,6 +179,38 @@ async function mockApi(page: Page): Promise<void> {
           history: [],
         }],
       }
+    } else if (path === "/api/cloud-control/sources/jira") {
+      const assuranceKeys = ["OR-590","OR-594","OR-598","OR-600","OR-601","OR-602","OR-603","OR-604","OR-605","OR-606","OR-607","OR-608"]
+      const assuranceIssues = assuranceKeys.map((key, index) => ({
+        key, summary: `Layer ${index + 1}`, status: "Done", statusCategory: "Done",
+        priority: "High", type: "Task", parentKey: "OR-620", labels: [],
+        browseUrl: `https://example.invalid/${key}`, updated: "2026-10-05T22:00:00Z",
+      }))
+      const extraIssues = Array.from({ length: 48 }, (_, index) => ({
+        key: `OR-${3000 + index}`, summary: `Bounded issue ${index + 1}`,
+        status: "To Do", statusCategory: "To Do", priority: "High", type: "Task",
+        parentKey: null, labels: ["ux"], browseUrl: `https://example.invalid/OR-${3000 + index}`,
+        updated: "2026-10-05T22:00:00Z",
+      }))
+      body = {
+        state: "fresh", authority: "Jira", observedAt: "2026-10-05T22:00:00Z",
+        payload: { openCount: 48, byStatus: { Done: 12, "To Do": 48 }, issues: [...assuranceIssues, ...extraIssues] },
+      }
+    } else if (path === "/api/cloud-control/sources/testops") {
+      const ids = ["fast-web","fast-python","property-state-machine","security","fuzz","performance","portability","flakes","coverage-static-sonar","mutation","browser-e2e","live-chaos-soak-recovery"]
+      const keys = ["OR-590","OR-594","OR-598","OR-600","OR-601","OR-602","OR-603","OR-604","OR-605","OR-606","OR-607","OR-608"]
+      body = {
+        state: "fresh", authority: "TestOps", observedAt: "2026-10-05T22:00:00Z",
+        payload: {
+          target: "PixelGaps/orchy",
+          layers: ids.map((layerId, index) => ({
+            layerId, runId: `run-${index + 1}`, revision: "a".repeat(40),
+            outcome: "PASS", finishedAt: "2026-10-05T22:00:00Z",
+            durationMs: 100 + index, jiraMilestone: keys[index],
+          })),
+          findings: [],
+        },
+      }
     } else if (path === "/api/validation") {
       body = { passed: true, output: "PASS", elapsed_ms: 1 }
     }
@@ -273,4 +305,34 @@ test("Agentic Handbook remains usable at mobile width without rendering hidden l
   await expect(page.locator("details.handbook-task").first()).toBeVisible()
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
   expect(overflow).toBeLessThanOrEqual(0)
+})
+
+
+test("OR-983 mobile dense surfaces remain bounded, navigable and touch-safe", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await mockApi(page)
+
+  await page.goto("/issues")
+  await expect(page.getByRole("heading", { name: "Jira Issues", exact: true })).toBeVisible()
+  await expect(page.locator(".issue-row")).toHaveCount(40)
+  await expect(page.getByRole("button", { name: /Show 40 more/ })).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+
+  await page.goto("/assurance")
+  await expect(page.locator(".assurance-layer")).toHaveCount(6)
+  await page.getByRole("button", { name: "Show all 12 layers" }).click()
+  await expect(page.locator(".assurance-layer")).toHaveCount(12)
+
+  await page.goto("/settings")
+  const boundaries = page.getByRole("button", { name: /Operator boundaries/ })
+  await boundaries.click()
+  await expect(page.getByText("Declared surface registry.")).toBeVisible()
+  const shortControls = await page.locator("button:visible, a.button:visible").evaluateAll((nodes) =>
+    nodes.filter((node) => node.getBoundingClientRect().height < 44).map((node) => ({
+      text: (node.textContent || "").trim(),
+      height: node.getBoundingClientRect().height,
+    })),
+  )
+  expect(shortControls).toEqual([])
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
 })

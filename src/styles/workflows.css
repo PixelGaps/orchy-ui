@@ -1630,3 +1630,41 @@ input,select,textarea{border-radius:5px!important;box-shadow:none!important}
 .factory-command-grid,.factory-result-body,.gallery-profile-stack{gap:7px}
 
 
+
+
+/* OR-983 — bounded mobile density and touch ergonomics. */
+.operator-registry-note{
+  margin:0;
+  padding:10px 12px 0;
+  color:var(--muted);
+  font-size:var(--font-small);
+  line-height:1.45;
+}
+.operator-registry-note strong{color:var(--text)}
+.queue-show-more{padding-top:8px}
+.assurance-layer-toggle{width:100%}
+@media(max-width:640px){
+  .button,
+  button.button,
+  .button-compact,
+  .collapsible-trigger,
+  summary,
+  input:not([type="checkbox"]):not([type="radio"]),
+  select{
+    min-height:44px!important;
+  }
+  .queue-master-card,
+  .queue-detail-card{
+    min-width:0;
+    max-width:100%;
+  }
+  .queue-detail-card{scroll-margin-top:76px}
+  .assurance-layer-head{
+    grid-template-columns:32px minmax(0,1fr) auto;
+    gap:7px;
+  }
+  .assurance-layer-metrics{
+    padding:5px 6px;
+    gap:4px;
+  }
+}

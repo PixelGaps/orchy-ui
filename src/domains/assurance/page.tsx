@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { BarChart3, RefreshCw, ShieldCheck } from "lucide-react"
 import {
   Bar,
@@ -72,6 +73,7 @@ function formatWhen(value: string | undefined) {
 }
 
 export function TestAssurancePage() {
+  const [showAllLayers, setShowAllLayers] = useState(false)
   const jira = useCloudSource<JiraProjection>("jira")
   const testOps = useCloudSource<TestOpsProjection>("testops")
   const refresh = useRefreshCloudSources(["jira", "testops"])
@@ -92,6 +94,7 @@ export function TestAssurancePage() {
 
   const sourceUnavailable =
     jira.data?.state !== "fresh" || testOps.data?.state !== "fresh"
+  const visibleLayers = showAllLayers ? layers : layers.slice(0, 6)
 
   return (
     <>
@@ -159,7 +162,7 @@ export function TestAssurancePage() {
 
       <section className="assurance-layout">
         <div className="assurance-journey" aria-label="12-layer assurance journey">
-          {layers.map((layer) => (
+          {visibleLayers.map((layer) => (
             <Card className="assurance-layer" key={layer.jiraKey}>
               <div className="assurance-layer-head">
                 <span className="assurance-layer-number">
@@ -221,6 +224,14 @@ export function TestAssurancePage() {
               </details>
             </Card>
           ))}
+          {layers.length > 6 && (
+            <Button
+              className="button-secondary assurance-layer-toggle"
+              onClick={() => setShowAllLayers((value) => !value)}
+            >
+              {showAllLayers ? "Show first 6 layers" : `Show all ${layers.length} layers`}
+            </Button>
+          )}
         </div>
 
         <Card className="assurance-chart-panel">
