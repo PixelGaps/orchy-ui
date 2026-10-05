@@ -148,7 +148,9 @@ export function IssuesPage() {
       return priorityDelta || a.key.localeCompare(b.key, undefined, { numeric: true })
     })
 
-  const visibleIssues = filtered.slice(0, visibleCount)\n\n  const milestoneCount = openIssues.filter((issue) => issue.type === "Epic").length
+  const visibleIssues = filtered.slice(0, visibleCount)
+
+  const milestoneCount = openIssues.filter((issue) => issue.type === "Epic").length
   const subtaskCount = openIssues.filter((issue) => issue.type === "Subtask").length
   const guardedCount = openIssues.filter(
     (issue) => issueLaunchMode(issue) !== "implement",

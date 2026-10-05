@@ -332,6 +332,7 @@ export function QueuePage() {
             </div>
           )}
           {jobs.length ? (
+            <>
             <DataTable
               label="All retained gateway jobs"
               columns={["Select", "Job", "Repository / request / SHA", "State", "Health", "Open"]}
@@ -364,6 +365,7 @@ export function QueuePage() {
                 </Button>
               </div>
             )}
+            </>
           ) : !jobsQuery.isPending ? (
             <EmptyState title={jobsQuery.data?.status === "empty" ? "No matching jobs" : "Queue history is empty"} body="Adjust filters or inspect the native Supabase transport surface." />
           ) : null}
