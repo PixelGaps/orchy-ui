@@ -16,7 +16,15 @@ export function ComfyUIPage() {
     queryFn: () => getApi("/api/comfyui"),
     refetchInterval: runtimePollInterval(active),
   })
-  const healthQuery = useQuery({\n    queryKey: ["operator-overview"],\n    queryFn: () => getApi("/api/operator/overview"),\n    refetchInterval: runtimePollInterval(active),\n  })\n  const health = healthQuery.data?.health?.components?.comfyui\n  const healthStale = !healthQuery.dataUpdatedAt || Date.now() - healthQuery.dataUpdatedAt > 30_000\n  const runtimeHealthy = !healthQuery.isError && !healthStale && health?.status === "ok"\n  const tabs = [
+  const healthQuery = useQuery({
+    queryKey: ["operator-overview"],
+    queryFn: () => getApi("/api/operator/overview"),
+    refetchInterval: runtimePollInterval(active),
+  })
+  const health = healthQuery.data?.health?.components?.comfyui
+  const healthStale = !healthQuery.dataUpdatedAt || Date.now() - healthQuery.dataUpdatedAt > 30_000
+  const runtimeHealthy = !healthQuery.isError && !healthStale && health?.status === "ok"
+  const tabs = [
     { id: "runtime", label: "Runtime" },
     { id: "settings", label: "Settings" },
   ]
@@ -44,7 +52,8 @@ export function ComfyUIPage() {
               { label: "API URL", value: query.data?.url || "—" },
               { label: "Health URL", value: query.data?.health_url || "—" },
               { label: "Output directory", value: query.data?.output_dir || "—" },
-              { label: "Default workflow", value: query.data?.workflow_path || "—" },\n              { label: "Runtime health", value: runtimeHealthy ? "ready" : healthStale ? "stale" : health?.status || "Unavailable" },
+              { label: "Default workflow", value: query.data?.workflow_path || "—" },
+              { label: "Runtime health", value: runtimeHealthy ? "ready" : healthStale ? "stale" : health?.status || "Unavailable" },
             ]}
           />
           <div className="panel-link-row">
