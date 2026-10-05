@@ -1364,3 +1364,36 @@ textarea {
 .data-platform-lineage span{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:rgba(80,227,255,.035);font-size:var(--font-small);font-weight:800}
 .data-platform-lineage b{color:var(--cyan)}
 @media(max-width:800px){.data-platform-grid,.data-platform-row,.data-platform-capability{grid-template-columns:1fr}.data-platform-lineage b{transform:rotate(90deg)}}
+
+
+@media (max-width: 480px) {
+  .compact-detail-grid,
+  .compact-detail-grid > *,
+  .compact-detail-grid .glass-card,
+  .compact-detail-grid .data-row,
+  .compact-detail-grid .data-row > span,
+  .compact-detail-grid .page-actions,
+  .product-quota-card,
+  .mission-preference-controls {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .compact-detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-x: clip;
+  }
+
+  .compact-detail-grid .data-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .compact-detail-grid .page-actions {
+    flex-wrap: wrap;
+  }
+
+  .compact-detail-grid .data-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
