@@ -18,5 +18,7 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - run: npm run typecheck
+      - name: Python workflow syntax
+        run: python3 -m py_compile .github/scripts/*.py
       - name: JavaScript syntax
         run: find scripts -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' \) -print0 | xargs -0 -r -n1 node --check
