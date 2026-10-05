@@ -4,7 +4,8 @@ import json, os, re, sys
 from urllib import error, parse, request
 
 API="https://api.github.com"
-TASK=re.compile(r"^(?:task|wip)/(?P<key>(?:OR|SUR)-[0-9]+)-[0-9]{8}-[a-z0-9][a-z0-9-]*$")\nLEGACY_TASK=re.compile(r"^task/(?P<key>(?:OR|SUR)-[0-9]+)-[a-z0-9][a-z0-9-]*$")
+TASK=re.compile(r"^(?:task|wip)/(?P<key>(?:OR|SUR)-[0-9]+)-[0-9]{8}-[a-z0-9][a-z0-9-]*$")
+LEGACY_TASK=re.compile(r"^task/(?P<key>(?:OR|SUR)-[0-9]+)-[a-z0-9][a-z0-9-]*$")
 PAUSED=re.compile(r"^paused/(?P<key>(?:OR|SUR)-[0-9]+)-[0-9]{8}-[a-z0-9][a-z0-9-]*$")
 
 def api(repo,token,method,path):
