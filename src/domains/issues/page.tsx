@@ -82,6 +82,7 @@ export function IssuesPage() {
   const [priority, setPriority] = useState("all")
   const [type, setType] = useState("all")
   const [parent, setParent] = useState("all")
+  const [visibleCount, setVisibleCount] = useState(40)
 
   const jiraAvailable = Boolean(jira.data?.payload) && jira.data?.state !== "unavailable"
   const allIssues = jira.data?.payload?.issues ?? []
@@ -146,7 +147,7 @@ export function IssuesPage() {
       return priorityDelta || a.key.localeCompare(b.key, undefined, { numeric: true })
     })
 
-  const milestoneCount = openIssues.filter((issue) => issue.type === "Epic").length
+  const visibleIssues = filtered.slice(0, visibleCount)\n\n  const milestoneCount = openIssues.filter((issue) => issue.type === "Epic").length
   const subtaskCount = openIssues.filter((issue) => issue.type === "Subtask").length
   const guardedCount = openIssues.filter(
     (issue) => issueLaunchMode(issue) !== "implement",
@@ -246,7 +247,7 @@ export function IssuesPage() {
         />
       ) : jiraAvailable ? (
         <section className="issue-list" aria-label="Open Jira issues">
-          {filtered.map((issue) => {
+          {visibleIssues.map((issue) => {
             const mode = issueLaunchMode(issue)
             const prompt = buildIssueExecutionPrompt(issue)
             return (
@@ -310,6 +311,11 @@ export function IssuesPage() {
               </Card>
             )
           })}
+          {visibleIssues.length < filtered.length && (
+            <Button className="button-secondary" onClick={() => setVisibleCount((count) => count + 40)}>
+              Show 40 more · {filtered.length - visibleIssues.length} remaining
+            </Button>
+          )}
         </section>
       ) : null}
     </>
