@@ -4,7 +4,7 @@ import json, os, re, sys
 from urllib import error, parse, request
 
 API="https://api.github.com"
-TASK=re.compile(r"^(?:task|wip)/(?P<key>(?:OR|SUR)-[0-9]+)-[0-9]{8}-[a-z0-9][a-z0-9-]*$")
+TASK=re.compile(r"^(?:task|wip)/(?P<key>(?:OR|SUR)-[0-9]+)-[0-9]{8}-[a-z0-9][a-z0-9-]*$")\nLEGACY_TASK=re.compile(r"^task/(?P<key>(?:OR|SUR)-[0-9]+)-[a-z0-9][a-z0-9-]*$")
 PAUSED=re.compile(r"^paused/(?P<key>(?:OR|SUR)-[0-9]+)-[0-9]{8}-[a-z0-9][a-z0-9-]*$")
 
 def api(repo,token,method,path):
@@ -45,7 +45,7 @@ def main():
         name=str(item.get("name") or "")
         if name=="main": continue
         head=str((item.get("commit") or {}).get("sha") or "")
-        known=bool(TASK.fullmatch(name) or PAUSED.fullmatch(name))
+        known=bool(TASK.fullmatch(name) or LEGACY_TASK.fullmatch(name) or PAUSED.fullmatch(name))
         if known and integrated(repo,token,head,main_sha):
             delete(repo,token,name); deleted.append(name)
         elif PAUSED.fullmatch(name): paused.append(name)
