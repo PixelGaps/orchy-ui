@@ -134,7 +134,8 @@ describe("top-level domain page coverage", () => {
         models: { vllm: ["qwen", "deepseek"], ollama: ["gemma"] },
       },
     })
-    queryState.values.set("operator-overview", { data: { health: { components: { vllm: { status: "ok" } } } }, dataUpdatedAt: Date.now(), isError: false })\n    queryState.values.set("capability-registry", {
+    queryState.values.set("operator-overview", { data: { health: { components: { vllm: { status: "ok" } } } }, dataUpdatedAt: Date.now(), isError: false })
+    queryState.values.set("capability-registry", {
       data: {
         entries: [
           { id: "a", label: "A", platform: "vllm", status: "available", reason: "", capabilities: ["chat"] },
@@ -146,7 +147,8 @@ describe("top-level domain page coverage", () => {
 
     sharedState.tab = "runtime"
     const { rerender } = renderPage(<LLMPage />)
-    expect(screen.getByText("ready")).toBeInTheDocument()\n    expect(screen.getByText(/CONFIG FRESH/)).toBeInTheDocument()
+    expect(screen.getByText("ready")).toBeInTheDocument()
+    expect(screen.getByText(/CONFIG FRESH/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: /Runtime endpoints/ }))
     expect(screen.getByText("http://localhost")).toBeInTheDocument()
 
@@ -167,7 +169,8 @@ describe("top-level domain page coverage", () => {
   })
 
   it("covers ComfyUI image, runtime and settings tabs", () => {
-    queryState.values.set("operator-overview", { data: { health: { components: { comfyui: { status: "ok" } } } }, dataUpdatedAt: Date.now(), isError: false })\n    queryState.values.set("comfyui-runtime", {
+    queryState.values.set("operator-overview", { data: { health: { components: { comfyui: { status: "ok" } } } }, dataUpdatedAt: Date.now(), isError: false })
+    queryState.values.set("comfyui-runtime", {
       data: {
         url: "http://comfy.test",
         health_url: "http://comfy.test/health",
@@ -183,7 +186,9 @@ describe("top-level domain page coverage", () => {
     sharedState.tab = "runtime"
     rerender(<MemoryRouter><ComfyUIPage /></MemoryRouter>)
     expect(screen.getByText("http://comfy.test")).toBeInTheDocument()
-    expect(screen.getByText("/outputs")).toBeInTheDocument()\n    expect(screen.getByText("ready")).toBeInTheDocument()\n    expect(screen.getByText(/CONFIG FRESH/)).toBeInTheDocument()
+    expect(screen.getByText("/outputs")).toBeInTheDocument()
+    expect(screen.getByText("ready")).toBeInTheDocument()
+    expect(screen.getByText(/CONFIG FRESH/)).toBeInTheDocument()
 
     sharedState.tab = "settings"
     rerender(<MemoryRouter><ComfyUIPage /></MemoryRouter>)
@@ -611,7 +616,14 @@ describe("top-level domain page coverage", () => {
       success: {
         evidence_count: 2,
         ranking_mode: "authority_first",
-        answer: "# Heading\n## Section\n### Detail\n\n- bullet\n* second\n1. numbered\nGrounded answer",
+        answer: "# Heading
+## Section
+### Detail
+
+- bullet
+* second
+1. numbered
+Grounded answer",
         queries: ["q1", "q2"],
         sources: [
           { id: "p", title: "Primary", query: "q1", url: "https://p.test", authority: "primary", domain: "p.test", published_at: "2026-09-25", snippet: "primary evidence" },
