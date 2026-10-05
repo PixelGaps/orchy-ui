@@ -32,7 +32,12 @@ export function LLMPage() {
     queryFn: () => getApi("/api/llm"),
     refetchInterval: runtimePollInterval(active),
   })
-  const healthQuery = useQuery({\n    queryKey: ["operator-overview"],\n    queryFn: () => getApi("/api/operator/overview"),\n    refetchInterval: runtimePollInterval(active),\n  })\n  const capabilitiesQuery = useQuery({
+  const healthQuery = useQuery({
+    queryKey: ["operator-overview"],
+    queryFn: () => getApi("/api/operator/overview"),
+    refetchInterval: runtimePollInterval(active),
+  })
+  const capabilitiesQuery = useQuery({
     queryKey: ["capability-registry"],
     queryFn: () => getApi("/api/capabilities"),
   })
@@ -43,7 +48,10 @@ export function LLMPage() {
     { id: "capabilities", label: "Capabilities" },
     { id: "settings", label: "Settings" },
   ]
-  const data = query.data\n  const health = healthQuery.data?.health?.components?.vllm\n  const healthStale = !healthQuery.dataUpdatedAt || Date.now() - healthQuery.dataUpdatedAt > 30_000\n  const runtimeHealthy = !healthQuery.isError && !healthStale && health?.status === "ok"
+  const data = query.data
+  const health = healthQuery.data?.health?.components?.vllm
+  const healthStale = !healthQuery.dataUpdatedAt || Date.now() - healthQuery.dataUpdatedAt > 30_000
+  const runtimeHealthy = !healthQuery.isError && !healthStale && health?.status === "ok"
   return (
     <>
       <PageHeader
@@ -66,7 +74,8 @@ export function LLMPage() {
             items={[
               { label: "Model", value: String(data?.model || "—"), tone: data?.model ? "live" : "neutral" },
               { label: "Containers", value: data ? (Array.isArray(data.containers) ? data.containers.length : "Unavailable") : "Unavailable" },
-              { label: "Runtime", value: runtimeHealthy ? "ready" : "Unavailable", tone: runtimeHealthy ? "live" : "neutral" },\n              { label: "Health authority", value: healthStale ? "stale" : health?.status || "Unavailable", tone: runtimeHealthy ? "live" : "neutral" },
+              { label: "Runtime", value: runtimeHealthy ? "ready" : "Unavailable", tone: runtimeHealthy ? "live" : "neutral" },
+              { label: "Health authority", value: healthStale ? "stale" : health?.status || "Unavailable", tone: runtimeHealthy ? "live" : "neutral" },
             ]}
           />
           <CollapsibleSection
