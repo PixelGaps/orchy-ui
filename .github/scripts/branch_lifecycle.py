@@ -50,7 +50,7 @@ def main():
         if known and integrated(repo,token,head,main_sha):
             delete(repo,token,name); deleted.append(name)
         elif PAUSED.fullmatch(name): paused.append(name)
-        elif TASK.fullmatch(name): active.append(name)
+        elif TASK.fullmatch(name) or LEGACY_TASK.fullmatch(name): active.append(name)
         else: unmanaged.append(name)
     print(json.dumps({"policy":"pixelgaps-task-branch-lifecycle","deleted_integrated":sorted(deleted),
                       "active":sorted(active),"paused":sorted(paused),"unmanaged":sorted(unmanaged)},sort_keys=True))
