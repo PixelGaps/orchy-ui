@@ -32,7 +32,7 @@ export function LLMPage() {
     queryFn: () => getApi("/api/llm"),
     refetchInterval: runtimePollInterval(active),
   })
-  const capabilitiesQuery = useQuery({
+  const healthQuery = useQuery({\n    queryKey: ["operator-overview"],\n    queryFn: () => getApi("/api/operator/overview"),\n    refetchInterval: runtimePollInterval(active),\n  })\n  const capabilitiesQuery = useQuery({
     queryKey: ["capability-registry"],
     queryFn: () => getApi("/api/capabilities"),
   })
@@ -43,14 +43,14 @@ export function LLMPage() {
     { id: "capabilities", label: "Capabilities" },
     { id: "settings", label: "Settings" },
   ]
-  const data = query.data
+  const data = query.data\n  const health = healthQuery.data?.health?.components?.vllm\n  const healthStale = !healthQuery.dataUpdatedAt || Date.now() - healthQuery.dataUpdatedAt > 30_000\n  const runtimeHealthy = !healthQuery.isError && !healthStale && health?.status === "ok"
   return (
     <>
       <PageHeader
         eyebrow="Local inference"
         title="LLM"
         description="vLLM runtime, served models, context controls and inference configuration."
-        badge={<FreshnessBadge updatedAt={query.dataUpdatedAt} error={query.isError} />}
+        badge={<Badge tone={query.isError ? "danger" : "neutral"}>CONFIG {query.isError ? "UNAVAILABLE" : "FRESH"}</Badge>}
       />
       <QueryStateNotice
         error={query.error}
@@ -66,7 +66,7 @@ export function LLMPage() {
             items={[
               { label: "Model", value: String(data?.model || "—"), tone: data?.model ? "live" : "neutral" },
               { label: "Containers", value: data ? (Array.isArray(data.containers) ? data.containers.length : "Unavailable") : "Unavailable" },
-              { label: "Runtime", value: data ? (data.model ? "ready" : "idle") : "Unavailable", tone: data?.model ? "live" : "neutral" },
+              { label: "Runtime", value: runtimeHealthy ? "ready" : "Unavailable", tone: runtimeHealthy ? "live" : "neutral" },\n              { label: "Health authority", value: healthStale ? "stale" : health?.status || "Unavailable", tone: runtimeHealthy ? "live" : "neutral" },
             ]}
           />
           <CollapsibleSection
