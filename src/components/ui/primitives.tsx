@@ -367,6 +367,7 @@ export function CollapsibleSection({
   summary,
   children,
   defaultOpen = false,
+  lazy = false,
   badge,
   action,
   className,
@@ -375,6 +376,7 @@ export function CollapsibleSection({
   summary?: ReactNode
   children: ReactNode
   defaultOpen?: boolean
+  lazy?: boolean
   badge?: ReactNode
   action?: ReactNode
   className?: string
@@ -403,7 +405,7 @@ export function CollapsibleSection({
         {action != null && <div className="collapsible-header-action">{action}</div>}
       </div>
       <div id={id} className="collapsible-content" hidden={!open}>
-        {children}
+        {!lazy || open ? children : null}
       </div>
     </section>
   )
