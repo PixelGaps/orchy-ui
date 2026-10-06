@@ -172,6 +172,7 @@ export function TestAssurancePage() {
                 </div>
                 <Badge tone={stateTone(layer.state)}>{layer.state}</Badge>
               </div>
+              </summary>
 
               <div className="assurance-layer-metrics">
                 <span>
@@ -189,7 +190,6 @@ export function TestAssurancePage() {
                   <strong>{testOpsAvailable ? layer.findingCount : "—"}</strong>
                 </span>
               </div>
-              </summary>
 
               <details className="assurance-evidence">
                 <summary>Evidence</summary>
