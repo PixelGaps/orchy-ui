@@ -160,7 +160,8 @@ export function TestAssurancePage() {
       <section className="assurance-layout">
         <div className="assurance-journey" aria-label="12-layer assurance journey">
           {layers.map((layer) => (
-            <Card className="assurance-layer" key={layer.jiraKey}>
+            <details className="assurance-layer" key={layer.jiraKey}>
+              <summary className="assurance-layer-summary">
               <div className="assurance-layer-head">
                 <span className="assurance-layer-number">
                   {String(layer.number).padStart(2, "0")}
@@ -188,6 +189,7 @@ export function TestAssurancePage() {
                   <strong>{testOpsAvailable ? layer.findingCount : "—"}</strong>
                 </span>
               </div>
+              </summary>
 
               <details className="assurance-evidence">
                 <summary>Evidence</summary>
@@ -219,7 +221,7 @@ export function TestAssurancePage() {
                   </div>
                 )}
               </details>
-            </Card>
+            </details>
           ))}
         </div>
 
