@@ -602,6 +602,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
 
             <CollapsibleSection
               className="factory-policy-details"
+            lazy
               title="Profile & advanced controls"
               summary="Expert profiles, raw specs, QA budgets and workflow overrides"
             >
@@ -691,7 +692,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
                     />
                   </label>
                 </div>
-                <CollapsibleSection title="Raw PBR JSON · Expert" summary="Authoritative profile payload">
+                <CollapsibleSection lazy title="Raw PBR JSON · Expert" summary="Authoritative profile payload">
                   <label className="field factory-raw-json">
                     <span>PBR specification JSON</span>
                     <textarea
@@ -764,7 +765,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
                     </label>
                   </div>
                 )}
-                <CollapsibleSection title="Raw product JSON · Expert" summary="Authoritative pack payload">
+                <CollapsibleSection lazy title="Raw product JSON · Expert" summary="Authoritative pack payload">
                   <label className="field factory-raw-json">
                     <span>Product specification JSON</span>
                     <textarea
@@ -812,6 +813,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
       {pbrResult && (
         <CollapsibleSection
           className="lineage-panel factory-result-disclosure"
+            lazy
           title={pbrResult.package?.id || "Latest PBR package"}
           summary={`PBR · ${pbrResult.status || "result"} · ${Object.keys(pbrResult.selected_maps ?? {}).length} selected maps`}
           badge={<Badge tone={statusTone(pbrResult.status)}>{pbrResult.status || "result"}</Badge>}
@@ -877,6 +879,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
       {objectResult && (
         <CollapsibleSection
           className="lineage-panel factory-result-disclosure"
+            lazy
           title={objectResult.package?.id || "Latest object pack"}
           summary={`Object pack · ${objectResult.status || "result"} · ${Object.keys(objectResult.selected_items ?? {}).length} selected items`}
           badge={<Badge tone={statusTone(objectResult.status)}>{objectResult.status || "result"}</Badge>}
@@ -941,6 +944,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
 
       <CollapsibleSection
         className="lineage-panel factory-lineage-disclosure"
+            lazy
         title="QA lineage"
         summary={`${candidates.length} tracked candidates · parent → child evolution`}
       >
@@ -1005,6 +1009,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
           )}
           <CollapsibleSection
             className="gallery-section factory-gallery-disclosure"
+            lazy
             title="Passed artifacts"
             summary="QA-cleared individual outputs by profile and production layer"
           >
@@ -1018,6 +1023,7 @@ export function ImageFactory({ embedded = false }: Readonly<{ embedded?: boolean
           </CollapsibleSection>
           <CollapsibleSection
             className="gallery-section factory-gallery-disclosure"
+            lazy
             title="Failed artifacts"
             summary="Rejected attempts retained for diagnosis and repair lineage"
           >
