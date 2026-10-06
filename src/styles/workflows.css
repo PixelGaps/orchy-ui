@@ -1630,3 +1630,46 @@ input,select,textarea{border-radius:5px!important;box-shadow:none!important}
 .factory-command-grid,.factory-result-body,.gallery-profile-stack{gap:7px}
 
 
+
+
+/* OR-983 — compact assurance scan and explicit live-readiness register. */
+.assurance-layer {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-panel);
+}
+.assurance-layer-summary {
+  display: block;
+  min-height: 56px;
+  list-style: none;
+  cursor: pointer;
+}
+.assurance-layer-summary::-webkit-details-marker { display: none; }
+.assurance-layer-summary .assurance-layer-head { border-bottom: 0; }
+.assurance-layer[open] .assurance-layer-summary {
+  border-bottom: 1px solid var(--border);
+  background: rgba(80,227,255,.025);
+}
+.operator-readiness-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 8px;
+  padding: 10px;
+}
+.operator-readiness-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-control);
+}
+.operator-live-readiness > .collapsible-content > small {
+  display: block;
+  padding: 0 10px 10px;
+  color: var(--muted);
+}
