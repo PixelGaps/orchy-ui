@@ -310,8 +310,8 @@ export function QueuePage() {
         <QueryStateNotice error={new Error(jobsQuery.data.reason || jobsQuery.data.status)} onRetry={() => void jobsQuery.refetch()} />
       ) : null}
 
-      <section className="two-column compact-detail-grid">
-        <Card>
+      <section className={`two-column compact-detail-grid queue-master-detail${selectedId ? " is-detail-open" : ""}`}>
+        <Card className="queue-master-card">
           <PanelHeader kicker="FULL QUEUE" title={jobsQuery.data ? `${jobsQuery.data.total_count} matching jobs` : "Matching jobs unavailable"} />
           {selectedJobs.length > 0 && (
             <div className="page-actions" aria-label="Bulk queue actions">
@@ -363,7 +363,8 @@ export function QueuePage() {
           </div>
         </Card>
 
-        <Card>
+        <Card className="queue-detail-card">
+          <button type="button" className="queue-detail-back button button-ghost button-compact" onClick={()=>setSelectedId("")}>Back to queue</button>
           <PanelHeader
             kicker="JOB DETAIL"
             title={detail?.job || "Select a job"}
