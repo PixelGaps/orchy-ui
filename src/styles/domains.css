@@ -1397,3 +1397,40 @@ textarea {
     overflow-x: auto;
   }
 }
+
+
+/* OR-983 — mobile queue master/detail and practical touch targets. */
+.queue-detail-back { display: none; }
+
+@media (max-width: 760px) {
+  .queue-master-detail {
+    display: block;
+  }
+  .queue-master-detail .queue-detail-card {
+    display: none;
+  }
+  .queue-master-detail.is-detail-open .queue-master-card {
+    display: none;
+  }
+  .queue-master-detail.is-detail-open .queue-detail-card {
+    display: block;
+  }
+  .queue-master-detail.is-detail-open .queue-detail-back {
+    display: inline-flex;
+    margin-bottom: 8px;
+  }
+
+  .page-actions .button,
+  .queue-filter-grid input,
+  .queue-filter-grid select,
+  .queue-detail-back,
+  .collapsible-trigger,
+  .assurance-layer-summary,
+  .issue-toolbar input,
+  .issue-toolbar select,
+  .mission-board-controls-v2 button,
+  .mission-secondary-filters input,
+  .mission-secondary-filters select {
+    min-height: 44px;
+  }
+}
