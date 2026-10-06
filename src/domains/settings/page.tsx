@@ -1,6 +1,8 @@
 import {
 Badge,CollapsibleSection,PageHeader
 } from "@/components/ui/primitives"
+import { useCloudSource } from "@/cloud/client"
+import type { FleetProjection, HostProjection, JiraProjection, OperationProjection, TestOpsProjection } from "@/cloud/projections"
 import {
 DomainConfiguration
 } from "@/domains/shared"
@@ -27,7 +29,27 @@ const PLATFORM_LIMITS = [
   ["Canonical state", "The browser never owns Jira work state, ExecutionStore lifecycle, TestOps evidence or privileged secrets."],
 ] as const
 
+function readinessTone(state: string | undefined) {
+  if (state === "fresh") return "live" as const
+  if (state === "stale") return "warn" as const
+  if (state === "unavailable") return "danger" as const
+  return "neutral" as const
+}
+
 export function GlobalSettingsPage() {
+  const jira = useCloudSource<JiraProjection>("jira")
+  const testOps = useCloudSource<TestOpsProjection>("testops")
+  const operations = useCloudSource<OperationProjection>("operations")
+  const fleet = useCloudSource<FleetProjection>("fleet")
+  const host = useCloudSource<HostProjection>("host")
+  const readiness = [
+    ["Jira", jira.data?.state],
+    ["TestOps", testOps.data?.state],
+    ["Operations", operations.data?.state],
+    ["CI fleet", fleet.data?.state],
+    ["Madriguera host", host.data?.state],
+  ] as const
+
   return (
     <>
       <PageHeader
@@ -39,8 +61,8 @@ export function GlobalSettingsPage() {
 
       <CollapsibleSection
         className="operator-boundaries"
-        title="Operator boundaries"
-        summary={`${OPERATOR_SURFACES.length} registered surfaces · authority and platform constraints`}
+        title="Declarative surface registry"
+        summary={`${OPERATOR_SURFACES.length} registered routes · registration is not a live-readiness claim`}
       >
         <div className="operator-parity-grid" aria-label="Registered operator surfaces">
           {OPERATOR_SURFACES.map(([label, route, authority, limitation]) => (
@@ -65,6 +87,23 @@ export function GlobalSettingsPage() {
             ))}
           </dl>
         </div>
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        className="operator-live-readiness"
+        title="Live readiness"
+        summary="Current source state from authoritative dashboard projections"
+        defaultOpen
+      >
+        <div className="operator-readiness-grid" aria-label="Current operator source readiness">
+          {readiness.map(([label, state]) => (
+            <div className="operator-readiness-item" key={label}>
+              <strong>{label}</strong>
+              <Badge tone={readinessTone(state)}>{state ?? "unknown"}</Badge>
+            </div>
+          ))}
+        </div>
+        <small>These states describe current source availability only; they do not change the declarative route registry above.</small>
       </CollapsibleSection>
 
       <DomainConfiguration section="global" />
