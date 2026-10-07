@@ -1423,7 +1423,7 @@ textarea {
   .page-actions .button,
   .queue-filter-grid input,
   .queue-filter-grid select,
-  .queue-detail-back,
+  .queue-detail-back.button-compact,
   .collapsible-trigger,
   .assurance-layer-summary,
   .issue-toolbar input,
