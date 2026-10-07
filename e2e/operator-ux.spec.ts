@@ -103,10 +103,14 @@ test("OR-983 Issues bounds initial DOM to 40 rows", async ({page}) => {
 test("OR-983 Image Factory lazy-mounts advanced content", async ({page}) => {
   await page.setViewportSize({width:1280,height:800}); await mockApi(page); await page.goto("/image-factory")
   const section=page.locator(".factory-policy-details")
-  await expect(section.getByRole("button",{name:/Profile & advanced controls/})).toHaveAttribute("aria-expanded","false")
-  expect(await section.locator(".collapsible-content").evaluate(el=>el.childElementCount)).toBe(0)
-  await section.getByRole("button",{name:/Profile & advanced controls/}).click()
-  expect(await section.locator(".collapsible-content").evaluate(el=>el.childElementCount)).toBeGreaterThan(0)
+  const trigger=section.getByRole("button",{name:/Profile & advanced controls/})
+  await expect(trigger).toHaveAttribute("aria-expanded","false")
+  const contentId=await trigger.getAttribute("aria-controls")
+  expect(contentId).toBeTruthy()
+  const content=page.locator(`#${contentId}`)
+  expect(await content.evaluate(el=>el.childElementCount)).toBe(0)
+  await trigger.click()
+  expect(await content.evaluate(el=>el.childElementCount)).toBeGreaterThan(0)
 })
 
 test("OR-983 Queue mobile uses one-pane master/detail flow", async ({page}) => {
