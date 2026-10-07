@@ -147,6 +147,8 @@ async function mockApi(page: Page): Promise<void> {
         section: path.split("/").at(-1) || "global",
         fields: [],
       }
+    } else if (path === "/api/image-factory/gallery") {
+      body = { summary: {}, publish_ready: [], passed: {}, failed: {} }
     } else if (path === "/api/image-factory/lineage") {
       body = { path: "", candidates: [] }
     }
