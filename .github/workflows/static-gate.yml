@@ -2,7 +2,6 @@ name: Fast Static Gate
 on:
   push:
     branches: [main, 'task/**']
-  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,6 +15,7 @@ jobs:
         with:
           node-version: "24"
           cache: npm
+      - run: node scripts/check-workflow-policy.mjs
       - run: npm ci --no-audit --no-fund
       - run: npm run typecheck
       - name: Python workflow syntax
