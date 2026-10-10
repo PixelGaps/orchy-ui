@@ -11,7 +11,7 @@ const runningSession = {
   target_sha: SHA,
   runtime: "aider",
   effort: "MEDIUM",
-  enabled_plugins: ["local-echo"],
+  enabled_plugins: [],
   attachments: [],
   turn_count: 1,
   state: "accepted",
@@ -94,15 +94,6 @@ describe("WorkbenchPage", () => {
         reason: "",
       },
     ])
-    mocks.listPlugins.mockResolvedValue([
-      {
-        plugin_id: "local-echo",
-        version: "1",
-        transport: "stdio",
-        capabilities: [],
-        tools: [{ name: "echo", description: "Echo", input_schema: {}, capabilities: [] }],
-      },
-    ])
     mocks.start.mockResolvedValue(runningSession)
     mocks.getSession.mockResolvedValue(runningSession)
     mocks.cancel.mockResolvedValue({ session_id: "session-1", status: "cancellation_requested" })
@@ -123,7 +114,7 @@ describe("WorkbenchPage", () => {
     ])
   })
 
-  it("starts a real-contract session with runtime, effort, plugin, SHA and acceptance", async () => {
+  it("starts a real-contract session without local plugins, with runtime, effort, SHA and acceptance", async () => {
     renderPage()
 
     expect(screen.getByText(/Retained sessions reopen by authoritative session ID/)).toBeInTheDocument()
@@ -139,7 +130,6 @@ describe("WorkbenchPage", () => {
     expect(screen.getByLabelText("Runtime")).toHaveValue("aider")
     expect(screen.getByLabelText("Effort")).toHaveValue("MEDIUM")
     expect(screen.getByRole("option", { name: "OpenCode · deferred" })).toBeDisabled()
-    fireEvent.click(screen.getByRole("checkbox", { name: /local-echo/ }))
     fireEvent.change(screen.getByLabelText("Repository paths"), { target: { value: "src/app.py" } })
     fireEvent.change(screen.getByLabelText("Task"), { target: { value: "Implement the change" } })
     fireEvent.change(screen.getByLabelText(/Acceptance criteria/), {
@@ -154,11 +144,13 @@ describe("WorkbenchPage", () => {
       target_sha: SHA,
       runtime: "aider",
       effort: "MEDIUM",
-      enabled_plugins: ["local-echo"],
+      enabled_plugins: [],
       attachments: [expect.objectContaining({ repository_path: "src/app.py", source: "repository" })],
       acceptance: ["Tests pass", "No unrelated changes"],
     })))
     expect(await screen.findByText("Inspecting repository")).toBeInTheDocument()
+    expect(mocks.listPlugins).not.toHaveBeenCalled()
+    expect(screen.queryByRole("checkbox", { name: /local-echo/ })).not.toBeInTheDocument()
     expect(screen.getByText("src/app.ts")).toBeInTheDocument()
     expect(screen.getByText("one-shot SSE")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /Stop/ })).toBeEnabled()

@@ -10,7 +10,7 @@ import {
   Wrench,
 } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 
 import {
   Badge,
@@ -27,7 +27,6 @@ import {
   cancelWorkbenchSession,
   fileToWorkbenchAttachment,
   getWorkbenchSession,
-  listWorkbenchPlugins,
   listWorkbenchRepositories,
   repairWorkbenchSession,
   resumeWorkbenchSession,
@@ -141,19 +140,10 @@ export function WorkbenchPage() {
     refetchInterval: false,
     refetchOnWindowFocus: false,
   })
-  const plugins = useQuery({
-    queryKey: ["workbench-plugins"],
-    queryFn: listWorkbenchPlugins,
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-    retry: false,
-  })
-
   const [repositoryId, setRepositoryId] = useState("")
   const [targetSha, setTargetSha] = useState("")
   const [runtime, setRuntime] = useState<WorkbenchRuntime>("aider")
   const [effort, setEffort] = useState<WorkbenchEffort>("MEDIUM")
-  const [enabledPlugins, setEnabledPlugins] = useState<string[]>([])
   const [task, setTask] = useState("")
   const [acceptance, setAcceptance] = useState("")
   const [files, setFiles] = useState<File[]>([])
@@ -177,11 +167,6 @@ export function WorkbenchPage() {
   const canRepair = REPAIRABLE.has(state.toLowerCase())
   const validSha = /^[0-9a-f]{40}$/.test(targetSha)
   const launchReady = Boolean(task.trim() && repositoryId && validSha && !busy)
-  const pluginById = useMemo(
-    () => new Map((plugins.data ?? []).map((plugin) => [plugin.plugin_id, plugin])),
-    [plugins.data],
-  )
-
   const refreshEvents = async (sessionId: string) => {
     setEvents([])
     const seen = new Set<number>()
@@ -229,7 +214,7 @@ export function WorkbenchPage() {
         target_sha: targetSha,
         runtime,
         effort,
-        enabled_plugins: enabledPlugins,
+        enabled_plugins: [],
         attachments,
         acceptance: acceptanceLines(acceptance),
       })
@@ -319,14 +304,6 @@ export function WorkbenchPage() {
     setSessionLookup("")
     setFollowUp("")
     setError("")
-  }
-
-  const togglePlugin = (pluginId: string) => {
-    setEnabledPlugins((current) =>
-      current.includes(pluginId)
-        ? current.filter((value) => value !== pluginId)
-        : [...current, pluginId],
-    )
   }
 
   return (
@@ -483,7 +460,7 @@ export function WorkbenchPage() {
               {!session && (
                 <EmptyState
                   title="Ready for a local coding session"
-                  body="Choose an exact repository SHA, runtime, effort profile and optional plugins, then submit the task."
+                  body="Choose an exact repository SHA, runtime and effort profile, then submit the task."
                 />
               )}
               {session && !events.length && (
@@ -596,57 +573,12 @@ export function WorkbenchPage() {
 
         <aside className="workbench-tools">
           <Card>
-            <PanelHeader
-              kicker="PLUGINS"
-              title="Session tools"
-              action={<Badge tone={plugins.error ? "warn" : plugins.data ? "live" : "neutral"}>{plugins.data ? plugins.data.length : "Unavailable"}</Badge>}
-            />
-            <QueryStateNotice
-              error={plugins.error}
-              updatedAt={plugins.dataUpdatedAt}
-              onRetry={() => void plugins.refetch()}
-            />
-            <div className="workbench-plugin-list">
-              {(plugins.data ?? []).map((plugin) => {
-                const checked = enabledPlugins.includes(plugin.plugin_id)
-                return (
-                  <label key={plugin.plugin_id} className="workbench-plugin">
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      disabled={Boolean(session)}
-                      onChange={() => togglePlugin(plugin.plugin_id)}
-                    />
-                    <span>
-                      <strong>{plugin.plugin_id}</strong>
-                      <small>v{plugin.version} · {plugin.transport} · {plugin.tools.length} tool{plugin.tools.length === 1 ? "" : "s"}</small>
-                    </span>
-                  </label>
-                )
-              })}
-              {!plugins.data?.length && !plugins.error && (
-                <p className="workbench-panel-note">No admitted plugins are currently registered.</p>
-              )}
-            </div>
-            {enabledPlugins.length > 0 && (
-              <div className="workbench-enabled-tools">
-                {enabledPlugins.map((id) => (
-                  <div key={id}>
-                    <strong>{id}</strong>
-                    <small>{pluginById.get(id)?.tools.map((tool) => tool.name).join(", ") || "metadata unavailable"}</small>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Card>
-
-          <Card>
             <PanelHeader kicker="BOUNDARIES" title="Authority contract" />
             <ul className="workbench-boundaries">
               <li>ExecutionStore owns lifecycle and retained state.</li>
               <li>Repository mutation remains exact-SHA + isolated worktree.</li>
               <li>Runtime/profile changes require a new session boundary.</li>
-              <li>Plugins are visible only when explicitly enabled for the session.</li>
+              <li>Local custom plugin selection is disconnected under OR-2959; ChatGPT-connected tools remain external.</li>
               <li>No model commit/push/merge authority and no hidden chain-of-thought retention.</li>
             </ul>
           </Card>

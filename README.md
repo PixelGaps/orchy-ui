@@ -60,3 +60,7 @@ The local listener is bound to `tailscale0`; the installer refuses to create a w
 A future hosted deployment must provide authenticated operator mediation and keep privileged secrets server-side. Repository visibility is not an authentication boundary.
 
 Current implementation version: **2.0.0**.
+
+## Local custom plugins (OR-2959)
+
+The browser Workbench no longer fetches the local custom plugin catalog or renders a selector and always starts sessions with `enabled_plugins: []`. Server-side Orchy and Madriguera enforce `PIXELGAPS_CUSTOM_PLUGINS_ENABLED` independently (default off; only exact `1` permits their experimental internal execution code). This UI does not enable those internal paths even if the server is explicitly opted in. ChatGPT-native connected plugins are unrelated and continue through the ChatGPT platform.
